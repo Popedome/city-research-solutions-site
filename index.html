@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Research Solutions | Market Research & Consumer Insights</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#1e56a0',
+              700: '#163d72',
+              800: '#0f2d54',
+              900: '#0a1f3b',
+            },
+            accent: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            },
+            gold: {
+              400: '#d4a843',
+              500: '#c4973c',
+              600: '#b08632',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .hero-gradient {
+      background: linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%);
+    }
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #0ea5e9;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .dropdown-menu {
+      display: none;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
+      padding-top: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Capabilities
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Capabilities</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Quantitative Research</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40 relative">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+            <span class="w-2 h-2 bg-accent-400 rounded-full animate-pulse"></span>
+            <span class="text-accent-400 text-sm font-medium">60+ Years of Research Expertise</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+            Insights That Drive
+            <span class="text-accent-400">Strategic</span> Decisions
+          </h1>
+          <p class="text-lg md:text-xl text-blue-100 leading-relaxed mb-8 max-w-xl">
+            We measure attitudes and behaviors, providing clients with meaningful insights to improve market share, increase revenue, and make confident strategic decisions.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="contact.html" class="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">
+              Get Started
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="about.html" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
+              Learn More
+            </a>
+          </div>
+        </div>
+        <div class="hidden lg:block">
+          <img src="images/hero-slide-3.jpg" alt="Market Research" class="rounded-2xl shadow-2xl">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Indicators -->
+  <section class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="fade-in">
+          <div class="text-3xl md:text-4xl font-extrabold text-brand-600">60+</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Years of Research Expertise</div>
+        </div>
+        <div class="fade-in">
+          <div class="text-3xl md:text-4xl font-extrabold text-brand-600">2000+</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Projects Completed</div>
+        </div>
+        <div class="fade-in">
+          <div class="text-3xl md:text-4xl font-extrabold text-brand-600">Fortune</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">100 Clients Served</div>
+        </div>
+        <div class="fade-in">
+          <div class="text-3xl md:text-4xl font-extrabold text-brand-600">2</div>
+          <div class="text-sm text-gray-500 mt-1 font-medium">Wisconsin Locations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities Section -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">What We Do</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Our Research Capabilities</h2>
+        <p class="text-lg text-gray-500 leading-relaxed">From focus groups to advanced analytics, we offer a comprehensive suite of research methodologies tailored to your business needs.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card 1: In-Facility -->
+        <a href="capabilities-in-facility.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
+          <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <img src="images/icon-infacility.jpg" alt="In-Facility Research" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-brand-600\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z\'/></svg>'">
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">In-Facility Research</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Focus groups, central location testing, in-depth interviews, and clinical research techniques in our world-class facilities.</p>
+          <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+            Learn More
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <!-- Card 2: Online -->
+        <a href="capabilities-online.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
+          <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <img src="images/icon-online.jpg" alt="Online Research" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-brand-600\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\'/></svg>'">
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Online Research</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Online focus groups, bulletin boards, surveys, and consumer panels with enhanced community features.</p>
+          <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+            Learn More
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <!-- Card 3: Real-Time -->
+        <a href="capabilities-real-time.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
+          <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <img src="images/icon-real-time.jpg" alt="Real-Time Research" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-brand-600\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M15 12a3 3 0 11-6 0 3 3 0 016 0z\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z\'/></svg>'">
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Real-Time Research</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Experience diaries, virtual ethnographies, in-home usage testing, and in-depth consumer ethnographies.</p>
+          <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+            Learn More
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <!-- Card 4: Retail -->
+        <a href="capabilities-retail.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
+          <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <img src="images/icon-retail.jpg" alt="Retail Research" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-brand-600\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z\'/></svg>'">
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Retail Research</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Shop-a-longs, packaging testing, point-of-purchase interviews, and simulated retail shopping sessions.</p>
+          <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+            Learn More
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <!-- Card 5: Quantitative -->
+        <a href="capabilities-quantitative.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
+          <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <img src="images/icon-quantitative.jpg" alt="Quantitative Research" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-brand-600\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z\'/></svg>'">
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Quantitative Research</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Factor analysis, conjoint analysis, decision tree analysis, pricing analysis, TURF analysis, and data mining.</p>
+          <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+            Learn More
+            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <!-- Card 6: Facilities -->
+        <a href="facilities.html" class="card-hover group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+          <div class="h-48 overflow-hidden">
+            <img src="images/banner-about-us.jpg" alt="World-Class Facilities" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          </div>
+          <div class="p-6 text-center">
+            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">World-Class Facilities</h3>
+            <p class="text-gray-500 text-sm leading-relaxed mb-4">Modern focus group rooms, client viewing suites, test kitchen, and comfortable respondent areas in Janesville, WI.</p>
+            <div class="inline-flex items-center text-brand-600 font-semibold text-sm">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Why Us Section -->
+  <section class="bg-gray-50 py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="fade-in">
+          <img src="images/content-group-sessions.jpg" alt="City Research Solutions Team" class="rounded-2xl shadow-lg">
+        </div>
+        <div class="fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Why Choose Us</p>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">A Trusted Partner for Consumer Insights</h2>
+          <p class="text-gray-500 leading-relaxed mb-6">
+            City Research Solutions is a full-service custom marketing research and consulting firm established in the Madison, Wisconsin area in 1979. Our experienced insights professionals serve clients ranging from Fortune 100 companies to emerging technology ventures.
+          </p>
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-brand-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <p class="text-gray-600"><strong class="text-gray-800">Make strategic decisions</strong> backed by data-driven consumer insights</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-brand-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <p class="text-gray-600"><strong class="text-gray-800">Improve market share</strong> with actionable competitive intelligence</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-brand-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <p class="text-gray-600"><strong class="text-gray-800">Increase revenue</strong> through deep understanding of consumer behavior</p>
+            </div>
+          </div>
+          <a href="about.html" class="inline-flex items-center px-6 py-3 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 transition-colors shadow-md hover:shadow-lg">
+            About Our Company
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: Join Panel -->
+  <section class="hero-gradient py-16 md:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Join Our Consumer Panel</h2>
+      <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">Interested in sharing your opinions and getting paid for it? Join our consumer research panel and help shape the products and services of tomorrow.</p>
+      <a href="https://www.cityresearchpanel.com" target="_blank" rel="noopener" class="inline-flex items-center px-8 py-4 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">
+        Join Now
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Contact Bar -->
+  <section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-1">Call Us</h3>
+          <a href="tel:608-314-8493" class="text-brand-600 hover:text-brand-700 font-medium">608-314-8493</a>
+        </div>
+        <div class="fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-1">Email Us</h3>
+          <a href="mailto:info@cityresearchsolutions.com" class="text-brand-600 hover:text-brand-700 font-medium">info@cityresearchsolutions.com</a>
+        </div>
+        <div class="fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-1">Visit Us</h3>
+          <p class="text-gray-500 text-sm font-semibold mt-2">Business Offices</p>
+          <p class="text-gray-500 text-sm">8383 Greenway Blvd, Suite 600<br>Middleton, WI 53562</p>
+          <p class="text-gray-500 text-sm font-semibold mt-2">Focus Facility</p>
+          <p class="text-gray-500 text-sm">One Parker Place, Suite 305<br>Janesville, WI 53545</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4">
+            <img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10">
+          </div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service custom marketing research and consulting firm providing consumer insights since 1979.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li>
+            <li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li>
+            <li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li>
+            <li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Capabilities</h4>
+          <ul class="space-y-2">
+            <li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li>
+            <li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li>
+            <li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li>
+            <li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li>
+            <li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a>
+          <a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

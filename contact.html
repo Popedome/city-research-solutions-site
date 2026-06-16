@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | City Research Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#1e56a0',700:'#163d72',800:'#0f2d54',900:'#0a1f3b' },
+        accent: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' }
+      }}}
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#0ea5e9; transition:width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .dropdown:hover .dropdown-menu { display:block; opacity:1; transform:translateY(0); }
+    .dropdown-menu { display:none; opacity:0; transform:translateY(-10px); transition:all 0.2s ease; }
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .hero-gradient { background:linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%); }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Capabilities
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase">Contact</a>
+        </nav>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Capabilities</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Quantitative Research</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10"><div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Contact Us</h1>
+      <p class="text-lg text-blue-100 max-w-2xl mx-auto">Whether you are one of our regular clients or just learning about our capabilities, thank you for visiting our site!</p>
+    </div>
+  </section>
+
+  <!-- Contact Info Cards -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Phone</h3>
+          <a href="tel:608-314-8493" class="text-brand-600 hover:text-brand-700 font-medium">608-314-8493</a>
+          <p class="text-gray-400 text-sm mt-1">Fax: 800-682-5913</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Email</h3>
+          <a href="mailto:info@cityresearchsolutions.com" class="text-brand-600 hover:text-brand-700 font-medium">info@cityresearchsolutions.com</a>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center fade-in">
+          <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Our Locations</h3>
+          <p class="text-gray-500 text-sm font-semibold mt-2">Business Offices</p>
+          <p class="text-gray-500 text-sm">8383 Greenway Blvd, Suite 600<br>Middleton, WI 53562</p>
+          <p class="text-gray-500 text-sm font-semibold mt-2">Focus Facility</p>
+          <p class="text-gray-500 text-sm">One Parker Place, Suite 305<br>Janesville, WI 53545</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location 1: Janesville -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-start mb-20">
+        <div class="fade-in">
+          <div class="inline-flex items-center gap-2 bg-accent-400/10 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-accent-600 text-sm font-semibold">Focus Facilities</span>
+          </div>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Janesville, Wisconsin</h2>
+          <p class="text-gray-500 leading-relaxed mb-6">Our world-class focus group facilities are centrally located in downtown Janesville, easily accessible from Chicago, Madison, and Milwaukee.</p>
+
+          <div class="bg-gray-50 rounded-2xl p-6 mb-6">
+            <h3 class="font-bold text-gray-900 mb-3">Facility Address</h3>
+            <p class="text-gray-600 mb-4">One Parker Place, Suite 305<br>Janesville, WI 53545</p>
+
+            <h3 class="font-bold text-gray-900 mb-3">Travel Times</h3>
+            <div class="grid grid-cols-3 gap-4 text-center">
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-2xl font-extrabold text-brand-600">90</div>
+                <div class="text-xs text-gray-400 mt-1">min from Chicago</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-2xl font-extrabold text-brand-600">40</div>
+                <div class="text-xs text-gray-400 mt-1">min from Madison</div>
+              </div>
+              <div class="bg-white rounded-xl p-4">
+                <div class="text-2xl font-extrabold text-brand-600">50</div>
+                <div class="text-xs text-gray-400 mt-1">min from Milwaukee</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <h3 class="font-bold text-gray-900 mb-3">Directions from Chicago</h3>
+            <ol class="text-gray-500 text-sm space-y-1.5 list-decimal list-inside">
+              <li>Take I-90/94 West from Chicago</li>
+              <li>Continue on I-90 West past Beloit</li>
+              <li>Take Exit 171A for WI-11/Racine Street</li>
+              <li>Head west on Racine Street into downtown Janesville</li>
+              <li>Turn right onto N. Parker Drive</li>
+              <li>One Parker Place will be on your left</li>
+            </ol>
+          </div>
+        </div>
+        <div class="fade-in">
+          <div class="rounded-2xl overflow-hidden shadow-lg h-80 lg:h-full lg:min-h-[500px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2935.5!2d-89.0204545!3d42.6839586!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDQxJzAyLjMiTiA4OcKwMDEnMTMuNiJX!5e0!3m2!1sen!2sus!4v1"
+              width="100%"
+              height="100%"
+              style="border:0; min-height:400px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Janesville Facility Location">
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location 2: Madison/Middleton -->
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div class="lg:order-2 fade-in">
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">Headquarters</span>
+          </div>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Madison, Wisconsin</h2>
+          <p class="text-gray-500 leading-relaxed mb-6">Our headquarters office is located in Middleton, Wisconsin — just minutes from downtown Madison, the state capitol, and the Dane County Regional Airport.</p>
+
+          <div class="bg-gray-50 rounded-2xl p-6 mb-6">
+            <h3 class="font-bold text-gray-900 mb-3">Office Address</h3>
+            <p class="text-gray-600 mb-4">8383 Greenway Boulevard, Suite 600<br>Middleton, WI 53562</p>
+
+            <h3 class="font-bold text-gray-900 mb-3">Directions from Madison Airport</h3>
+            <ol class="text-gray-500 text-sm space-y-1.5 list-decimal list-inside">
+              <li>Exit the airport heading west on International Lane</li>
+              <li>Turn right onto US-151 West / Gammon Road</li>
+              <li>Continue on US-12/14 West (Beltline Highway)</li>
+              <li>Take the Greenway Boulevard exit</li>
+              <li>Turn right onto Greenway Boulevard</li>
+              <li>8383 Greenway Blvd will be on your right</li>
+            </ol>
+          </div>
+
+          <div class="bg-gray-50 rounded-2xl p-6">
+            <h3 class="font-bold text-gray-900 mb-3">Directions from State Capitol</h3>
+            <ol class="text-gray-500 text-sm space-y-1.5 list-decimal list-inside">
+              <li>Head west on University Avenue</li>
+              <li>Continue onto US-14 West / University Avenue</li>
+              <li>Merge onto US-12/14 West (Beltline Highway)</li>
+              <li>Take the Greenway Boulevard exit</li>
+              <li>Turn right onto Greenway Boulevard</li>
+              <li>8383 Greenway Blvd will be on your right</li>
+            </ol>
+          </div>
+        </div>
+        <div class="lg:order-1 fade-in">
+          <div class="rounded-2xl overflow-hidden shadow-lg h-80 lg:h-full lg:min-h-[500px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2914.5!2d-89.5262004!3d43.0886292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDA1JzE5LjEiTiA4OcKwMzEnMzQuMyJX!5e0!3m2!1sen!2sus!4v1"
+              width="100%"
+              height="100%"
+              style="border:0; min-height:400px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Madison Office Location">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service custom marketing research and consulting firm providing consumer insights since 1979.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-2"><li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li><li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li><li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li><li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Capabilities</h4>
+          <ul class="space-y-2"><li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li><li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li><li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li><li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li><li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6"><a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a><a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

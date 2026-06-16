@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Facilities | City Research Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#1e56a0',700:'#163d72',800:'#0f2d54',900:'#0a1f3b' },
+            accent: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#0ea5e9; transition:width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .dropdown:hover .dropdown-menu { display:block; opacity:1; transform:translateY(0); }
+    .dropdown-menu { display:none; opacity:0; transform:translateY(-10px); transition:all 0.2s ease; }
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .hero-gradient { background:linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%); }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Capabilities
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
+        </nav>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Capabilities</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Quantitative Research</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">World-Class Focus Facilities</h1>
+      <p class="text-lg text-blue-100 max-w-2xl mx-auto">Modern research facilities in downtown Janesville, Wisconsin, featuring stadium-style client suites for comfortable observation during research sessions.</p>
+    </div>
+  </section>
+
+  <!-- Facilities Overview -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Our Spaces</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Explore Our Facilities</h2>
+        <p class="text-lg text-gray-500">Each space is designed to facilitate productive research sessions while keeping clients comfortable and engaged.</p>
+      </div>
+
+      <!-- Facility 1: Focus Group Room -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 fade-in">
+        <div class="rounded-2xl overflow-hidden shadow-lg">
+          <img src="images/facility-focus-group-room.jpg" alt="Focus Group Room" class="w-full h-80 object-cover">
+        </div>
+        <div>
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">01</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Group Facilities</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">Our main focus group room measures 24 x 32 feet and can comfortably accommodate up to 20 respondents. The versatile space is adaptable for various research formats including traditional focus groups, triads, and large central-location testing sessions.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>24 x 32 ft adaptable space</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Seats up to 20 respondents</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Multiple configuration options</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Facility 2: Client Viewing Suite -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 fade-in">
+        <div class="lg:order-2 rounded-2xl overflow-hidden shadow-lg">
+          <img src="images/facility-viewing-suite.jpg" alt="Client Viewing Suite" class="w-full h-80 object-cover">
+        </div>
+        <div class="lg:order-1">
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">02</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Client Viewing Suite</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">Four dedicated observation rooms seating up to 20 client-observers with complete privacy. Stadium-style seating provides excellent sightlines to the focus group room, ensuring every observer has a clear view of the research in progress.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>4 observation rooms</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Seats up to 20 observers</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Stadium-style seating</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Facility 3: Client Work Lounge -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 fade-in">
+        <div class="rounded-2xl overflow-hidden shadow-lg">
+          <img src="images/facility-client-lounge.jpg" alt="Client Work Lounge" class="w-full h-80 object-cover">
+        </div>
+        <div>
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">03</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Client Work Lounge</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">A comfortable, professional space designed for private conversations, concurrent meetings, post-session debriefs, and focused work. Equipped with secure internet access so your team stays productive between sessions.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Private meeting space</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Secure internet access</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Debrief-ready environment</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Facility 4: Test Kitchen -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center mb-20 fade-in">
+        <div class="lg:order-2 rounded-2xl overflow-hidden shadow-lg">
+          <img src="images/facility-test-kitchen.jpg" alt="Test Kitchen" class="w-full h-80 object-cover">
+        </div>
+        <div class="lg:order-1">
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">04</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Test Kitchen Facilities</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">A fully functional kitchen equipped for food and beverage testing, product preparation, and consumer taste-testing sessions. Features one-way glass with an adjacent client viewing area for unobtrusive observation.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Fully functional kitchen</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>One-way glass observation</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Adjacent client viewing area</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Facility 5: Waiting Room -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center fade-in">
+        <div class="rounded-2xl overflow-hidden shadow-lg">
+          <img src="images/facility-waiting-room.jpg" alt="Respondent Waiting Area" class="w-full h-80 object-cover">
+        </div>
+        <div>
+          <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-1.5 mb-4">
+            <span class="text-brand-600 text-sm font-semibold">05</span>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Respondent Waiting Area</h3>
+          <p class="text-gray-500 leading-relaxed mb-4">Separate, comfortable waiting facilities for research participants. Designed to keep respondents relaxed and at ease before their sessions, ensuring they arrive in the best possible frame of mind for productive research.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Comfortable seating</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Separate from research areas</li>
+            <li class="flex items-center gap-2 text-gray-600 text-sm"><svg class="w-4 h-4 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Welcoming atmosphere</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location Info -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+      <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">Janesville, Wisconsin</h2>
+      <p class="text-gray-500 mb-2">One Parker Place, Suite 305, Janesville, WI 53545</p>
+      <p class="text-gray-400 text-sm mb-6">90 minutes from Chicago &bull; 40 minutes from Madison &bull; 50 minutes from Milwaukee</p>
+      <a href="contact.html" class="inline-flex items-center px-6 py-3 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 transition-colors shadow-md">
+        Get Directions
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service custom marketing research and consulting firm providing consumer insights since 1979.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li>
+            <li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li>
+            <li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li>
+            <li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Capabilities</h4>
+          <ul class="space-y-2">
+            <li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li>
+            <li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li>
+            <li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li>
+            <li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li>
+            <li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a>
+          <a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
