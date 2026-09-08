@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Monthly competitive sweeps, social listening and grey-market watch across the retailers and markets you compete in, read by researchers who know your category. Part of the Pervasive Insights&trade; suite from City Research Solutions.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitive Intelligence | Pervasive Insights&trade; | City Research Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#1e56a0',700:'#163d72',800:'#0f2d54',900:'#0a1f3b' },
+        accent: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' }
+      }}}
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#0ea5e9; transition:width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .dropdown:hover .dropdown-menu { display:block; opacity:1; transform:translateY(0); }
+    .dropdown-menu { display:none; opacity:0; transform:translateY(-10px); transition:all 0.2s ease; }
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .hero-gradient { background:linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%); }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Research Services
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5">AI SUITE</span></a>
+            </div>
+          </div>
+          <div class="dropdown relative">
+            <button class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase flex items-center gap-1">
+              Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5 tracking-normal">AI SUITE</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-80 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">The AI Suite: Overview</a>
+              <a href="pi-research-library.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Research Stack: Library &amp; Data</a>
+              <a href="pi-synthetic-panel.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Synthetic Customers: Surveys, Groups, One-on-Ones</a>
+              <a href="pi-competitive-intelligence.html" class="block px-4 py-2.5 text-sm text-brand-600 font-semibold bg-brand-50">Competitive Intelligence</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Research Services</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Quantitative Research</a>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Pervasive Insights&trade; &middot; AI Suite</a>
+        </div>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Pervasive Insights&trade; &middot; AI Suite</p>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Overview</a>
+          <a href="pi-research-library.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Stack</a>
+          <a href="pi-synthetic-panel.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Synthetic Customers</a>
+          <a href="pi-competitive-intelligence.html" class="block px-4 py-2 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Competitive Intelligence</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10"><div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+      <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Pervasive Insights&trade; &middot; Alongside the portal</p>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Competitive Intelligence</h1>
+      <p class="text-lg text-blue-100 max-w-2xl mx-auto">What your competitors charge, where they are stocked, what they launched and what people are saying about them, collected every month across the retailers and markets you compete in, and read by researchers who know your category.</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <div class="fade-in">
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-6">The price sheet somebody updates twice a year, run monthly and completely.</h2>
+          <p class="text-gray-500 leading-relaxed mb-4">Most brands track their competitors by hand: a spreadsheet of shelf prices someone refreshes when there is time, a few Google alerts, and whatever the sales team heard at the show. It is a snapshot, usually of one market, and it cannot see the things that only show up as a series: how long a rival has been on promotion, how fast its reviews are accumulating, whether it is quietly adding retailers.</p>
+          <p class="text-gray-500 leading-relaxed mb-4">Our competitive intelligence program replaces the snapshot with a time series. Automated collection runs against the named retailers in each market to a fixed product master, the professional and consumer conversation is monitored continuously, and a researcher who knows your category turns both into a monthly pulse and a quarterly briefing. Where the signals disagree is usually the most useful finding.</p>
+          <p class="text-gray-500 leading-relaxed mb-8">It runs as a City Research program alongside your Pervasive Insights&trade; portal, and every sweep and listening report is indexed into your Research Stack as a dataset, so a shelf-price question and a customer-perception question can be answered in the same place.</p>
+
+          <h3 class="text-lg font-bold text-gray-900 mb-4">The tools</h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="bg-gray-50 rounded-xl p-5">
+              <div class="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 10h18v11H3zM8 14h8"/></svg></div>
+              <h4 class="font-bold text-gray-900 mb-1">Competitive Sweep</h4>
+              <p class="text-gray-500 text-sm">Price, promotion, availability, channel coverage, assortment, review velocity and product detail, by retailer and market, monthly or quarterly.</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-5">
+              <div class="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div>
+              <h4 class="font-bold text-gray-900 mb-1">Social Listening</h4>
+              <p class="text-gray-500 text-sm">Share of voice, sentiment, the recurring arguments, and which creators and educators are associated with which brands, tracked over time.</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-5">
+              <div class="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+              <h4 class="font-bold text-gray-900 mb-1">Grey &amp; Parallel-Market Watch</h4>
+              <p class="text-gray-500 text-sm">Counterfeit and near-mark detection across the global marketplaces where your product turns up without your permission.</p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-5">
+              <div class="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center mb-3"><svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+              <h4 class="font-bold text-gray-900 mb-1">Live Dashboard</h4>
+              <p class="text-gray-500 text-sm">Price index, share of purchase, SKU count, channel depth and presence score by market, refreshed on the sweep cadence, with every tile marked measured or modelled and the open question of the quarter stated in plain language.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample: the dashboard's own structure (KPI tiles, measured/modelled, the headline, brand watch, open question, watch list) -->
+        <div class="fade-in">
+          <div class="rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white">
+            <div class="bg-gray-900 px-5 py-3 flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Competitive Intelligence &middot; Dashboard</span>
+              <span class="text-[10px] font-semibold text-gray-300"><span class="text-green-400">&#9679;</span> measured &nbsp; <span class="text-amber-300">&#9679;</span> modelled</span>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wider mb-5">
+                <span class="bg-brand-600 text-white rounded px-2 py-1">Dashboard</span><span class="bg-gray-100 text-gray-600 rounded px-2 py-1">Competitive Sweep</span><span class="bg-gray-100 text-gray-600 rounded px-2 py-1">Purchase Diary</span><span class="bg-gray-100 text-gray-600 rounded px-2 py-1">Social Listening</span><span class="ml-auto bg-gray-100 text-gray-600 rounded px-2 py-1">Market: US &#9662;</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 tabular-nums">
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">Price index <span class="text-green-500">&#9679;</span></div><div class="text-xl font-extrabold text-gray-900">100 <span class="text-xs font-semibold text-green-600">+1.2%</span></div><div class="text-[11px] text-gray-500">Held three waves. Set fell 4%.</div></div>
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">Share of purchase <span class="text-green-500">&#9679;</span></div><div class="text-xl font-extrabold text-gray-900">37%</div><div class="text-[11px] text-gray-500">Top brand in category. Diary, US.</div></div>
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">SKUs <span class="text-green-500">&#9679;</span></div><div class="text-xl font-extrabold text-gray-900">14 <span class="text-xs font-semibold text-gray-500">0%</span></div><div class="text-[11px] text-gray-500">Flat 24 mo. Nearest rival 9 &rarr; 19.</div></div>
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">Channel depth <span class="text-green-500">&#9679;</span></div><div class="text-xl font-extrabold text-gray-900">3.8 <span class="text-xs font-semibold text-gray-500">#1</span></div><div class="text-[11px] text-gray-500">Retailers per SKU. Rivals 2.6.</div></div>
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">Presence score <span class="text-amber-400">&#9679;</span></div><div class="text-xl font-extrabold text-gray-900">58 <span class="text-xs font-semibold text-gray-500">#1</span></div><div class="text-[11px] text-gray-500">Highest in category. Listening, modelled.</div></div>
+                <div class="bg-gray-50 rounded-lg p-3"><div class="text-[10px] uppercase tracking-wider text-gray-400">Review placing</div><div class="text-xl font-extrabold text-gray-900">#4</div><div class="text-[11px] text-gray-500">One site's best-of list. Editorial, not a survey.</div></div>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">The headline</p>
+              <p class="text-sm text-gray-700 leading-relaxed mb-4"><strong class="text-gray-900">Most talked about, fourth on the list.</strong> The brand leads the category on share of voice and presence score [social listening, modelled] and on channel depth and price stability [sweep, measured], while placing fourth on one influential enthusiast site's best-of list for the year. We track the list because it is the kind buyers quote to each other, not because it measures anything.</p>
+              <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2">Brand watch &middot; this quarter</p>
+                  <table class="w-full text-xs tabular-nums"><tbody class="divide-y divide-gray-100">
+                    <tr><td class="py-1.5 font-semibold text-gray-900">Your brand</td><td class="py-1.5 text-right"><span class="inline-block w-6 text-center rounded bg-green-100 text-green-800 font-bold">B</span></td><td class="py-1.5 pl-2 text-gray-500">Advancing: clear momentum, identifiable weak spots</td></tr>
+                    <tr><td class="py-1.5 font-semibold text-gray-900">Rival 1</td><td class="py-1.5 text-right"><span class="inline-block w-6 text-center rounded bg-amber-100 text-amber-800 font-bold">C</span></td><td class="py-1.5 pl-2 text-gray-500">Holding: mixed signals</td></tr>
+                    <tr><td class="py-1.5 font-semibold text-gray-900">Rival 2</td><td class="py-1.5 text-right"><span class="inline-block w-6 text-center rounded bg-green-100 text-green-800 font-bold">A&minus;</span></td><td class="py-1.5 pl-2 text-gray-500">Commanding: gaining on most dimensions</td></tr>
+                  </tbody></table>
+                  <p class="text-[10px] text-gray-400 mt-1">Composite of price, assortment, coverage, purchase and conversation, graded on competitive position this quarter, not product quality.</p>
+                </div>
+                <div>
+                  <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2">Open question this quarter</p>
+                  <div class="text-xs space-y-2">
+                    <div class="border border-gray-200 rounded-lg p-2.5"><span class="font-bold text-gray-900">Social says:</span> <span class="text-gray-600">quiet. Rival 2 is absent from launch chatter and from the best-of list.</span></div>
+                    <div class="border border-gray-200 rounded-lg p-2.5"><span class="font-bold text-gray-900">Sweep says:</span> <span class="text-gray-600">expanding. 9 &rarr; 19 SKUs in two years, +4 added and nothing delisted in six months.</span></div>
+                    <p class="text-gray-500">Either a brand losing relevance while holding distribution, or one about to launch into shelf space it has already secured. Neither method resolves it; the diary would, by showing whether Rival 2 appears in shortlists.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-3 text-[11px] border-t border-gray-100 pt-4">
+                <div><p class="font-bold text-gray-700 uppercase tracking-wider mb-1">Watch &middot; sweep</p><p class="text-gray-500">Flagship coverage recovers? <span class="text-gray-400">monthly</span></p></div>
+                <div><p class="font-bold text-gray-700 uppercase tracking-wider mb-1">Watch &middot; social</p><p class="text-gray-500">Counterfeit chatter volume <span class="text-gray-400">monthly</span></p></div>
+                <div><p class="font-bold text-gray-700 uppercase tracking-wider mb-1">Watch &middot; diary</p><p class="text-gray-500">Rejected-model reasons <span class="text-gray-400">quarterly</span></p></div>
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 mt-3">Generic durable-goods category. Figures and brands are illustrative, produced under sample conditions, not from a client program. Tiles marked measured come from the sweep and the diary; tiles marked modelled come from social listening and carry a stated precision caveat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Triangulation -->
+  <section class="bg-brand-900 py-20 md:py-24 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+        <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Why a research firm runs it</p>
+        <h2 class="text-3xl font-extrabold mb-4">Three signals, three speeds, one program.</h2>
+        <p class="text-blue-100">Automated collection tells you what happened. Only a person can tell you why. We sell both, and the combination is the product.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white/5 rounded-2xl border border-white/10 p-6 fade-in"><div class="text-accent-400 text-xs font-bold uppercase tracking-wider mb-2">Leads by weeks</div><h3 class="font-bold text-lg mb-2">Social Listening</h3><p class="text-sm text-blue-200">The earliest signal and the least precise. It will tell you a brand is gaining ground weeks before it reaches a shelf, but not what anything costs or what anyone bought.</p></div>
+        <div class="bg-white/5 rounded-2xl border border-white/10 p-6 fade-in"><div class="text-accent-400 text-xs font-bold uppercase tracking-wider mb-2">Confirms in days</div><h3 class="font-bold text-lg mb-2">Competitive Sweep</h3><p class="text-sm text-blue-200">What actually landed, at what price, in how many retailers. Measured, not modelled, and only possible as a series if collection runs as events happen.</p></div>
+        <div class="bg-white/5 rounded-2xl border border-white/10 p-6 fade-in"><div class="text-accent-400 text-xs font-bold uppercase tracking-wider mb-2">Settles motive in months</div><h3 class="font-bold text-lg mb-2">Purchase Diary <span class="text-xs font-normal text-blue-300">(a research service)</span></h3><p class="text-sm text-blue-200">A panel member buys any brand, logs it while the decision is fresh, photographs the receipt, and tells us what came second and why it lost. The only method that asks a person. <a href="capabilities-online.html" class="underline hover:text-white">Part of our online research services.</a></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we collect -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-3 gap-10">
+        <div class="fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">What we collect</p>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-4">The product master is the part worth understanding.</h2>
+          <p class="text-gray-500 text-sm leading-relaxed">Collecting from seventeen retailers is straightforward. Deciding what counts as the same product across markets and across waves is category judgment, not a coding problem, and it is what breaks a price series when it is done poorly. That is why a researcher builds the master before the first sweep runs.</p>
+        </div>
+        <div class="lg:col-span-2 overflow-x-auto fade-in">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left text-xs uppercase tracking-wider text-gray-400 border-b border-gray-200"><th class="py-2 pr-4">Signal</th><th class="py-2">What it tracks</th></tr></thead>
+            <tbody class="divide-y divide-gray-100 text-gray-600">
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Price</td><td class="py-3">Selling and list price by retailer, discount depth, spread across the market, currency</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Promotion</td><td class="py-3">Whether a model is on promotion and how many months of the year it has been</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Availability</td><td class="py-3">In stock, out of stock or delisted, by retailer and market, as a time series</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Channel coverage</td><td class="py-3">How many retailers carry each model, which ones, and how that count moves wave to wave</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Assortment</td><td class="py-3">Launches, discontinuations, variants, and the count of live models per brand</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Demand proxy</td><td class="py-3">New reviews per model per month and movement in average rating</td></tr>
+              <tr><td class="py-3 pr-4 font-semibold text-gray-900 align-top">Conversation</td><td class="py-3">Mention volume, share of voice, sentiment and themes by brand; creator and educator associations; platform, geography and language</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other tools -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">More in the Pervasive Insights&trade; suite</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="pervasive-insights.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Suite overview</a>
+        <a href="pi-research-library.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Research Library &amp; Ask Your Data</a>
+        <a href="pi-synthetic-panel.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Calibrated Synthetic Panel</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore: human research services and the rest of the suite -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Human research first</h3>
+      <p class="text-gray-500 text-sm text-center mb-6">Everything in the suite is built on studies fielded by City Research Solutions. Explore the research services behind it.</p>
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <a href="capabilities-in-facility.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">In-Facility (Clinical)</a>
+        <a href="capabilities-online.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Online Research</a>
+        <a href="capabilities-real-time.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Real-Time (Experiential)</a>
+        <a href="capabilities-retail.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Retail Research</a>
+        <a href="capabilities-quantitative.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Quantitative Research</a>
+      </div>
+      <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 text-center">Elsewhere in Pervasive Insights&trade;</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="pervasive-insights.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Overview</a>
+        <a href="pi-research-library.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Research Stack</a>
+        <a href="pi-synthetic-panel.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Synthetic Customers</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient py-16 md:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-extrabold text-white mb-4">Start with the markets and retailers that matter to you.</h2>
+      <p class="text-lg text-blue-100 mb-8">Programs are built from the three signals in any combination, at the cadence and market count that fits. The first conversation is about your category, not a package.</p>
+      <a href="contact.html" class="inline-flex items-center px-8 py-4 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg">Talk to us about your category <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-5 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service consumer research and insights firm, established in the Madison, Wisconsin area in 1979. Human research first; a suite of machine-learning tools built on it.</p>
+          <p class="text-blue-300 text-xs mt-4">Pervasive Insights&trade; is a City Research Solutions product. <a href="https://pervasiveinsights.ai" class="underline hover:text-white transition-colors">pervasiveinsights.ai</a></p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2"><li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li><li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li><li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li><li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Research Services</h4>
+          <ul class="space-y-2"><li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li><li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li><li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li><li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li><li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Pervasive Insights&trade; &middot; AI Suite</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Pervasive Insights&trade; &middot; AI Suite</h4>
+          <ul class="space-y-2"><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Overview</a></li><li><a href="pi-research-library.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Stack</a></li><li><a href="pi-synthetic-panel.html" class="text-blue-200 hover:text-white text-sm transition-colors">Synthetic Customers</a></li><li><a href="pi-competitive-intelligence.html" class="text-blue-200 hover:text-white text-sm transition-colors">Competitive Intelligence</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6"><a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a><a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

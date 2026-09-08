@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Pervasive Insights&trade; is the AI suite of City Research Solutions: a searchable research library, a synthetic consumer panel calibrated to how your customers actually answer, and monthly competitive intelligence. A City Research Solutions product.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pervasive Insights&trade; | The AI Suite of City Research Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#1e56a0',700:'#163d72',800:'#0f2d54',900:'#0a1f3b' },
+        accent: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' }
+      }}}
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#0ea5e9; transition:width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .dropdown:hover .dropdown-menu { display:block; opacity:1; transform:translateY(0); }
+    .dropdown-menu { display:none; opacity:0; transform:translateY(-10px); transition:all 0.2s ease; }
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .hero-gradient { background:linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%); }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase flex items-center gap-1">
+              Research Services
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-brand-600 font-semibold bg-brand-50">Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5">AI SUITE</span></a>
+            </div>
+          </div>
+          <div class="dropdown relative">
+            <button class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase flex items-center gap-1">
+              Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5 tracking-normal">AI SUITE</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-80 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-brand-600 font-semibold bg-brand-50">The AI Suite: Overview</a>
+              <a href="pi-research-library.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Research Stack: Library &amp; Data</a>
+              <a href="pi-synthetic-panel.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Synthetic Customers: Surveys, Groups, One-on-Ones</a>
+              <a href="pi-competitive-intelligence.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Competitive Intelligence</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Research Services</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Quantitative Research</a>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Pervasive Insights&trade; &middot; AI Suite</a>
+        </div>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Pervasive Insights&trade; &middot; AI Suite</p>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Overview</a>
+          <a href="pi-research-library.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Stack</a>
+          <a href="pi-synthetic-panel.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Synthetic Customers</a>
+          <a href="pi-competitive-intelligence.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Competitive Intelligence</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10"><div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div><div class="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+      <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Pervasive Insights&trade; &middot; The AI suite of City Research Solutions</p>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-5">Your research, working harder.</h1>
+      <p class="text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">A private portal built on the research you have already commissioned. Search your reports and query your raw data. Field surveys, focus groups and one-on-one interviews with calibrated synthetic panelists drawn from your own customers. Watch your competitive market month by month. Every answer cites its source, and every calibration is on the report card.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="contact.html" class="inline-flex items-center px-7 py-3.5 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg">Request a walkthrough</a>
+        <a href="#tools" class="inline-flex items-center px-7 py-3.5 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-all border border-white/20">See what's in the portal</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- The loop, up top -->
+  <section class="bg-gray-50 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- The loop graphic: editable SVG at images/pi-loop.svg -->
+      <figure class="fade-in">
+        <img src="images/pi-loop.svg" alt="The Pervasive Insights&trade; loop: human research fields studies, which calibrate a synthetic panel; the panel screens and sharpens concepts in synthetic surveys and focus groups; real respondents field the finalists; their answers recalibrate the panel around a central reservoir of the client's research history." class="w-full rounded-2xl border border-gray-100 shadow-sm">
+      </figure>
+      <p class="text-center text-sm text-gray-500 mt-4">Human research first. Machine learning built on top. Every loop makes the next study count for more.</p>
+    </div>
+  </section>
+
+  <!-- Positioning -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-5 gap-12 items-start">
+        <div class="lg:col-span-3 fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Why it starts with human research</p>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Synthetic research is only as good as the real research underneath it.</h2>
+          <div class="space-y-4 text-gray-600 leading-relaxed">
+            <p>Most synthetic-consumer tools generate respondents from a demographic profile, with no evidence that they answer the way your actual customers do. Pervasive Insights&trade; is built the other way round. Every tool in the portal starts from research you have actually fielded: your report decks, your raw datasets, your customers' real answers. The synthetic panelists are calibrated to those answers, the calibration error is published topic area by topic area, and where you have asked the question before, the human result sits right beside the synthetic one.</p>
+            <p>It does not replace fielding. It screens the ideas that deserve a real study, answers the questions that come up between waves, and keeps every study you have ever paid for in play.</p>
+          </div>
+        </div>
+        <div class="lg:col-span-2 fade-in">
+          <div class="bg-gray-50 rounded-2xl border border-gray-100 p-8">
+            <h3 class="text-lg font-bold text-gray-900 mb-5">Three kinds of "synthetic"</h3>
+            <ol class="space-y-5">
+              <li class="flex gap-4">
+                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 text-gray-600 font-bold text-sm flex items-center justify-center">1</span>
+                <div><p class="font-semibold text-gray-900">Generated personas</p><p class="text-sm text-gray-500">Built from demographic filters alone. No customer data, and no evidence of how closely they track real respondents.</p></div>
+              </li>
+              <li class="flex gap-4">
+                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 text-gray-600 font-bold text-sm flex items-center justify-center">2</span>
+                <div><p class="font-semibold text-gray-900">Data-described personas</p><p class="text-sm text-gray-500">Built from web analytics or CRM records. They know who your customers are, but their answers are still guesses.</p></div>
+              </li>
+              <li class="flex gap-4">
+                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-600 text-white font-bold text-sm flex items-center justify-center">3</span>
+                <div><p class="font-semibold text-brand-700">Calibrated synthetic panelists</p><p class="text-sm text-gray-600">Built from your fielded research and checked against it, topic area by topic area, segment by segment, on a report card you can open any time.</p></div>
+              </li>
+            </ol>
+            <p class="text-xs text-gray-400 mt-6">Pervasive Insights&trade; is the third kind. Machine learning is the method; your research is the material.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's in the portal: mirrors the portal's own navigation -->
+  <section id="tools" class="bg-gray-50 py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">What's in the portal</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">One question box. Five direct tools. Everything cited.</h2>
+        <p class="text-lg text-gray-500">Your team opens the portal, types a research question, and the portal decides whether the answer is in your library, in your data, or needs the synthetic panel. Or they go straight to the tool they want.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 mb-8">
+        <a href="pi-research-library.html" class="card-hover group bg-white rounded-2xl border border-gray-100 p-8 shadow-sm block">
+          <p class="text-xs font-bold uppercase tracking-wider text-accent-500 mb-3">Research Stack</p>
+          <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Every study you have ever fielded, indexed in one place, with an AI agent over the top.</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">Not a slide search. Your report decks and the full, structured datasets behind them, held in one corpus. Ask a question in plain language and the agent works out what you are looking for, reads across every study at once, and comes back with a single cited answer. Then ask the follow-up: cut it by age, by income, by wave.</p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="bg-gray-50 rounded-xl p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">The Library</p><p class="font-semibold text-gray-900 mt-1">Library search</p><p class="text-xs text-gray-500 mt-1">Search your past reports, slide deliverables and PowerPoint decks. AI-synthesized answers with citations back to the original slides.</p></div>
+            <div class="bg-gray-50 rounded-xl p-4"><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">The Data</p><p class="font-semibold text-gray-900 mt-1">Data synthesis</p><p class="text-xs text-gray-500 mt-1">Query the raw research datasets directly. One question runs across every matching dataset in your corpus, three waves of a tracker at once, and the answer is synthesized into one finding with the table or chart.</p></div>
+          </div>
+          <span class="mt-5 inline-flex items-center text-brand-600 font-semibold text-sm">Research Stack <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+        <a href="pi-synthetic-panel.html" class="card-hover group bg-white rounded-2xl border-2 border-brand-100 p-8 shadow-sm block">
+          <p class="text-xs font-bold uppercase tracking-wider text-accent-500 mb-3">Synthetic customers</p>
+          <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors">Calibrated synthetic panelists drawn from your own customers, ready for any question.</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">Build a panel from your segments, then survey it, sit it around a table, or interview one panelist at a time. Your own human data is layered in: where you have asked the same or a similar question of real people, the result comes back side by side with the human answer, cell by cell.</p>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div class="bg-gray-50 rounded-xl p-4"><p class="font-semibold text-gray-900">Surveys</p><p class="text-xs text-gray-500 mt-1">Field a survey to 50 to 500 calibrated synthetic panelists.</p></div>
+            <div class="bg-gray-50 rounded-xl p-4"><p class="font-semibold text-gray-900">Focus groups</p><p class="text-xs text-gray-500 mt-1">Run moderated focus group discussions with synthetic panelists from any segment.</p></div>
+            <div class="bg-gray-50 rounded-xl p-4"><p class="font-semibold text-gray-900">One-on-ones</p><p class="text-xs text-gray-500 mt-1">Interview a single panelist in depth about their category behavior.</p></div>
+          </div>
+          <span class="mt-5 inline-flex items-center text-brand-600 font-semibold text-sm">Synthetic customers <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-wider text-accent-500 mb-3">Deliverables</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Any conversation becomes a one-pager, an analyst memo or a slide deck.</h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-4">Every answer in the portal exports to Word with the synthesis, the sources and Pervasive Insights&trade; branding, and any result can be sent to a slide presentation. The rest of the suite downloads too:</p>
+          <ul class="text-sm text-gray-600 space-y-1.5">
+            <li class="flex gap-2"><span class="text-accent-500 font-bold">&rarr;</span><span><strong class="text-gray-900">Library search:</strong> only the referenced slides, not the full decks.</span></li>
+            <li class="flex gap-2"><span class="text-accent-500 font-bold">&rarr;</span><span><strong class="text-gray-900">Synthetic surveys:</strong> the full dataset and the question-by-question summaries.</span></li>
+            <li class="flex gap-2"><span class="text-accent-500 font-bold">&rarr;</span><span><strong class="text-gray-900">Synthetic focus groups:</strong> the complete transcript and a full summary report.</span></li>
+            <li class="flex gap-2"><span class="text-accent-500 font-bold">&rarr;</span><span><strong class="text-gray-900">Deliverables shelf:</strong> every one-pager and memo you have exported, kept in the portal by date.</span></li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <p class="text-xs font-bold uppercase tracking-wider text-accent-500 mb-3">Under the hood</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">The Calibration Report Card and the Constellation, open to every client.</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">The report card shows how closely the synthetic panel matches your real customer data on each of 19 marketing topic areas, for each of your segments, in percentage points. The Constellation shows what has been calibrated, what is inferred from a related topic area, and what is not yet calibrated. Nothing is hidden. <a href="pi-synthetic-panel.html#report-card" class="text-brand-600 font-semibold">See the report card <a href="pi-synthetic-panel.html#report-card" class="text-brand-600 font-semibold">See the report card &rarr;</a>rarr;</a> <a href="pi-synthetic-panel.html#constellation" class="text-brand-600 font-semibold ml-2">See the Constellation &rarr;</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Competitive intelligence: alongside the portal, feeding the research stack -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-5 gap-12 items-center">
+        <div class="lg:col-span-3 fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Alongside the portal</p>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-5">Competitive Intelligence: the third source of truth.</h2>
+          <p class="text-gray-600 leading-relaxed mb-4">The portal answers from what your customers have told us. A Competitive Intelligence program answers from what the market is doing: what competitors charge, where they are stocked, what they launched, and what people are saying about them, collected every month by automated sweeps and social listening, and confirmed by a human purchase diary.</p>
+          <p class="text-gray-600 leading-relaxed">It is run by City Research as a program, not a portal tool, and its outputs land in the same place your research does: every sweep and every listening report is indexed into your Research Stack as a dataset, so the portal can put a shelf-price question next to a customer-perception question and answer both.</p>
+          <a href="pi-competitive-intelligence.html" class="mt-6 inline-flex items-center text-brand-600 font-semibold">Competitive Intelligence <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="lg:col-span-2 fade-in">
+          <div class="bg-brand-50 rounded-2xl border border-brand-100 p-6">
+            <p class="text-xs font-bold uppercase tracking-wider text-brand-700 mb-3">Three signals, three speeds</p>
+            <ul class="space-y-3 text-sm text-gray-700">
+              <li><strong class="text-gray-900">Social listening</strong> leads by weeks: the earliest signal and the least precise.</li>
+              <li><strong class="text-gray-900">Competitive sweep</strong> confirms in days: what actually landed, at what price, in how many retailers.</li>
+              <li><strong class="text-gray-900">Purchase diary</strong> settles motive in months: the only method that asks a person.</li>
+            </ul>
+            <p class="text-xs text-gray-500 mt-4">Where two of them disagree is usually the more useful finding.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How the two arms work together -->
+  <section class="bg-gray-50 py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">How it fits</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Human research and the suite, in one loop.</h2>
+        <p class="text-lg text-gray-500">The suite does not stand apart from our research services. It sits between waves and makes each one count for more.</p>
+      </div>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="relative bg-brand-50 rounded-2xl p-6 fade-in">
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Step 1 &middot; Human</span>
+          <h3 class="font-bold text-gray-900 mt-2 mb-2">Field</h3>
+          <p class="text-sm text-gray-600">A survey, a set of groups, a tracker wave or an in-home test, run the way we have run them for decades.</p>
+        </div>
+        <div class="relative bg-white rounded-2xl p-6 border border-gray-100 fade-in">
+          <span class="text-xs font-bold text-accent-500 uppercase tracking-wider">Step 2 &middot; Portal</span>
+          <h3 class="font-bold text-gray-900 mt-2 mb-2">Calibrate</h3>
+          <p class="text-sm text-gray-600">Report decks and datasets go into your Research Stack. The synthetic panelists are calibrated to the new results and the report card updates.</p>
+        </div>
+        <div class="relative bg-white rounded-2xl p-6 border border-gray-100 fade-in">
+          <span class="text-xs font-bold text-accent-500 uppercase tracking-wider">Step 3 &middot; Portal</span>
+          <h3 class="font-bold text-gray-900 mt-2 mb-2">Screen &amp; sharpen</h3>
+          <p class="text-sm text-gray-600">Concepts, packaging, copy, claims, ads, flavors and names are tested in synthetic surveys and focus groups. Weak options are screened out; survivors are sharpened.</p>
+        </div>
+        <div class="relative bg-brand-50 rounded-2xl p-6 fade-in">
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Step 4 &middot; Human</span>
+          <h3 class="font-bold text-gray-900 mt-2 mb-2">Field the finalists</h3>
+          <p class="text-sm text-gray-600">Real respondents decide the winner. The answer goes back into the Research Stack, and the next round starts smarter.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we claim -->
+  <section class="bg-brand-900 py-20 md:py-24 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="fade-in">
+          <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">What we claim, and what we don't</p>
+          <h2 class="text-3xl font-extrabold mb-6">Calibrated to how your customers actually answer.</h2>
+          <p class="text-blue-100 leading-relaxed mb-4">We test the panel the way a research firm tests anything: apples to apples. The same questions go to real respondents and to the calibrated panel, and the Calibration Report Card shows the gap on every cell, topic area by topic area, segment by segment, across all 19 marketing topic areas. Rows that are not yet calibrated say so.</p>
+          <p class="text-blue-100 leading-relaxed">Where you have tested, you get your exact human results. Where you have not, you get a calibrated read that respects everything you have tested. Where something is genuinely new, the panel flags it low-confidence and points to a real test.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5 fade-in">
+          <div class="bg-white/5 rounded-2xl p-6 border border-white/10"><div class="text-3xl font-extrabold text-accent-400">~3.5pp</div><p class="text-sm text-blue-200 mt-1">Average distribution error against real survey data, across all 19 marketing topic areas; 92% of cells within 5 points</p></div>
+          <div class="bg-white/5 rounded-2xl p-6 border border-white/10"><div class="text-3xl font-extrabold text-accent-400">6,000+</div><p class="text-sm text-blue-200 mt-1">Calibrated synthetic panelists per client, drawn to match the actual buyer population and its segments</p></div>
+          <div class="bg-white/5 rounded-2xl p-6 border border-white/10"><div class="text-3xl font-extrabold text-accent-400">40+ years</div><p class="text-sm text-blue-200 mt-1">Of real human respondent experience across thousands of research engagements, behind every calibration</p></div>
+          <div class="bg-white/5 rounded-2xl p-6 border border-white/10"><div class="text-3xl font-extrabold text-accent-400">Private</div><p class="text-sm text-blue-200 mt-1">Built on private infrastructure owned and operated by CRS. Your data never touches a third-party server.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Common questions</p>
+        <h2 class="text-3xl font-extrabold text-gray-900">Before you ask</h2>
+      </div>
+      <div class="space-y-4">
+        <details class="group bg-gray-50 rounded-xl border border-gray-100 p-6">
+          <summary class="font-semibold text-gray-900 cursor-pointer flex justify-between items-center">Is this "AI"?<span class="text-brand-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <p class="text-gray-600 text-sm leading-relaxed mt-3">It is machine learning applied to research you have commissioned, run by a research firm on infrastructure we own. We do not sell a chatbot, and we do not invent respondents. We would rather you think of Pervasive Insights&trade; as a research methodology than as software.</p>
+        </details>
+        <details class="group bg-gray-50 rounded-xl border border-gray-100 p-6">
+          <summary class="font-semibold text-gray-900 cursor-pointer flex justify-between items-center">Who owns the data, and where does it live?<span class="text-brand-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <p class="text-gray-600 text-sm leading-relaxed mt-3">You own it. Your portal is private to your company and runs on private infrastructure owned and operated by CRS; your data never touches a third-party server. Your studies calibrate your panel and nobody else's.</p>
+        </details>
+        <details class="group bg-gray-50 rounded-xl border border-gray-100 p-6">
+          <summary class="font-semibold text-gray-900 cursor-pointer flex justify-between items-center">Does it replace fielding real studies?<span class="text-brand-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <p class="text-gray-600 text-sm leading-relaxed mt-3">No, and we will tell any prospect the same. The portal decides what deserves fielding, answers the questions that come up between waves, and keeps every study you have ever paid for in use. Final decisions still go to real respondents, and every new wave tightens the calibration.</p>
+        </details>
+        <details class="group bg-gray-50 rounded-xl border border-gray-100 p-6">
+          <summary class="font-semibold text-gray-900 cursor-pointer flex justify-between items-center">What happens on a question we have never researched?<span class="text-brand-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <p class="text-gray-600 text-sm leading-relaxed mt-3">The result tells you. A survey result carries its calibration state: measured for that topic area, or inferred from a related one with no human benchmark attached. The report card shows which topic areas are not yet calibrated. When something is genuinely new, the panel flags it low-confidence and points to a real test.</p>
+        </details>
+        <details class="group bg-gray-50 rounded-xl border border-gray-100 p-6">
+          <summary class="font-semibold text-gray-900 cursor-pointer flex justify-between items-center">Do we need to be a current research client?<span class="text-brand-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <p class="text-gray-600 text-sm leading-relaxed mt-3">The portal works best on research we have fielded with you, and most clients meet it at the end of a readout. If you have a research history with another firm, we can index it; if you have none, we start with a study. Either way, the first conversation is a 30-minute walkthrough.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore: human research services and the rest of the suite -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Human research first</h3>
+      <p class="text-gray-500 text-sm text-center mb-6">Everything in the suite is built on studies fielded by City Research Solutions. Explore the research services behind it.</p>
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <a href="capabilities-in-facility.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">In-Facility (Clinical)</a>
+        <a href="capabilities-online.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Online Research</a>
+        <a href="capabilities-real-time.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Real-Time (Experiential)</a>
+        <a href="capabilities-retail.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Retail Research</a>
+        <a href="capabilities-quantitative.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Quantitative Research</a>
+      </div>
+      <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 text-center">Elsewhere in Pervasive Insights&trade;</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="pi-research-library.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Research Stack</a>
+        <a href="pi-synthetic-panel.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Synthetic Customers</a>
+        <a href="pi-competitive-intelligence.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Competitive Intelligence</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient py-16 md:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-extrabold text-white mb-4">See it on your own research.</h2>
+      <p class="text-lg text-blue-100 mb-8">A 30-minute walkthrough of a working portal, in your category, with generic sample data. No proposal, no slide deck.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="contact.html" class="inline-flex items-center px-8 py-4 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg">Request a walkthrough</a>
+        <a href="https://pervasiveinsights.ai" class="inline-flex items-center px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-all border border-white/20">pervasiveinsights.ai &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-5 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service consumer research and insights firm, established in the Madison, Wisconsin area in 1979. Human research first; a suite of machine-learning tools built on it.</p>
+          <p class="text-blue-300 text-xs mt-4">Pervasive Insights&trade; is a City Research Solutions product. <a href="https://pervasiveinsights.ai" class="underline hover:text-white transition-colors">pervasiveinsights.ai</a></p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2"><li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li><li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li><li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li><li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Research Services</h4>
+          <ul class="space-y-2"><li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li><li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li><li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li><li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li><li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Pervasive Insights&trade; &middot; AI Suite</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Pervasive Insights&trade; &middot; AI Suite</h4>
+          <ul class="space-y-2"><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Overview</a></li><li><a href="pi-research-library.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Stack</a></li><li><a href="pi-synthetic-panel.html" class="text-blue-200 hover:text-white text-sm transition-colors">Synthetic Customers</a></li><li><a href="pi-competitive-intelligence.html" class="text-blue-200 hover:text-white text-sm transition-colors">Competitive Intelligence</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6"><a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a><a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

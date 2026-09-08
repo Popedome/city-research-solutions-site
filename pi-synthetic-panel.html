@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="A synthetic panel of your customers built from your fielded research and calibrated to how they actually answer. One-on-one interviews, surveys and focus groups in minutes. Part of the Pervasive Insights&trade; suite from City Research Solutions.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calibrated Synthetic Panel | Pervasive Insights&trade; | City Research Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: {
+        brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#1e56a0',700:'#163d72',800:'#0f2d54',900:'#0a1f3b' },
+        accent: { 400:'#38bdf8',500:'#0ea5e9',600:'#0284c7' }
+      }}}
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#0ea5e9; transition:width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .dropdown:hover .dropdown-menu { display:block; opacity:1; transform:translateY(0); }
+    .dropdown-menu { display:none; opacity:0; transform:translateY(-10px); transition:all 0.2s ease; }
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .hero-gradient { background:linear-gradient(135deg, #0a1f3b 0%, #1e56a0 50%, #0284c7 100%); }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3">
+          <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
+          <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
+          <a href="facilities.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Research Facilities</a>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Research Services
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="capabilities-in-facility.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">In-Facility (Clinical) Research</a>
+              <a href="capabilities-online.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Online Research</a>
+              <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
+              <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
+              <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5">AI SUITE</span></a>
+            </div>
+          </div>
+          <div class="dropdown relative">
+            <button class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase flex items-center gap-1">
+              Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5 tracking-normal">AI SUITE</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-80 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">The AI Suite: Overview</a>
+              <a href="pi-research-library.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Research Stack: Library &amp; Data</a>
+              <a href="pi-synthetic-panel.html" class="block px-4 py-2.5 text-sm text-brand-600 font-semibold bg-brand-50">Synthetic Customers: Surveys, Groups, One-on-Ones</a>
+              <a href="pi-competitive-intelligence.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Competitive Intelligence</a>
+            </div>
+          </div>
+          <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+      <div class="px-4 py-4 space-y-2">
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">About Us</a>
+        <a href="facilities.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Facilities</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Research Services</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Quantitative Research</a>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Pervasive Insights&trade; &middot; AI Suite</a>
+        </div>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Pervasive Insights&trade; &middot; AI Suite</p>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Overview</a>
+          <a href="pi-research-library.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Stack</a>
+          <a href="pi-synthetic-panel.html" class="block px-4 py-2 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Synthetic Customers</a>
+          <a href="pi-competitive-intelligence.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Competitive Intelligence</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Hero -->
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10"><div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+      <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Pervasive Insights&trade; &middot; Synthetic customers</p>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Surveys, focus groups and one-on-ones with calibrated synthetic panelists.</h1>
+      <p class="text-lg text-blue-100 max-w-2xl mx-auto">Build a panel from your own segments, then field a survey, run a moderated group, or interview a single panelist in depth. Every result carries its calibration state, and the whole panel is graded on a report card you can open any time.</p>
+    </div>
+  </section>
+
+  <!-- The three modes, as the portal presents them -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-6 mb-16">
+        <div class="bg-white rounded-2xl border border-gray-200 p-7 shadow-sm fade-in"><p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Mode</p><h2 class="text-xl font-extrabold text-gray-900 mb-2">Panel Survey</h2><p class="text-gray-500 text-sm">Field a survey to 50 to 500 calibrated synthetic panelists, sized to each client. See results by total sample or by segment.</p></div>
+        <div class="bg-white rounded-2xl border border-gray-200 p-7 shadow-sm fade-in"><p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Mode</p><h2 class="text-xl font-extrabold text-gray-900 mb-2">Focus Groups</h2><p class="text-gray-500 text-sm">Run moderated focus group discussions with synthetic panelists from any segment. Group count and participants per group are set for each client; delivered as a transcript and a report.</p></div>
+        <div class="bg-white rounded-2xl border border-gray-200 p-7 shadow-sm fade-in"><p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Mode</p><h2 class="text-xl font-extrabold text-gray-900 mb-2">One-on-One</h2><p class="text-gray-500 text-sm">Interview a single panelist in depth about their category behavior. Chat with a panelist in their own voice.</p></div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+        <div class="fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Panel builder</p>
+          <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Not invented consumers. Your consumers, calibrated.</h2>
+          <p class="text-gray-500 leading-relaxed mb-4">Every panel is drawn from calibrated synthetic panelists built on your fielded research: the segments your surveys found, the language your focus groups used, the trade-offs your trackers measured. A Market Representative Panel mirrors your buyer population; a Custom Panel lets you set the segment mix, gender mix and age group, and add recruiting criteria in plain language.</p>
+          <p class="text-gray-500 leading-relaxed mb-8">Where you have tested, you get your exact human results. Where you have not, you get a calibrated read that respects everything you have tested, with realistic person-to-person variation rather than a flat average. When something is genuinely new, the panel flags it low-confidence and points to a real test.</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-3">Question types in survey administration</h3>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Open-End</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Single Select</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Multi Select</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Rating Scale</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Rank All Items</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Rank Top N</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Matrix (Single)</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Matrix (Check-All)</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">MaxDiff (Best/Worst)</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Van Westendorp Pricing</span><span class="bg-gray-100 text-gray-700 rounded-full px-3 py-1">Gabor-Granger Price Ladder</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-3">Attach stimulus images to any question. Results download as CSV or PDF. Plain-language recruiting criteria narrow any panel further.</p>
+        </div>
+
+        <!-- Panel builder, as it appears in the portal -->
+        <div class="fade-in">
+          <div class="rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white">
+            <div class="bg-gray-900 px-5 py-3 flex items-center justify-between"><span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Panel builder</span><span class="text-[10px] font-semibold text-amber-300 bg-amber-300/10 border border-amber-300/30 rounded px-2 py-0.5">Sample</span></div>
+            <div class="p-6 text-sm">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Sample presets</p>
+              <div class="flex gap-2 mb-4"><span class="bg-brand-700 text-white rounded px-3 py-1.5 text-xs font-semibold">Market Representative Panel</span><span class="border border-gray-200 rounded px-3 py-1.5 text-xs text-gray-600">Custom Panel</span><span class="border border-gray-200 rounded px-3 py-1.5 text-xs text-gray-600">Clear &amp; Start Fresh</span></div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Panel size</p>
+              <div class="flex gap-2 mb-4 text-xs"><span class="bg-brand-700 text-white rounded px-2.5 py-1 font-semibold">50</span><span class="border border-gray-200 rounded px-2.5 py-1">100</span><span class="border border-gray-200 rounded px-2.5 py-1">200</span><span class="border border-gray-200 rounded px-2.5 py-1">300</span><span class="border border-gray-200 rounded px-2.5 py-1">500</span></div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Segment mix</p>
+              <div class="space-y-1.5 text-xs tabular-nums mb-4">
+                <div class="flex items-center gap-2"><span class="w-40 text-gray-700">Core Enthusiast</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 bg-brand-600 rounded" style="width:24%"></div></div><span class="w-16 text-right text-gray-500">24% n=12</span></div>
+                <div class="flex items-center gap-2"><span class="w-40 text-gray-700">Practical Owner</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 bg-brand-600 rounded" style="width:22%"></div></div><span class="w-16 text-right text-gray-500">22% n=11</span></div>
+                <div class="flex items-center gap-2"><span class="w-40 text-gray-700">Premium Seeker</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 bg-brand-600 rounded" style="width:18%"></div></div><span class="w-16 text-right text-gray-500">18% n=9</span></div>
+                <div class="flex items-center gap-2"><span class="w-40 text-gray-700">Value Shopper</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 bg-brand-600 rounded" style="width:20%"></div></div><span class="w-16 text-right text-gray-500">20% n=10</span></div>
+                <div class="flex items-center gap-2"><span class="w-40 text-gray-700">Newcomer</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 bg-brand-600 rounded" style="width:16%"></div></div><span class="w-16 text-right text-gray-500">16% n=8</span></div>
+              </div>
+              <div class="grid grid-cols-2 gap-4 mb-4">
+                <div><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Gender mix</p><div class="flex gap-1 text-xs"><span class="bg-brand-700 text-white rounded px-2 py-1">Both</span><span class="border border-gray-200 rounded px-2 py-1">Men Only</span><span class="border border-gray-200 rounded px-2 py-1">Women Only</span></div></div>
+                <div><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Age group</p><div class="flex gap-1 text-xs"><span class="bg-brand-700 text-white rounded px-2 py-1">Mix</span><span class="border border-gray-200 rounded px-2 py-1">Under 40</span><span class="border border-gray-200 rounded px-2 py-1">40-60</span><span class="border border-gray-200 rounded px-2 py-1">60+</span></div></div>
+              </div>
+                            <div class="flex justify-end"><span class="bg-brand-700 text-white rounded px-4 py-2 text-xs font-semibold">Create Panel</span></div>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 mt-3">Segment names are illustrative. A live portal shows the client's own segments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sample: survey results in the portal's format -->
+  <section class="bg-gray-50 py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">What a survey result looks like</p>
+        <h2 class="text-3xl font-extrabold text-gray-900">Respondent distribution, results by total sample or by segment, and the calibration state on every question</h2>
+        <p class="text-gray-500 mt-4">And your own human data is layered in: the range your real customers have given on the same type of question, or, where you have asked the same question before, the human result beside the synthetic one, cell by cell.</p>
+      </div>
+      <div class="max-w-4xl mx-auto rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white fade-in">
+        <div class="bg-gray-900 px-5 py-3 flex items-center justify-between"><span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Survey results</span><span class="text-[10px] font-semibold text-gray-300">Download CSV &middot; Download PDF</span></div>
+        <div class="p-6 md:p-8">
+          <p class="text-lg font-bold text-gray-900">"Coffee maker replacement triggers" &middot; sample</p>
+          <p class="text-xs text-gray-500 mb-5">100 respondents &middot; 2 questions &middot; Complete</p>
+          <div class="bg-gray-50 rounded-lg px-4 py-3 mb-6 text-xs">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Respondent distribution</p>
+            <p class="text-gray-700"><span class="text-brand-600">&#9679;</span> Core Enthusiast: <strong>24</strong> &nbsp; <span class="text-brand-600">&#9679;</span> Practical Owner: <strong>22</strong> &nbsp; <span class="text-brand-600">&#9679;</span> Premium Seeker: <strong>18</strong> &nbsp; <span class="text-brand-600">&#9679;</span> Value Shopper: <strong>20</strong> &nbsp; <span class="text-brand-600">&#9679;</span> Newcomer: <strong>16</strong></p>
+            <p class="text-gray-500 mt-1">Male: 52 &nbsp; Female: 48</p>
+          </div>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-3">Questions</p>
+          <div class="border border-gray-200 rounded-xl p-5 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3"><p class="font-bold text-gray-900">Q1: Which of these would most make you replace your current coffee maker this year? <span class="font-normal text-gray-400">(single-select)</span></p><span class="text-[11px] text-brand-600">100 responses &middot; click to drill down</span></div>
+            <p class="text-[11px] bg-green-50 border border-green-200 text-green-800 rounded px-3 py-2 mb-3"><strong>Calibration state: Measured</strong> &middot; topic area: Purchase Intent &middot; a human benchmark for this topic area is attached; results are read against it.</p>
+            <div class="flex flex-wrap items-center gap-2 mb-3 text-xs"><span class="text-gray-500">Cut by:</span><span class="border border-gray-300 rounded-full px-3 py-1 text-gray-700 font-semibold">Overall</span><span class="border border-gray-200 rounded-full px-3 py-1 text-gray-500">By segment</span><span class="bg-amber-50 border border-amber-400 text-amber-800 rounded-full px-3 py-1 font-semibold">&#9635; Compare to human</span></div>
+            <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-4 mb-5 text-xs">
+              <p class="text-gray-800"><strong>Evidence: same question type</strong> &nbsp;<span class="text-gray-600">the range your real customers gave on this type of question, asked as a single-select purchase trigger, across <strong class="text-gray-900">214 previous studies</strong> and 31,600 respondents</span></p>
+              <p class="text-gray-800 mt-1"><strong>What is being measured:</strong> the leading answer's share of respondents</p>
+              <p class="text-gray-800 mt-4 mb-1"><strong>Your human data</strong> &middot; 214 measurements</p>
+              <div class="relative h-9">
+                <div class="absolute left-0 right-0 top-4 h-0.5 bg-amber-300"></div>
+                <div class="absolute top-3 h-3 bg-amber-200 rounded-sm" style="left:28.4%;width:32.6%"></div>
+                <div class="absolute top-1 h-7 bg-amber-400 border border-amber-600 rounded-sm" style="left:37.5%;width:12.3%"></div>
+                <div class="absolute top-0 h-9 w-1 bg-gray-900" style="left:43.2%"></div>
+                <span class="absolute -bottom-1 text-[10px] text-gray-500" style="left:28.4%;transform:translateX(-50%)">28.4%</span>
+                <span class="absolute -bottom-1 text-[10px] text-gray-500" style="left:61%;transform:translateX(-50%)">61.0%</span>
+              </div>
+              <div class="flex justify-between text-[10px] text-gray-400 mt-2"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+              <div class="flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-gray-600 mt-1"><span><span class="inline-block w-3 h-2 bg-amber-200 align-middle mr-1"></span>full range 28.4&ndash;61.0%</span><span><span class="inline-block w-3 h-3 bg-amber-400 border border-amber-600 align-middle mr-1"></span>middle half 37.5&ndash;49.8%</span><span><span class="inline-block w-0.5 h-3 bg-gray-900 align-middle mr-1"></span>median 43.2%</span></div>
+              <p class="text-gray-800 mt-4 mb-1"><strong>This survey</strong></p>
+              <div class="relative h-9">
+                <div class="absolute left-0 right-0 top-4 h-0.5 bg-amber-300"></div>
+                <div class="absolute top-3 h-3 bg-amber-100 rounded-sm" style="left:28.4%;width:32.6%"></div>
+                <div class="absolute top-0 h-9 w-1 bg-red-600" style="left:41%"></div>
+                <span class="absolute -top-1 text-[11px] font-bold text-red-700" style="left:42.5%">41%</span>
+              </div>
+              <div class="mt-3 border border-green-300 bg-white rounded px-3 py-2 text-green-800 font-semibold">2nd quarter &mdash; 37.5&ndash;43.2% &middot; inside the middle half of what your customers have said before</div>
+              <p class="text-gray-500 mt-2">Based on 214 human measurements &middot; evidence strong. A result outside the full human range would be held for review rather than reported.</p>
+            </div>
+            <div class="space-y-2 text-sm tabular-nums">
+              <div class="flex items-center gap-3"><span class="w-56 text-gray-700">Brews a single cup and a full pot</span><div class="flex-1 h-2.5 bg-gray-100 rounded"><div class="h-2.5 bg-brand-600 rounded" style="width:41%"></div></div><span class="w-20 text-right font-semibold text-gray-900">41% <span class="font-normal text-gray-400">n=41</span></span></div>
+              <div class="flex items-center gap-3"><span class="w-56 text-gray-700">Easier to clean</span><div class="flex-1 h-2.5 bg-gray-100 rounded"><div class="h-2.5 bg-brand-600 rounded" style="width:27%"></div></div><span class="w-20 text-right font-semibold text-gray-900">27% <span class="font-normal text-gray-400">n=27</span></span></div>
+              <div class="flex items-center gap-3"><span class="w-56 text-gray-700">Takes up less counter space</span><div class="flex-1 h-2.5 bg-gray-100 rounded"><div class="h-2.5 bg-brand-400 rounded" style="width:18%"></div></div><span class="w-20 text-right font-semibold text-gray-900">18% <span class="font-normal text-gray-400">n=18</span></span></div>
+              <div class="flex items-center gap-3"><span class="w-56 text-gray-700">Programmable from my phone</span><div class="flex-1 h-2.5 bg-gray-100 rounded"><div class="h-2.5 bg-brand-300 rounded" style="width:9%"></div></div><span class="w-20 text-right font-semibold text-gray-900">9% <span class="font-normal text-gray-400">n=9</span></span></div>
+              <div class="flex items-center gap-3"><span class="w-56 text-gray-700">Nothing, I would not replace it</span><div class="flex-1 h-2.5 bg-gray-100 rounded"><div class="h-2.5 bg-gray-300 rounded" style="width:5%"></div></div><span class="w-20 text-right font-semibold text-gray-900">5% <span class="font-normal text-gray-400">n=5</span></span></div>
+            </div>
+          </div>
+          <div class="border border-gray-200 rounded-xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3"><p class="font-bold text-gray-900">Q2: If it were priced at $X, how likely would you be to purchase? <span class="font-normal text-gray-400">(Gabor-Granger price ladder)</span></p><span class="text-[11px] text-brand-600">100 responses &middot; click to drill down</span></div>
+            <p class="text-[11px] bg-amber-50 border border-amber-200 text-amber-800 rounded px-3 py-2 mb-4"><strong>Calibration state: Inferred</strong> &middot; topic area: Price Sensitivity &middot; inferred from a related topic area, not measured for this question. No human pricing benchmark is attached to this question; the prices below come from the synthetic panel alone.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm tabular-nums">
+              <div class="bg-gray-50 rounded-lg p-3"><p class="text-[10px] uppercase tracking-wider text-gray-400">$49</p><p class="font-bold text-gray-900">78% likely</p></div>
+              <div class="bg-gray-50 rounded-lg p-3"><p class="text-[10px] uppercase tracking-wider text-gray-400">$69</p><p class="font-bold text-gray-900">61% likely</p></div>
+              <div class="bg-gray-50 rounded-lg p-3"><p class="text-[10px] uppercase tracking-wider text-gray-400">$89</p><p class="font-bold text-gray-900">38% likely</p></div>
+              <div class="bg-gray-50 rounded-lg p-3"><p class="text-[10px] uppercase tracking-wider text-gray-400">$109</p><p class="font-bold text-gray-900">19% likely</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 text-center mt-4 max-w-3xl mx-auto">Generic small-appliance category. Segment names, figures and findings are illustrative, produced under sample conditions, not from a client portal.</p>
+
+      <!-- Sample 2: the same survey result with the client's human data layered in -->
+      <div class="max-w-4xl mx-auto rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white fade-in mt-10">
+        <div class="bg-gray-900 px-5 py-3 flex items-center justify-between"><span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Survey results &middot; Compare to human</span><span class="text-[10px] font-semibold text-gray-300">Download CSV &middot; Download PDF</span></div>
+        <div class="p-6 md:p-8">
+          <p class="text-lg font-bold text-gray-900">"Please RANK your TOP 5 finishes for the new carafe, from MOST to LEAST favorite" &middot; sample</p>
+          <p class="text-xs text-gray-500 mb-5">100 respondents &middot; 1 question &middot; Complete &middot; stimulus images attached</p>
+          <div class="flex flex-wrap items-center gap-2 mb-4 text-xs"><span class="text-gray-500">Cut by:</span><span class="border border-gray-300 rounded-full px-3 py-1 text-gray-700 font-semibold">Overall</span><span class="border border-gray-200 rounded-full px-3 py-1 text-gray-500">By segment</span><span class="bg-amber-50 border border-amber-400 text-amber-800 rounded-full px-3 py-1 font-semibold">&#9635; Compare to human</span></div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4 text-xs">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-amber-800 mb-1">Closest comparable human question</p>
+            <p class="text-gray-800 font-medium">Please RANK your TOP 5 finishes for the carafe, from your MOST favorite to LEAST favorite.</p>
+            <p class="text-gray-500 mt-1">Product / Finish Preference &middot; Carafe Concept Test, 2024 &middot; n=812 &middot; q17/q18 &middot; single_select_pct</p>
+            <p class="text-gray-500 italic mt-2">Closest comparable human question (same scale family), shown as a directional reference, not a calibrated benchmark for this exact stimulus. Human scale points mapped to the survey scale by sentiment.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left tabular-nums">
+              <thead class="bg-gray-50 text-gray-700 text-xs"><tr><th class="px-3 py-2 font-semibold">Item</th><th class="px-3 py-2 font-semibold">#1</th><th class="px-3 py-2 font-semibold">#2</th><th class="px-3 py-2 font-semibold">#3</th><th class="px-3 py-2 font-semibold">% in Top 3</th></tr></thead>
+              <tbody>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Matte black</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">17</span> <span class="text-gray-400">(17%)</span><br><span class="text-[10px] text-green-700">H 16.3% &Delta;+0.7</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">14</span> <span class="text-gray-400">(14%)</span><br><span class="text-[10px] text-green-700">H 10.1% &Delta;+3.9</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">10</span> <span class="text-gray-400">(10%)</span><br><span class="text-[10px] text-green-700">H 10.3% &Delta;-0.3</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">41%</span><br><span class="text-[10px] text-green-700">H 39.7% &Delta;+1.3</span></td></tr>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Brushed steel</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">14</span> <span class="text-gray-400">(14%)</span><br><span class="text-[10px] text-green-700">H 16.4% &Delta;-2.4</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">11</span> <span class="text-gray-400">(11%)</span><br><span class="text-[10px] text-green-700">H 14.6% &Delta;-3.6</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">13</span> <span class="text-gray-400">(13%)</span><br><span class="text-[10px] text-green-700">H 12.7% &Delta;+0.3</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">38%</span><br><span class="text-[10px] text-amber-600">H 46.7% &Delta;-8.7</span></td></tr>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Cream</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">15</span> <span class="text-gray-400">(15%)</span><br><span class="text-[10px] text-green-700">H 15.5% &Delta;-0.5</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">13</span> <span class="text-gray-400">(13%)</span><br><span class="text-[10px] text-green-700">H 9.8% &Delta;+3.2</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">19</span> <span class="text-gray-400">(19%)</span><br><span class="text-[10px] text-amber-600">H 11.9% &Delta;+7.1</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">47%</span><br><span class="text-[10px] text-amber-600">H 40.2% &Delta;+6.8</span></td></tr>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Forest green</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">11</span> <span class="text-gray-400">(11%)</span><br><span class="text-[10px] text-amber-600">H 5.8% &Delta;+5.2</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">12</span> <span class="text-gray-400">(12%)</span><br><span class="text-[10px] text-green-700">H 10.9% &Delta;+1.1</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">11</span> <span class="text-gray-400">(11%)</span><br><span class="text-[10px] text-green-700">H 9.4% &Delta;+1.6</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">34%</span><br><span class="text-[10px] text-green-700">H 29.1% &Delta;+4.9</span></td></tr>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Navy</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">14</span> <span class="text-gray-400">(14%)</span><br><span class="text-[10px] text-green-700">H 9.2% &Delta;+4.8</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">5</span> <span class="text-gray-400">(5%)</span><br><span class="text-[10px] text-amber-600">H 10.1% &Delta;-5.1</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">8</span> <span class="text-gray-400">(8%)</span><br><span class="text-[10px] text-green-700">H 8.3% &Delta;-0.3</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">27%</span><br><span class="text-[10px] text-green-700">H 30.6% &Delta;-3.6</span></td></tr>
+<tr class="border-t border-gray-100"><td class="px-3 py-2 text-brand-700 font-medium align-top">Terracotta</td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">9</span> <span class="text-gray-400">(9%)</span><br><span class="text-[10px] text-green-700">H 5.7% &Delta;+3.3</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">9</span> <span class="text-gray-400">(9%)</span><br><span class="text-[10px] text-green-700">H 9.2% &Delta;-0.2</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">5</span> <span class="text-gray-400">(5%)</span><br><span class="text-[10px] text-amber-600">H 10.5% &Delta;-5.5</span></td><td class="px-3 py-2 align-top"><span class="font-semibold text-gray-900">23%</span><br><span class="text-[10px] text-amber-600">H 28.4% &Delta;-5.4</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-gray-500 mt-4">Each cell: the synthetic count and share on top; underneath, <span class="text-green-700 font-semibold">H</span> is the human result from your own study and &Delta; is the gap in points. Green within 5 points, amber beyond. Where no human question exists, the row shows the synthetic result alone and the calibration state says so. Two ways the human layer appears: when you have asked the same <em>type</em> of question many times, the portal shows the range your real customers gave and places the synthetic result on it (first sample above); when you have asked the <em>same</em> question before, the comparison is cell by cell (this sample). The more you have asked real people over the years, the more of your synthetic results come back with your own human data beside them.</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-400 text-center mt-4 max-w-3xl mx-auto">Generic small-appliance category. Item names, figures and the human reference are illustrative, produced under sample conditions, not from a client portal.</p>
+    </div>
+  </section>
+
+  <!-- Focus groups + one-on-one -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div class="fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">Focus groups</p>
+          <h2 class="text-2xl font-extrabold text-gray-900 mb-4">Project builder, then transcript and report.</h2>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">Name the study, set the number of groups and panelists per group, choose a discussion mode (conversational or round-robin), write the discussion guide or load a saved sampling plan, and run. The output has two tabs, Transcript and Report, with PDF and CSV export.</p>
+          <div class="rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white">
+            <div class="bg-gray-900 px-5 py-3 flex items-center gap-4 text-xs"><span class="font-semibold text-white border-b-2 border-accent-400 pb-0.5">Transcript</span><span class="text-gray-400">Report</span><span class="ml-auto text-gray-400">PDF &middot; CSV</span></div>
+            <div class="p-5 text-sm space-y-3 text-gray-700">
+              <p class="text-xs text-gray-500">Coffee maker replacement (sample) &middot; Groups: 3 &middot; Mode: round-robin</p>
+              <p class="text-xs font-bold text-gray-900">Group 1 (3 participants)</p>
+              <p><span class="font-semibold text-gray-900">MODERATOR:</span> Welcome everyone. I'm going to go around the room on each question so everyone gets a chance to share. Dana, your turn.</p>
+              <p><span class="font-semibold text-brand-700">Dana T.</span> <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">[Pragmatic]</span> The carafe. I was making a pot for one person and pouring half of it out. The new one does a cup and I stopped feeling guilty.</p>
+              <p><span class="font-semibold text-brand-700">Marcus W.</span> <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">[Confident]</span> Opposite for me. If it can't make ten cups when my in-laws show up, it's a toy.</p>
+              <p><span class="font-semibold text-brand-700">Priya N.</span> <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">[Considered]</span> I don't care about either until it goes on sale. Then I care whether it fits under the cabinet.</p>
+              <p><span class="font-semibold text-gray-900">MODERATOR:</span> Marcus, how much does capacity matter versus the price?</p>
+              <p><span class="font-semibold text-brand-700">Marcus W.</span> <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400">[Confident]</span> If it holds ten cups I'll pay forty more. If it holds six I won't pay anything.</p>
+            </div>
+            <div class="border-t border-gray-100 p-5 text-sm bg-gray-50">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Report &middot; Topline</p>
+              <p class="text-gray-700 mb-2">Of 9 participants, 5 named single-cup flexibility as the replacement trigger, 3 named guest capacity, 1 named counter footprint. Price surfaced as a gate rather than a driver: nobody replaces until a sale, then fit and capacity decide.</p>
+              <p class="text-xs text-gray-500"><strong class="text-gray-700">Overall sentiment</strong> &nbsp;Pragmatic 33% &middot; Considered 22% &middot; Confident 22% &middot; Warm 11% &middot; Other 12%</p>
+            </div>
+          </div>
+        </div>
+        <div class="fade-in">
+          <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">One-on-one</p>
+          <h2 class="text-2xl font-extrabold text-gray-900 mb-4">Chat with a panelist in their own voice.</h2>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">Pick a panelist from any segment and interview them in depth about their category behavior. Show a stimulus in the conversation and follow up as many times as you like.</p>
+          <div class="rounded-2xl border border-gray-200 shadow-lg overflow-hidden bg-white">
+            <div class="bg-gray-900 px-5 py-3"><span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">One-on-One</span></div>
+            <div class="p-5 text-sm text-gray-700">
+              <div class="flex items-center gap-3 mb-4"><div class="w-9 h-9 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center">R</div><div><p class="font-semibold text-gray-900">Renee K.</p><p class="text-xs text-gray-500">44 &middot; two kids &middot; suburban Midwest &middot; Practical Owner &middot; heavy user</p></div></div>
+              <p class="mb-2 text-gray-500">I want to show you a coffee maker we're considering. What's your honest first reaction?</p>
+              <p class="text-[10px] text-gray-400 mb-2">Stimulus shown in-conversation</p>
+              <p class="bg-gray-50 rounded-lg p-3 mb-3"><span class="font-semibold text-brand-700">RENEE K.</span> First thing I look at is whether the carafe is glass or thermal, because the glass ones burn the last cup by nine o'clock. I like that the water tank comes off the side; the one I have you fill from the top and it drips on the counter every time. What I can't tell from a photo is how loud it is, and that matters more than you'd think when a kid is asleep down the hall.</p>
+              <p class="mb-2 text-gray-500">What would make you buy this over the one you have now?</p>
+              <p class="bg-gray-50 rounded-lg p-3"><span class="font-semibold text-brand-700">RENEE K.</span> Thermal carafe and a tank I can fill at the sink. I'd pay twenty more for those two things. The phone app I'd never use.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 text-center mt-6 max-w-3xl mx-auto">Names, segments and findings are illustrative, produced under sample conditions, not from a client portal.</p>
+    </div>
+  </section>
+
+  <!-- Under the hood: the calibration report card as it appears in the portal -->
+  <section id="report-card" class="bg-brand-900 py-20 md:py-24 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+        <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Under the hood &middot; Calibration Report Card</p>
+        <h2 class="text-3xl font-extrabold mb-4">The question isn't "can you build a synthetic panel." It's "does it answer like my customers."</h2>
+        <p class="text-blue-100">Every client's portal has a report card: how closely the synthetic panel's answer matches real customer data for each of 19 marketing topic areas, for each segment, measured in percentage points. It updates as new waves of real customer research come in.</p>
+      </div>
+      <div class="grid lg:grid-cols-5 gap-8 items-start">
+        <div class="lg:col-span-2 fade-in">
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10"><div class="text-2xl font-extrabold text-accent-400">94.7%</div><p class="text-[11px] text-blue-200 mt-1">Pass rate: 72 / 76 cells &le; 5pp</p></div>
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10"><div class="text-2xl font-extrabold text-accent-400">14/16</div><p class="text-[11px] text-blue-200 mt-1">Rows fully passing: all 5 segment gaps &le; 5pp</p></div>
+          </div>
+          <p class="text-sm font-bold text-white mb-2">How to read this page</p>
+          <p class="text-sm text-blue-100 leading-relaxed mb-4">Each cell is the gap between the synthetic panel and real customer data for that segment, in percentage points. Green is within &plusmn;5pp; amber is wider and flagged; rows that are not yet calibrated say so. Calibration is ongoing, and the card updates as new waves of real customer research come in.</p>
+          <p class="text-sm text-blue-100 leading-relaxed">Across all clients: about 3.5pp average error, 92% of cells within 5pp, benchmarked against 40+ years of real human respondent experience across thousands of research engagements. <a href="#constellation" class="text-accent-400 font-semibold hover:underline">Explore the Constellation view &rarr;</a></p>
+        </div>
+        <div class="lg:col-span-3 overflow-x-auto fade-in">
+          <table class="w-full text-xs tabular-nums bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+            <thead><tr class="text-[10px] uppercase tracking-wider text-blue-300 border-b border-white/10"><th class="text-left py-2 px-3">Category</th><th class="py-2 px-1">Core Enthusiast</th><th class="py-2 px-1">Practical Owner</th><th class="py-2 px-1">Premium Seeker</th><th class="py-2 px-1">Value Shopper</th><th class="py-2 px-1">Newcomer</th></tr></thead>
+            <tbody class="text-center text-blue-50">
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">1</span>Functional Perception</td><td class="text-green-300">2.2pp</td><td class="text-green-300">1.5pp</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.8pp</td><td class="text-green-300">2.3pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">2</span>Emotional Perception</td><td class="text-green-300">3.0pp</td><td class="text-green-300">2.0pp</td><td class="text-green-300">2.3pp</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.5pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">3</span>Value Perception</td><td class="text-green-300">2.1pp</td><td class="text-green-300">3.2pp</td><td class="text-green-300">2.2pp</td><td class="text-green-300">1.9pp</td><td class="text-green-300">2.4pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">4</span>Brand Preference</td><td class="text-green-300">4.2pp</td><td class="text-green-300">2.2pp</td><td class="text-green-300">2.0pp</td><td class="text-green-300">3.4pp</td><td class="text-green-300">2.9pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">5</span>Purchase Intent</td><td class="text-green-300">1.4pp</td><td class="text-amber-300">5.8pp</td><td class="text-green-300">1.9pp</td><td class="text-green-300">3.7pp</td><td class="text-green-300">4.3pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">6</span>Repurchase Intent</td><td class="text-green-300">2.3pp</td><td class="text-green-300">1.6pp</td><td class="text-green-300">2.7pp</td><td class="text-green-300">2.4pp</td><td class="text-green-300">1.4pp</td></tr>
+              <tr class="border-b border-white/5"><td class="text-left py-1.5 px-3"><span class="text-blue-300 mr-2">7</span>Consideration Set</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.4pp</td><td class="text-green-300">1.4pp</td></tr>
+              <tr><td class="text-left py-2 px-3 text-blue-300 italic" colspan="6">&hellip; and 12 more marketing topic areas, including Usage Frequency, Price Sensitivity, Feature Importance, Channel Preference, Awareness &amp; Ad Recall and Ad / Concept Response. Rows not yet calibrated say so.</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[11px] text-blue-300 mt-3">Partial, illustrative view with generic segment names. Every client sees the full card for all 19 marketing topic areas and their own segments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Constellation: what has been calibrated, what is inferred, what is not yet -->
+  <section id="constellation" class="bg-brand-800 py-20 md:py-24 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-center">
+      <div class="lg:col-span-2 fade-in">
+        <p class="text-accent-400 font-semibold text-sm uppercase tracking-wider mb-3">Under the hood &middot; Constellation</p>
+        <h2 class="text-3xl font-extrabold mb-4">Every marketing topic area, and where its calibration stands.</h2>
+        <p class="text-blue-100 leading-relaxed mb-4">The Constellation is the map behind the report card. Each point is one of the 19 marketing topic areas the portal calibrates. The closer a point sits to the center, the more of your own human data anchors it; the color says how far calibration has gone.</p>
+        <ul class="space-y-2 text-sm text-blue-100">
+          <li class="flex items-start gap-2"><span class="w-3.5 h-3.5 mt-1 flex-shrink-0 rounded-full bg-green-400"></span><strong class="text-white">Measured</strong>&nbsp;&middot; calibrated directly against your fielded studies</li>
+          <li class="flex items-start gap-2"><span class="w-3.5 h-3.5 mt-1 flex-shrink-0 rounded-full bg-amber-300"></span><strong class="text-white">Inferred</strong>&nbsp;&middot; read from a related topic area; flagged in every result</li>
+          <li class="flex items-start gap-2"><span class="w-3.5 h-3.5 mt-1 flex-shrink-0 rounded-full bg-white/25 border border-white/40"></span><strong class="text-white">Not yet calibrated</strong>&nbsp;&middot; the portal says so, and points to the human study that would fix it</li>
+        </ul>
+        <p class="text-xs text-blue-300 mt-5">Every new study you field with us moves points inward. The live view opens from the portal sidebar under Under the hood.</p>
+      </div>
+      <div class="lg:col-span-3 fade-in">
+        <div class="relative rounded-2xl border border-white/10 bg-white/5 overflow-hidden" style="padding-top:62%">
+          <div class="absolute inset-0">
+            <div class="absolute rounded-full border border-white/10" style="left:12%;top:11%;width:76%;height:78%"></div>
+            <div class="absolute rounded-full border border-white/10" style="left:24%;top:24%;width:52%;height:52%"></div>
+            <div class="absolute rounded-full border border-white/20 bg-white/5" style="left:36%;top:37%;width:28%;height:26%"></div>
+            <div class="absolute text-center" style="left:50%;top:50%;transform:translate(-50%,-50%)"><p class="text-[10px] uppercase tracking-wider text-blue-300">Your research</p><p class="text-xs font-bold text-white">history</p></div>
+            <div class="absolute flex flex-col items-center" style="left:50.0%;top:20.4%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Functional Perception</span></div>
+            <div class="absolute flex flex-col items-center" style="left:62.3%;top:22.0%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Purchase Intent</span></div>
+            <div class="absolute flex flex-col items-center" style="left:73.3%;top:26.6%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Brand Awareness</span></div>
+            <div class="absolute flex flex-col items-center" style="left:81.8%;top:33.8%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Brand Consideration</span></div>
+            <div class="absolute flex flex-col items-center" style="left:92.7%;top:41.6%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-amber-300"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Price Sensitivity</span></div>
+            <div class="absolute flex flex-col items-center" style="left:87.9%;top:52.4%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Value Perception</span></div>
+            <div class="absolute flex flex-col items-center" style="left:84.8%;top:61.9%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Feature Priorities</span></div>
+            <div class="absolute flex flex-col items-center" style="left:78.0%;top:70.1%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Usage Occasions</span></div>
+            <div class="absolute flex flex-col items-center" style="left:68.1%;top:76.1%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Channel & Retailer</span></div>
+            <div class="absolute flex flex-col items-center" style="left:57.2%;top:83.9%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-amber-300"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Media & Information</span></div>
+            <div class="absolute flex flex-col items-center" style="left:43.7%;top:79.2%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Packaging Response</span></div>
+            <div class="absolute flex flex-col items-center" style="left:29.1%;top:80.2%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-amber-300"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Claims & Messaging</span></div>
+            <div class="absolute flex flex-col items-center" style="left:22.0%;top:70.1%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Concept Appeal</span></div>
+            <div class="absolute flex flex-col items-center" style="left:15.2%;top:61.9%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Loyalty & Switching</span></div>
+            <div class="absolute flex flex-col items-center" style="left:12.1%;top:52.4%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-green-400"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Satisfaction & NPS</span></div>
+            <div class="absolute flex flex-col items-center" style="left:7.3%;top:41.6%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-amber-300"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Innovation Openness</span></div>
+            <div class="absolute flex flex-col items-center" style="left:10.7%;top:29.9%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-white/25 border border-white/40"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Sustainability Attitudes</span></div>
+            <div class="absolute flex flex-col items-center" style="left:21.1%;top:21.1%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-white/25 border border-white/40"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Promotion Response</span></div>
+            <div class="absolute flex flex-col items-center" style="left:34.7%;top:15.3%;transform:translate(-50%,-50%)"><span class="w-3.5 h-3.5 rounded-full bg-white/25 border border-white/40"></span><span class="text-[9px] text-blue-100 mt-1 whitespace-nowrap">Service & Support</span></div>
+          </div>
+        </div>
+        <p class="text-xs text-blue-300 text-center mt-3">Illustrative constellation, produced under sample conditions. A live portal shows the client's own topic areas and states.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section class="py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+        <p class="text-accent-500 font-semibold text-sm uppercase tracking-wider mb-3">What a week with it looks like</p>
+        <h2 class="text-3xl font-extrabold text-gray-900">Cheap kills, fast iteration, field the finalists</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-gray-50 rounded-2xl p-6 fade-in"><h3 class="font-bold text-gray-900 mb-2">The concept funnel</h3><p class="text-sm text-gray-500">Forty concepts, budget to field eight. The panel screens all forty on Monday, kills the bottom of the pile with the evidence attached, and the eight fielding slots go to survivors instead of favorites. Real respondents crown the winner.</p></div>
+        <div class="bg-gray-50 rounded-2xl p-6 fade-in"><h3 class="font-bold text-gray-900 mb-2">The design round</h3><p class="text-sm text-gray-500">Twelve ideas for a seasonal line. Drop them all, get the segment splits and the obvious kills by lunch, iterate the survivors ten times if you like, then field the best three. The fielded winner goes back into the research stack for next season.</p></div>
+        <div class="bg-gray-50 rounded-2xl p-6 fade-in"><h3 class="font-bold text-gray-900 mb-2">The off-wave question</h3><p class="text-sm text-gray-500">The tracker fields in March; the question arrives in July. Ask the panel before the meeting ends. Where the report card shows a segment cell in amber, a five-question pulse fields exactly the flagged items instead of the whole wave.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other tools -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">More in the Pervasive Insights&trade; suite</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="pervasive-insights.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Suite overview</a>
+        <a href="pi-research-library.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Research Stack</a>
+        <a href="pi-competitive-intelligence.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Competitive Intelligence</a>
+        <a href="https://pervasiveinsights.ai" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">More samples at pervasiveinsights.ai &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore: human research services and the rest of the suite -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">Human research first</h3>
+      <p class="text-gray-500 text-sm text-center mb-6">Everything in the suite is built on studies fielded by City Research Solutions. Explore the research services behind it.</p>
+      <div class="flex flex-wrap justify-center gap-3 mb-8">
+        <a href="capabilities-in-facility.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">In-Facility (Clinical)</a>
+        <a href="capabilities-online.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Online Research</a>
+        <a href="capabilities-real-time.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Real-Time (Experiential)</a>
+        <a href="capabilities-retail.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Retail Research</a>
+        <a href="capabilities-quantitative.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Quantitative Research</a>
+      </div>
+      <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 text-center">Elsewhere in Pervasive Insights&trade;</h3>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="pervasive-insights.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Overview</a>
+        <a href="pi-research-library.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Research Stack</a>
+        <a href="pi-competitive-intelligence.html" class="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-gray-600 hover:text-brand-600 hover:shadow-md transition-all border border-gray-200">Competitive Intelligence</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-gradient py-16 md:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-extrabold text-white mb-4">See a calibrated panel answer a question in your category.</h2>
+      <p class="text-lg text-blue-100 mb-8">A 30-minute walkthrough of a working portal on generic sample data. Bring the question your team argued about last week.</p>
+      <a href="contact.html" class="inline-flex items-center px-8 py-4 bg-white text-brand-700 font-semibold rounded-xl hover:bg-blue-50 transition-all shadow-lg">Request a walkthrough <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-5 gap-8">
+        <div class="md:col-span-2">
+          <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service consumer research and insights firm, established in the Madison, Wisconsin area in 1979. Human research first; a suite of machine-learning tools built on it.</p>
+          <p class="text-blue-300 text-xs mt-4">Pervasive Insights&trade; is a City Research Solutions product. <a href="https://pervasiveinsights.ai" class="underline hover:text-white transition-colors">pervasiveinsights.ai</a></p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2"><li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li><li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li><li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li><li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Research Services</h4>
+          <ul class="space-y-2"><li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li><li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li><li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li><li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li><li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Pervasive Insights&trade; &middot; AI Suite</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Pervasive Insights&trade; &middot; AI Suite</h4>
+          <ul class="space-y-2"><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Overview</a></li><li><a href="pi-research-library.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Stack</a></li><li><a href="pi-synthetic-panel.html" class="text-blue-200 hover:text-white text-sm transition-colors">Synthetic Customers</a></li><li><a href="pi-competitive-intelligence.html" class="text-blue-200 hover:text-white text-sm transition-colors">Competitive Intelligence</a></li></ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
+        <div class="flex items-center gap-6"><a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a><a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

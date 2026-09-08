@@ -37,16 +37,19 @@
   <header class="bg-white shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
         <a href="index.html" class="flex items-center gap-3">
           <img src="images/logo-v6-horizontal.jpg" alt="City Research Solutions" class="h-12">
         </a>
-        <nav class="hidden md:flex items-center gap-8">
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7">
           <a href="index.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Home</a>
           <a href="about.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">About Us</a>
           <a href="facilities.html" class="nav-link text-brand-600 font-semibold text-sm tracking-wide uppercase">Research Facilities</a>
           <div class="dropdown relative">
             <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
-              Capabilities
+              Research Services
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu absolute top-full left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
@@ -55,29 +58,55 @@
               <a href="capabilities-real-time.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Real-Time (Experiential) Research</a>
               <a href="capabilities-retail.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Retail Research</a>
               <a href="capabilities-quantitative.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Quantitative Research</a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5">AI SUITE</span></a>
+            </div>
+          </div>
+          <div class="dropdown relative">
+            <button class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors flex items-center gap-1">
+              Pervasive Insights&trade; <span class="ml-1 text-[10px] font-bold text-brand-900 bg-gold-400 rounded px-1.5 py-0.5 tracking-normal">AI SUITE</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-80 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+              <a href="pervasive-insights.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">The AI Suite: Overview</a>
+              <a href="pi-research-library.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Research Stack: Library &amp; Data</a>
+              <a href="pi-synthetic-panel.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Synthetic Customers: Surveys, Groups, One-on-Ones</a>
+              <a href="pi-competitive-intelligence.html" class="block px-4 py-2.5 text-sm text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Competitive Intelligence</a>
             </div>
           </div>
           <a href="contact.html" class="nav-link text-gray-600 hover:text-brand-600 font-medium text-sm tracking-wide uppercase transition-colors">Contact</a>
         </nav>
-        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Open menu">
           <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
     </div>
+
+    <!-- Mobile Navigation -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
       <div class="px-4 py-4 space-y-2">
-        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Home</a>
-        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">About Us</a>
+        <a href="index.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Home</a>
+        <a href="about.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">About Us</a>
         <a href="facilities.html" class="block px-4 py-2.5 text-brand-600 font-semibold text-sm rounded-lg bg-brand-50">Research Facilities</a>
         <div class="pl-4 space-y-1">
-          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Capabilities</p>
-          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">In-Facility (Clinical)</a>
-          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Online Research</a>
-          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Real-Time (Experiential)</a>
-          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Retail Research</a>
-          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Quantitative Research</a>
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Research Services</p>
+          <a href="capabilities-in-facility.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">In-Facility (Clinical)</a>
+          <a href="capabilities-online.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Online Research</a>
+          <a href="capabilities-real-time.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Real-Time (Experiential)</a>
+          <a href="capabilities-retail.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Retail Research</a>
+          <a href="capabilities-quantitative.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Quantitative Research</a>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Pervasive Insights&trade; &middot; AI Suite</a>
         </div>
-        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg">Contact</a>
+        <div class="pl-4 space-y-1">
+          <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Pervasive Insights&trade; &middot; AI Suite</p>
+          <a href="pervasive-insights.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Overview</a>
+          <a href="pi-research-library.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Research Stack</a>
+          <a href="pi-synthetic-panel.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Synthetic Customers</a>
+          <a href="pi-competitive-intelligence.html" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Competitive Intelligence</a>
+        </div>
+        <a href="contact.html" class="block px-4 py-2.5 text-gray-600 hover:bg-gray-50 text-sm rounded-lg transition-colors">Contact</a>
       </div>
     </div>
   </header>
@@ -218,37 +247,28 @@
   <!-- Footer -->
   <footer class="bg-brand-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid md:grid-cols-4 gap-8">
+      <div class="grid md:grid-cols-5 gap-8">
         <div class="md:col-span-2">
           <div class="mb-4"><img src="images/crs_logo_white.svg" alt="City Research Solutions" class="h-10"></div>
-          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service custom marketing research and consulting firm providing consumer insights since 1979.</p>
+          <p class="text-blue-200 text-sm leading-relaxed max-w-md">A full-service consumer research and insights firm, established in the Madison, Wisconsin area in 1979. Human research first; a suite of machine-learning tools built on it.</p>
+          <p class="text-blue-300 text-xs mt-4">Pervasive Insights&trade; is a City Research Solutions product. <a href="https://pervasiveinsights.ai" class="underline hover:text-white transition-colors">pervasiveinsights.ai</a></p>
         </div>
         <div>
-          <h4 class="font-semibold text-white mb-4">Quick Links</h4>
-          <ul class="space-y-2">
-            <li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li>
-            <li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li>
-            <li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li>
-            <li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li>
-          </ul>
+          <h4 class="font-semibold text-white mb-4">Company</h4>
+          <ul class="space-y-2"><li><a href="index.html" class="text-blue-200 hover:text-white text-sm transition-colors">Home</a></li><li><a href="about.html" class="text-blue-200 hover:text-white text-sm transition-colors">About Us</a></li><li><a href="facilities.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Facilities</a></li><li><a href="contact.html" class="text-blue-200 hover:text-white text-sm transition-colors">Contact</a></li></ul>
         </div>
         <div>
-          <h4 class="font-semibold text-white mb-4">Capabilities</h4>
-          <ul class="space-y-2">
-            <li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li>
-            <li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li>
-            <li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li>
-            <li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li>
-            <li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li>
-          </ul>
+          <h4 class="font-semibold text-white mb-4">Research Services</h4>
+          <ul class="space-y-2"><li><a href="capabilities-in-facility.html" class="text-blue-200 hover:text-white text-sm transition-colors">In-Facility</a></li><li><a href="capabilities-online.html" class="text-blue-200 hover:text-white text-sm transition-colors">Online</a></li><li><a href="capabilities-real-time.html" class="text-blue-200 hover:text-white text-sm transition-colors">Real-Time</a></li><li><a href="capabilities-retail.html" class="text-blue-200 hover:text-white text-sm transition-colors">Retail</a></li><li><a href="capabilities-quantitative.html" class="text-blue-200 hover:text-white text-sm transition-colors">Quantitative</a></li><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Pervasive Insights&trade; &middot; AI Suite</a></li></ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-4">Pervasive Insights&trade; &middot; AI Suite</h4>
+          <ul class="space-y-2"><li><a href="pervasive-insights.html" class="text-blue-200 hover:text-white text-sm transition-colors">Overview</a></li><li><a href="pi-research-library.html" class="text-blue-200 hover:text-white text-sm transition-colors">Research Stack</a></li><li><a href="pi-synthetic-panel.html" class="text-blue-200 hover:text-white text-sm transition-colors">Synthetic Customers</a></li><li><a href="pi-competitive-intelligence.html" class="text-blue-200 hover:text-white text-sm transition-colors">Competitive Intelligence</a></li></ul>
         </div>
       </div>
       <div class="border-t border-white/10 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-blue-300 text-sm">&copy; 2026 City Research Solutions. All rights reserved.</p>
-        <div class="flex items-center gap-6">
-          <a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a>
-          <a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a>
-        </div>
+        <div class="flex items-center gap-6"><a href="tel:608-314-8493" class="text-blue-300 hover:text-white text-sm transition-colors">608-314-8493</a><a href="mailto:info@cityresearchsolutions.com" class="text-blue-300 hover:text-white text-sm transition-colors">info@cityresearchsolutions.com</a></div>
       </div>
     </div>
   </footer>
