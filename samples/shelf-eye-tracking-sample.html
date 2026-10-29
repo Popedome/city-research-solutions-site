@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shelf Eye-Tracking Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* packaging test additions */
+.dhead{display:flex;align-items:center;gap:14px}
+.dhead .thumb{width:46px;flex:none}
+.dhead .dn2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin:0}
+.dhead .dsub{font-size:11px;color:var(--ink-3);margin:1px 0 0}
+.dstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:11px;border-top:1px solid var(--rule)}
+.dstats .lab{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 2px}
+.dstats .v{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700;letter-spacing:-.02em;margin:0}
+.dstats .v small{font-size:11px;color:var(--ink-3);font-weight:500}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.shelfmsg{font-size:12.5px;color:var(--ink-2);min-height:20px;margin:10px 0 0}
+.shelfmsg b{color:var(--ink)}
+.shelfmsg .ok{color:var(--good);font-weight:700}
+.shelfmsg .miss{color:var(--crit);font-weight:700}
+.shelf g.can.live{cursor:pointer}
+.shelf g.can.live:hover{opacity:.85}
+.canbox{max-width:200px;margin:4px auto 0}
+.heatoff .heat{display:none}
+.stack{display:flex;height:16px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stack i{display:block;height:100%}
+.sbrow{display:grid;grid-template-columns:minmax(90px,150px) 1fr;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.sbrow:last-child{border-bottom:none}
+.sbrow .sl{font-size:12px;font-weight:600}
+.sbrow .sl small{display:block;font-weight:500;color:var(--ink-3);font-size:10.5px}
+.heatkey{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.heatkey i{display:inline-block;width:90px;height:9px;border-radius:5px;background:linear-gradient(90deg,rgba(192,57,47,.15),#f2542d,#ffb020,#fff27a)}
+.cl{display:grid;grid-template-columns:22px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.cl:last-child{border-bottom:none}
+.cl.h{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);border-bottom:1.5px solid var(--rule-2);padding-top:0}
+.cl .rk{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);text-align:right}
+.cl .cn{font-weight:600;line-height:1.35}
+.cl .cn small{display:block;font-weight:500;font-size:10px;color:var(--good);letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+.mb{display:grid;grid-template-columns:1fr 34px;gap:6px;align-items:center}
+.mb .hbt{height:11px}
+.mb span.mono{font-size:11px;color:var(--ink-2);text-align:right}
+.mb .ml{display:none}
+@media(max-width:560px){
+  .cl{grid-template-columns:22px 1fr;row-gap:4px}
+  .cl .rk{grid-row:1 / 4;align-self:start;padding-top:1px}
+  .cl .cn,.cl > .mb{grid-column:2}
+  .cl.h{display:none}
+  .lg{display:none}
+  .mb{grid-template-columns:auto 1fr 30px}
+  .mb .ml{display:inline;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+}
+.combo{padding:9px 0;border-bottom:1px solid var(--rule)}
+.combo:last-child{border-bottom:none}
+.combo .ct{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:5px}
+.combo .ct b{font-size:12.5px;font-weight:700}
+.combo .ct span{font-family:"JetBrains Mono",monospace;font-size:15px;font-weight:700}
+.combo .cc{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.45}
+.best{font-weight:700;color:var(--good)}
+.sig{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 5px;border-radius:3px;white-space:nowrap}
+.sig.y{background:var(--good-bg);color:var(--good)}
+.sig.n{background:var(--panel-2);color:var(--ink-3)}
+.sig.r{background:var(--crit-bg);color:var(--crit)}
+.chartcap{max-width:540px;margin:0 auto}
+.pick{display:flex;gap:16px;align-items:center}
+.pick .thumb{width:70px;flex:none}
+.claimpack{list-style:none;margin:0;padding:0;counter-reset:c}
+.claimpack li{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.claimpack li:last-child{border-bottom:none}
+.claimpack li::before{counter-increment:c;content:counter(c);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--s3)}
+.claimpack li em{font-style:normal;font-size:11.5px;color:var(--ink-2);display:block;margin-top:2px}
+.claimpack li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+</style>
+<style>
+.shelfwrap{position:relative;width:100%;max-width:1000px;margin:0 auto}
+.shelfwrap svg,.shelfwrap canvas{display:block;width:100%;height:auto}
+.shelfwrap canvas,.shelfwrap .ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.shelfcap{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 6px}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-bottom:12px}
+.method{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 18px;font-size:12.5px;color:var(--ink-2)}
+.method b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:2px}
+.stack{display:flex;height:26px;border-radius:4px;overflow:hidden;margin:4px 0 2px}
+.stack i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden}
+.stlab{font-size:12px;color:var(--ink-2);margin-top:10px;display:flex;justify-content:space-between}
+.cmp2 .hb{grid-template-columns:92px 1fr auto}
+.twrow td:first-child{font-weight:600}
+.callout{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:16px 18px}
+.callout p{margin:0 0 8px;font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55}
+.callout p:last-child{margin:0}
+.callout h3{margin:0 0 8px;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:rgba(243,244,240,.7)}
+.dir{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;margin:0 0 13px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .callout{background:#1e2b3a}}
+:root[data-theme="dark"] .callout{background:#1e2b3a}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product and number on this page is made up to show what an in-person shelf eye-tracking test looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Shelf Eye-Tracking Test</b><span>Sample · In person · Sparkling water aisle</span></div>
+    <div class="period">Central location test · eye-tracking glasses<br>n=40, 20 per shelf layout</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#2a78d6">Shelf Results</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#eb6834">Heat Maps</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1a8f66">Top Packages</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#8a63d2">Eye-Track Comparison</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#3d5a80">Recommendation</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SHELF RESULTS -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Tidewell wants to know whether a new shelf layout would help it at retail. We built <b>two full-size sparkling water sets</b> in our facility: the <b>current set</b>, where Tidewell sits at the right end of the aisle, and an <b>alternative set</b> that moves it to the center at eye and waist level. 40 category shoppers wore <b>eye-tracking glasses</b>, 20 per set. Each looked at the shelf freely for 10 seconds, then shopped it and chose the one 8-pack they would buy.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Tidewell share of purchases</p><p class="val">40<small>%</small><span class="pill up">+25 pts</span></p><p class="sub">Alternative set. Current set: 15% (3 of 20 vs 8 of 20)</p></div>
+    <div class="card kpi"><p class="lab">Shoppers seeing each Tidewell pack</p><p class="val">5.9<small> of 20</small></p><p class="sub">Up from 2.9 in the current set</p></div>
+    <div class="card kpi"><p class="lab">Time to first look, Tidewell</p><p class="val">3.8<small> s</small></p><p class="sub">Down from 5.1 s in the current set</p></div>
+    <div class="card kpi"><p class="lab">Average price paid</p><p class="val">$6.30</p><p class="sub">Down 2.3% from $6.45. Tidewell is priced below the category leader</p></div>
+  </div>
+  <div class="row w21">
+    <div class="card"><p class="ttl">Share of purchases by brand <span class="src real">measured</span></p>
+      <div id="stacks"></div>
+      <div class="legend" id="brandLegend"></div>
+      <p class="note"><b>Tidewell goes from a tie for third to first.</b> It takes one purchase each from five competitors, so no single brand carries the loss. Counts are out of 20 shoppers per set, so read the size of the gain as directional.</p></div>
+    <div class="card"><p class="ttl">Purchases by shelf <span class="src real">measured</span></p>
+      <div class="cmp2" id="rowBars"></div>
+      <p class="note">Eye level wins in both sets. The alternative set spreads a little more buying to the waist and bottom shelves.</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">How the test works</p>
+      <div class="method">
+        <div><b>Format</b>In person, central location. Two real shelf sets built side by side in the facility.</div>
+        <div><b>Who</b>40 adults 21 to 54 who bought sparkling water in the past month. Randomly assigned to one set.</div>
+        <div><b>Equipment</b>Lightweight eye-tracking glasses, calibrated for each shopper before they reach the aisle.</div>
+        <div><b>Task</b>10 seconds of free viewing, then shop the set and take the one 8-pack you would buy.</div>
+        <div><b>Measures</b>Who looked at each pack, time to first look, number of looks, total looking time, what was bought.</div>
+        <div><b>Outputs</b>Heat maps, spotlight maps, package-level scores, a side-by-side read of the two sets.</div>
+      </div></div>
+    <div class="card"><p class="ttl">Who took part <span class="src real">measured</span></p><div id="who"></div>
+      <p class="note">Quotas kept age, gender and buying frequency matched across the two sets.</p></div>
+  </div>
+</div>
+
+<!-- HEAT MAPS -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">Each map combines every glance from the <b>first 10 seconds</b> the 20 shoppers spent in front of the set. <b>Heat map</b> shows where looking piled up. <b>Spotlight</b> darkens everything nobody looked at. The two count views show how many of the 20 looked at each pack, and what they finally bought.</p>
+  <div class="card">
+    <div class="ctrls">
+      <div class="mkt" id="pogSel"><span class="mktlab">Shelf</span><button data-p="cur" class="on">Current set</button><button data-p="alt">Alternative set</button><button data-p="both" class="cmp">Compare both</button></div>
+      <div class="mkt" id="modeSel"><span class="mktlab">View</span><button data-m="heat" class="on">Heat map</button><button data-m="spot">Spotlight</button><button data-m="view">Shoppers looking</button><button data-m="buy">Purchases</button></div>
+    </div>
+    <div id="maps"></div>
+    <div class="legend" id="mapLegend"></div>
+    <p class="note" id="mapNote"></p>
+  </div>
+</div>
+
+<!-- TOP PACKAGES -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">The ten packages that pulled the most eyes in each set, then every Tidewell pack side by side. <b>First look</b> is seconds from stepping up to the shelf. <b>Looking time</b> is the total time spent on that pack in the first 10 seconds.</p>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Top 10, current set</p><div class="scroll"><table><thead><tr><th>Package</th><th class="n">First look</th><th class="n">Looking</th><th class="n">Shoppers</th></tr></thead><tbody id="topCur"></tbody></table></div></div>
+    <div class="card"><p class="ttl">Top 10, alternative set</p><div class="scroll"><table><thead><tr><th>Package</th><th class="n">First look</th><th class="n">Looking</th><th class="n">Shoppers</th></tr></thead><tbody id="topAlt"></tbody></table></div></div>
+  </div>
+  <div class="card"><p class="ttl">Every Tidewell pack, current vs alternative <span class="src real">measured</span></p>
+    <div class="scroll"><table style="min-width:640px"><thead><tr><th>Pack</th><th>Where it sat</th><th class="n">Shoppers<br>cur / alt</th><th class="n">First look (s)<br>cur / alt</th><th class="n">Looking (ms)<br>cur / alt</th><th class="n">Bought<br>cur / alt</th></tr></thead><tbody id="twBody"></tbody></table></div>
+    <p class="note"><b>Six of eight Tidewell packs make the alternative top 10. None of them made the current top 10 except Lime.</b> At the right end of the aisle, half of Tidewell sat on the top and bottom shelves, where few shoppers looked in the first 10 seconds.</p></div>
+</div>
+
+<!-- COMPARISON -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">The whole shelf, not just Tidewell. Did the alternative layout make the <b>category</b> easier to shop, or did Tidewell only borrow attention from its neighbors?</p>
+  <div class="row k4" id="cmpCards"></div>
+  <div class="dir"><b>Read the size of these gaps as directional.</b> With 20 shoppers per set, the eye-tracking measures show where attention moves and why. To size the effect, we pair this test with an online shelf test of a few hundred shoppers.</div>
+  <div class="card"><p class="ttl">What changed across the whole set</p>
+    <p class="note" style="margin-top:0">Shoppers looked at slightly more packages, found their first one a little sooner and stayed longer on the packs they looked at. The gains are modest for the category as a whole and large for Tidewell, which means the alternative layout mostly <b>redistributes</b> attention toward the center of the aisle rather than creating a lot of new looking. Corrowan, which held the left end of eye level in the current set, is still the second brand but is no longer the most looked at.</p></div>
+</div>
+
+<!-- RECOMMENDATION -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <div class="callout"><h3>Recommendation</h3>
+    <p><b>Take the alternative layout to the retailer.</b> Moving Tidewell from the right end of the aisle to the center, at eye and waist level, roughly doubles the number of shoppers who look at each Tidewell pack (2.9 to 5.9 of 20), gets the first look about 1.4 seconds sooner and lifts Tidewell from 3 to 8 of 20 purchases.</p>
+    <p>The category does not lose. Shoppers look at slightly more packs overall and stay longer on each one. Average price paid dips 2.3%, because Tidewell sells below the category leader. Raise that with the buyer before they raise it with you.</p>
+    <p><b>Next step:</b> confirm the purchase shift with an online shelf test of about 300 shoppers per layout, and test whether Tidewell keeps most of its gain with only the eye-level row, since center waist-level space is harder to win.</p>
+  </div>
+  <div class="row k3" style="margin-top:13px">
+    <div class="card"><p class="ttl">Why in person</p><p class="note" style="margin-top:0">Glasses record where people actually look at a real shelf, at real distance, with real lighting and real neighbors. It catches what a screen cannot: packs above or below the line of sight, ends of the aisle, and how people move along a set.</p></div>
+    <div class="card"><p class="ttl">Why online too</p><p class="note" style="margin-top:0">Online heat maps reach hundreds of shoppers in days, at a fraction of the cost. They are the right tool for comparing package designs and sizing an effect. In person is the right tool for layouts, fixtures and displays.</p></div>
+    <div class="card"><p class="ttl">What you get</p><p class="note" style="margin-top:0">Heat and spotlight maps for each set, package-level scores for every item on the shelf, a brand read for your packs, purchase results, and a recommendation you can take into a line review.</p></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. In-person central location test with eye-tracking glasses, adults 21 to 54 who bought sparkling water in the past month, n=40 (20 per shelf layout). Measures are from the first 10 seconds of free viewing; purchases are from the shopping task that followed. A live version is built on your category, your fixtures and your own planograms.</footer>
+</div>
+
+<script>
+(function(){
+const D={"brands":{"Tidewell":{"c":"#1f6f8b","t":"#fff","p":5.99},"Corrowan":{"c":"#2f7d4f","t":"#fff","p":6.49},"Ostra":{"c":"#22304a","t":"#fff","p":6.99},"Fenley":{"c":"#f5d547","t":"#4a3b00","p":5.49},"Marlo Spring":{"c":"#ebe6da","t":"#23465e","p":7.49},"Quillet":{"c":"#f39c2b","t":"#3f1d05","p":6.29},"Pellwick":{"c":"#c2185b","t":"#fff","p":4.99}},"cur":[{"b":"Corrowan","f":"Lime","r":0,"c":0,"n":3,"ttf":5.1,"dw":308,"nd":1.15,"buy":0},{"b":"Corrowan","f":"Berry","r":0,"c":1,"n":4,"ttf":4.9,"dw":286,"nd":1.19,"buy":2},{"b":"Ostra","f":"Coconut","r":0,"c":2,"n":2,"ttf":5.0,"dw":219,"nd":1.0,"buy":0},{"b":"Ostra","f":"Lime","r":0,"c":3,"n":4,"ttf":4.6,"dw":351,"nd":1.44,"buy":1},{"b":"Fenley","f":"Lemon","r":0,"c":4,"n":3,"ttf":5.8,"dw":243,"nd":1.08,"buy":1},{"b":"Fenley","f":"Raspberry","r":0,"c":5,"n":3,"ttf":5.3,"dw":280,"nd":1.12,"buy":0},{"b":"Marlo Spring","f":"Lemon","r":0,"c":6,"n":2,"ttf":6.0,"dw":226,"nd":1.17,"buy":0},{"b":"Quillet","f":"Peach","r":0,"c":7,"n":3,"ttf":4.5,"dw":253,"nd":1.14,"buy":1},{"b":"Tidewell","f":"Pink Grapefruit","r":0,"c":8,"n":3,"ttf":5.2,"dw":333,"nd":1.15,"buy":1},{"b":"Tidewell","f":"Black Cherry","r":0,"c":9,"n":3,"ttf":5.5,"dw":325,"nd":1.24,"buy":0},{"b":"Corrowan","f":"Cherry","r":1,"c":0,"n":6,"ttf":4.1,"dw":487,"nd":1.52,"buy":2},{"b":"Corrowan","f":"Original","r":1,"c":1,"n":7,"ttf":3.0,"dw":558,"nd":1.52,"buy":2},{"b":"Ostra","f":"Blackberry","r":1,"c":2,"n":5,"ttf":3.3,"dw":435,"nd":1.41,"buy":2},{"b":"Ostra","f":"Yuzu","r":1,"c":3,"n":4,"ttf":4.2,"dw":412,"nd":1.36,"buy":1},{"b":"Fenley","f":"Grapefruit","r":1,"c":4,"n":6,"ttf":3.3,"dw":426,"nd":1.34,"buy":1},{"b":"Fenley","f":"Original","r":1,"c":5,"n":7,"ttf":3.3,"dw":478,"nd":1.48,"buy":1},{"b":"Marlo Spring","f":"Mint","r":1,"c":6,"n":4,"ttf":4.9,"dw":364,"nd":1.23,"buy":1},{"b":"Quillet","f":"Mango","r":1,"c":7,"n":4,"ttf":3.9,"dw":320,"nd":1.26,"buy":1},{"b":"Tidewell","f":"Lime","r":1,"c":8,"n":5,"ttf":4.1,"dw":363,"nd":1.38,"buy":1},{"b":"Tidewell","f":"Lemon","r":1,"c":9,"n":3,"ttf":4.2,"dw":320,"nd":1.09,"buy":0},{"b":"Corrowan","f":"Lemon","r":2,"c":0,"n":3,"ttf":4.5,"dw":288,"nd":1.09,"buy":0},{"b":"Corrowan","f":"Grapefruit","r":2,"c":1,"n":3,"ttf":5.1,"dw":336,"nd":1.13,"buy":0},{"b":"Ostra","f":"Pear","r":2,"c":2,"n":3,"ttf":5.2,"dw":260,"nd":1.24,"buy":0},{"b":"Pellwick","f":"Raspberry","r":2,"c":3,"n":3,"ttf":4.6,"dw":228,"nd":1.29,"buy":0},{"b":"Fenley","f":"Orange","r":2,"c":4,"n":3,"ttf":5.0,"dw":278,"nd":1.24,"buy":0},{"b":"Marlo Spring","f":"Original","r":2,"c":5,"n":5,"ttf":4.6,"dw":356,"nd":1.49,"buy":1},{"b":"Marlo Spring","f":"Lime","r":2,"c":6,"n":3,"ttf":5.1,"dw":265,"nd":1.14,"buy":0},{"b":"Quillet","f":"Passionfruit","r":2,"c":7,"n":3,"ttf":4.3,"dw":305,"nd":1.35,"buy":0},{"b":"Tidewell","f":"Blood Orange","r":2,"c":8,"n":3,"ttf":5.0,"dw":283,"nd":1.19,"buy":1},{"b":"Tidewell","f":"Original","r":2,"c":9,"n":3,"ttf":4.7,"dw":241,"nd":1.18,"buy":0},{"b":"Corrowan","f":"Mango","r":3,"c":0,"n":2,"ttf":5.3,"dw":295,"nd":1.07,"buy":0},{"b":"Corrowan","f":"Orange","r":3,"c":1,"n":2,"ttf":5.5,"dw":282,"nd":1.13,"buy":0},{"b":"Ostra","f":"Original","r":3,"c":2,"n":2,"ttf":5.6,"dw":198,"nd":1.0,"buy":0},{"b":"Pellwick","f":"Watermelon","r":3,"c":3,"n":2,"ttf":6.1,"dw":185,"nd":1.13,"buy":0},{"b":"Fenley","f":"Lime","r":3,"c":4,"n":2,"ttf":5.4,"dw":311,"nd":1.11,"buy":0},{"b":"Marlo Spring","f":"Cucumber","r":3,"c":5,"n":2,"ttf":5.5,"dw":256,"nd":1.01,"buy":0},{"b":"Marlo Spring","f":"Pear","r":3,"c":6,"n":2,"ttf":6.0,"dw":255,"nd":1.02,"buy":0},{"b":"Quillet","f":"Guava","r":3,"c":7,"n":2,"ttf":5.6,"dw":276,"nd":1.13,"buy":0},{"b":"Tidewell","f":"Cucumber Mint","r":3,"c":8,"n":1,"ttf":6.2,"dw":238,"nd":1.0,"buy":0},{"b":"Tidewell","f":"Peach","r":3,"c":9,"n":2,"ttf":6.2,"dw":226,"nd":1.1,"buy":0}],"alt":[{"b":"Marlo Spring","f":"Original","r":0,"c":0,"n":2,"ttf":5.1,"dw":293,"nd":1.14,"buy":0},{"b":"Marlo Spring","f":"Cucumber","r":0,"c":1,"n":3,"ttf":5.4,"dw":277,"nd":1.26,"buy":0},{"b":"Marlo Spring","f":"Lemon","r":0,"c":2,"n":3,"ttf":4.3,"dw":376,"nd":1.3,"buy":0},{"b":"Marlo Spring","f":"Mint","r":0,"c":3,"n":2,"ttf":5.2,"dw":289,"nd":1.27,"buy":0},{"b":"Marlo Spring","f":"Lime","r":0,"c":4,"n":3,"ttf":4.8,"dw":370,"nd":1.33,"buy":0},{"b":"Marlo Spring","f":"Pear","r":0,"c":5,"n":4,"ttf":4.4,"dw":373,"nd":1.2,"buy":1},{"b":"Quillet","f":"Peach","r":0,"c":6,"n":3,"ttf":5.2,"dw":340,"nd":1.3,"buy":1},{"b":"Quillet","f":"Mango","r":0,"c":7,"n":2,"ttf":5.8,"dw":329,"nd":1.28,"buy":0},{"b":"Quillet","f":"Passionfruit","r":0,"c":8,"n":3,"ttf":5.5,"dw":263,"nd":1.29,"buy":0},{"b":"Quillet","f":"Guava","r":0,"c":9,"n":3,"ttf":4.9,"dw":244,"nd":1.16,"buy":0},{"b":"Corrowan","f":"Lime","r":1,"c":0,"n":5,"ttf":4.1,"dw":378,"nd":1.5,"buy":2},{"b":"Corrowan","f":"Cherry","r":1,"c":1,"n":4,"ttf":4.5,"dw":358,"nd":1.22,"buy":0},{"b":"Corrowan","f":"Lemon","r":1,"c":2,"n":6,"ttf":3.2,"dw":496,"nd":1.65,"buy":2},{"b":"Tidewell","f":"Pink Grapefruit","r":1,"c":3,"n":6,"ttf":3.7,"dw":436,"nd":1.57,"buy":3},{"b":"Tidewell","f":"Lime","r":1,"c":4,"n":6,"ttf":3.6,"dw":472,"nd":1.52,"buy":2},{"b":"Tidewell","f":"Blood Orange","r":1,"c":5,"n":7,"ttf":3.1,"dw":552,"nd":1.66,"buy":3},{"b":"Tidewell","f":"Cucumber Mint","r":1,"c":6,"n":6,"ttf":3.8,"dw":487,"nd":1.5,"buy":0},{"b":"Ostra","f":"Coconut","r":1,"c":7,"n":4,"ttf":4.4,"dw":402,"nd":1.41,"buy":0},{"b":"Ostra","f":"Blackberry","r":1,"c":8,"n":5,"ttf":4.4,"dw":390,"nd":1.31,"buy":1},{"b":"Ostra","f":"Pear","r":1,"c":9,"n":4,"ttf":4.1,"dw":330,"nd":1.28,"buy":0},{"b":"Corrowan","f":"Mango","r":2,"c":0,"n":3,"ttf":4.2,"dw":297,"nd":1.28,"buy":0},{"b":"Corrowan","f":"Berry","r":2,"c":1,"n":3,"ttf":4.3,"dw":379,"nd":1.3,"buy":0},{"b":"Corrowan","f":"Original","r":2,"c":2,"n":5,"ttf":4.4,"dw":382,"nd":1.43,"buy":1},{"b":"Tidewell","f":"Black Cherry","r":2,"c":3,"n":5,"ttf":4.5,"dw":430,"nd":1.32,"buy":0},{"b":"Tidewell","f":"Lemon","r":2,"c":4,"n":6,"ttf":3.6,"dw":436,"nd":1.4,"buy":0},{"b":"Tidewell","f":"Original","r":2,"c":5,"n":5,"ttf":4.3,"dw":443,"nd":1.4,"buy":0},{"b":"Tidewell","f":"Peach","r":2,"c":6,"n":6,"ttf":3.6,"dw":450,"nd":1.38,"buy":0},{"b":"Ostra","f":"Original","r":2,"c":7,"n":5,"ttf":4.1,"dw":368,"nd":1.46,"buy":1},{"b":"Ostra","f":"Lime","r":2,"c":8,"n":5,"ttf":3.8,"dw":360,"nd":1.25,"buy":1},{"b":"Ostra","f":"Yuzu","r":2,"c":9,"n":4,"ttf":3.9,"dw":378,"nd":1.31,"buy":0},{"b":"Corrowan","f":"Grapefruit","r":3,"c":0,"n":2,"ttf":5.6,"dw":268,"nd":1.19,"buy":0},{"b":"Corrowan","f":"Orange","r":3,"c":1,"n":3,"ttf":5.1,"dw":289,"nd":1.1,"buy":0},{"b":"Fenley","f":"Lemon","r":3,"c":2,"n":2,"ttf":6.0,"dw":177,"nd":1.0,"buy":1},{"b":"Fenley","f":"Grapefruit","r":3,"c":3,"n":2,"ttf":4.9,"dw":289,"nd":1.02,"buy":0},{"b":"Fenley","f":"Orange","r":3,"c":4,"n":2,"ttf":5.1,"dw":254,"nd":1.06,"buy":0},{"b":"Fenley","f":"Lime","r":3,"c":5,"n":3,"ttf":5.4,"dw":320,"nd":1.3,"buy":1},{"b":"Fenley","f":"Raspberry","r":3,"c":6,"n":2,"ttf":5.0,"dw":259,"nd":1.03,"buy":0},{"b":"Fenley","f":"Original","r":3,"c":7,"n":2,"ttf":5.7,"dw":254,"nd":1.0,"buy":0},{"b":"Pellwick","f":"Raspberry","r":3,"c":8,"n":2,"ttf":6.0,"dw":227,"nd":1.0,"buy":0},{"b":"Pellwick","f":"Watermelon","r":3,"c":9,"n":2,"ttf":5.2,"dw":268,"nd":1.0,"buy":0}],"S":{"cur":{"avgN":3.3,"ttf":4.59,"nd":1.21,"dw":309,"price":6.45,"row":[30,60,10,0],"twN":2.88,"twTTF":5.14,"twDW":291,"unseen":0},"alt":{"avgN":3.75,"ttf":4.34,"nd":1.28,"dw":350,"price":6.3,"row":[10,65,15,10],"twN":5.88,"twTTF":3.77,"twDW":463,"unseen":0}},"BUY":{"cur":{"Corrowan":6,"Ostra":4,"Tidewell":3,"Fenley":3,"Marlo Spring":2,"Quillet":2,"Pellwick":0},"alt":{"Tidewell":8,"Corrowan":5,"Ostra":3,"Fenley":2,"Marlo Spring":1,"Quillet":1,"Pellwick":0}}};
+const BC={"Tidewell":"var(--s1)","Corrowan":"var(--s3)","Ostra":"var(--s7)","Fenley":"var(--s4)","Marlo Spring":"var(--ink-3)","Quillet":"var(--s2)","Pellwick":"var(--s5)"};
+const BRANDS=Object.keys(D.brands);
+const ROWN=["Top shelf","Eye level","Waist","Bottom shelf"];
+const fmt=(x,d=1)=>Number(x).toFixed(d);
+const hb=(l,v,max,c,txt)=>`<div class="hb"><span class="hbl">${l}</span><div class="hbt"><i style="width:${Math.max(1,v/max*100)}%;background:${c}"></i></div><span class="hbv">${txt}</span></div>`;
+
+/* shelf results */
+document.getElementById("stacks").innerHTML=[["cur","Current set"],["alt","Alternative set"]].map(([k,l])=>{
+  const b=D.BUY[k];return `<div class="stlab"><span>${l}</span><span class="mono">n=20</span></div><div class="stack">`+
+  BRANDS.filter(x=>b[x]>0).map(x=>`<i style="width:${b[x]/20*100}%;background:${BC[x]}" title="${x} ${b[x]} of 20">${b[x]>=2?b[x]*5+"%":""}</i>`).join("")+`</div>`}).join("");
+document.getElementById("brandLegend").innerHTML=BRANDS.map(b=>`<span><i class="sw" style="width:10px;height:10px;border-radius:2px;background:${BC[b]}"></i>${b}</span>`).join("");
+document.getElementById("rowBars").innerHTML=ROWN.map((r,i)=>`<p class="note" style="margin:8px 0 2px"><b>${r}</b></p>`+
+  hb("Current",D.S.cur.row[i],70,"var(--ink-3)",D.S.cur.row[i]+"%")+hb("Alternative",D.S.alt.row[i],70,"var(--s1)",D.S.alt.row[i]+"%")).join("");
+document.getElementById("who").innerHTML=[["Women",55],["Men",45],["Ages 21 to 34",40],["Ages 35 to 54",60],["Buy weekly or more",45],["Buy two to three times a month",55]]
+  .map(([l,v])=>hb(l,v,100,"var(--s1)",v+"%")).join("");
+
+/* shelf drawing */
+const W=1000,H=520,CW=88,CH=96,GX=10,X0=16,RH=126,Y0=14;
+const cx=c=>X0+c*(CW+GX),cy=r=>Y0+r*RH;
+function shelfSVG(items){let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Shelf set of 40 sparkling water 8-packs">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" rx="6" style="fill:var(--panel-2)"/>`;
+  for(let r=0;r<4;r++)s+=`<rect x="4" y="${cy(r)+CH+2}" width="${W-8}" height="10" rx="2" style="fill:var(--rule-2)"/>`;
+  items.forEach(it=>{const B=D.brands[it.b],x=cx(it.c),y=cy(it.r);
+    s+=`<g><rect x="${x}" y="${y}" width="${CW}" height="${CH}" rx="4" fill="${B.c}" stroke="rgba(0,0,0,.18)"/>`+
+      `<rect x="${x}" y="${y+58}" width="${CW}" height="16" fill="rgba(255,255,255,.22)"/>`+
+      `<text x="${x+CW/2}" y="${y+30}" text-anchor="middle" font-size="${it.b.length>8?11:13}" font-weight="700" fill="${B.t}" font-family="Archivo,Arial,sans-serif">${it.b}</text>`+
+      `<text x="${x+CW/2}" y="${y+70}" text-anchor="middle" font-size="9.5" font-weight="600" fill="${B.t}" font-family="Archivo,Arial,sans-serif">${it.f}</text>`+
+      `<text x="${x+CW/2}" y="${y+88}" text-anchor="middle" font-size="7" letter-spacing="1" fill="${B.t}" opacity=".7" font-family="Archivo,Arial,sans-serif">8 CANS</text></g>`});
+  return s+"</svg>"}
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function gauss(r){let u=r(),v=r();return Math.sqrt(-2*Math.log(u||1e-9))*Math.cos(2*Math.PI*v)}
+function intensity(items,seed){const c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
+  g.globalCompositeOperation="lighter";const r=rng(seed);
+  const blob=(x,y,rad,a)=>{const gr=g.createRadialGradient(x,y,0,x,y,rad);gr.addColorStop(0,`rgba(255,255,255,${a})`);gr.addColorStop(1,"rgba(255,255,255,0)");g.fillStyle=gr;g.beginPath();g.arc(x,y,rad,0,7);g.fill()};
+  items.forEach(it=>{const x=cx(it.c)+CW/2,y=cy(it.r)+CH*0.42;const pts=it.n*3,w=it.dw/400;
+    for(let i=0;i<pts;i++)blob(x+gauss(r)*20,y+gauss(r)*17,26,0.055*w)});
+  for(let i=0;i<90;i++)blob(r()*W,r()*(H-30),22,0.025);
+  return g.getImageData(0,0,W,H)}
+const CACHE={};
+function ramp(t){const st=[[0,[40,200,60]],[.45,[170,230,40]],[.7,[255,220,30]],[1,[230,40,30]]];
+  for(let i=1;i<st.length;i++)if(t<=st[i][0]){const a=st[i-1],b=st[i],f=(t-a[0])/(b[0]-a[0]);return a[1].map((v,j)=>v+(b[1][j]-v)*f)}return st[3][1]}
+let MAXA=1;
+function paint(cv,key,mode){const g=cv.getContext("2d"),src=CACHE[key],out=g.createImageData(W,H),d=src.data,o=out.data;
+  for(let i=0;i<d.length;i+=4){const t=Math.min(1,d[i+3]/MAXA);
+    if(mode==="heat"){if(t<.08){o[i+3]=0;continue}const c=ramp(t);o[i]=c[0];o[i+1]=c[1];o[i+2]=c[2];o[i+3]=Math.min(205,60+t*200)}
+    else{o[i]=8;o[i+1]=10;o[i+2]=14;o[i+3]=Math.round(215*(1-Math.min(1,t*1.7)))}}
+  g.putImageData(out,0,0)}
+function bubbles(items,mode){let s=`<svg class="ov" viewBox="0 0 ${W} ${H}" aria-hidden="true">`;
+  items.forEach(it=>{const v=mode==="view"?it.n:it.buy;if(mode==="buy"&&!v)return;const x=cx(it.c)+CW/2,y=cy(it.r)+CH/2;
+    const rad=mode==="view"?15:13+v*4;const fill=mode==="view"?"rgba(20,23,26,.82)":"#c0392f";
+    s+=`<circle cx="${x}" cy="${y}" r="${rad}" fill="${fill}" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="${mode==="view"?14:15+v}" font-weight="700" fill="#fff" font-family="Archivo,Arial,sans-serif">${v}</text>`});
+  return s+"</svg>"}
+let P="cur",M="heat";
+function drawMaps(){const keys=P==="both"?["cur","alt"]:[P];const el=document.getElementById("maps");
+  el.innerHTML=keys.map(k=>`<p class="shelfcap">${k==="cur"?"Current set: Tidewell at the right end":"Alternative set: Tidewell in the center, eye and waist level"}</p><div class="shelfwrap" id="sw_${k}">${shelfSVG(D[k])}${(M==="heat"||M==="spot")?`<canvas width="${W}" height="${H}"></canvas>`:bubbles(D[k],M)}</div>`).join("");
+  if(M==="heat"||M==="spot")keys.forEach(k=>paint(document.querySelector(`#sw_${k} canvas`),k,M));
+  const L={heat:`<span><i class="sw" style="width:90px;height:9px;border-radius:5px;background:linear-gradient(90deg,#28c83c,#aae628,#ffdc1e,#e6281e)"></i>Less looking to more looking</span>`,
+    spot:`<span>Bright areas were looked at. Dark areas were not.</span>`,
+    view:`<span><i class="sw" style="width:14px;height:14px;border-radius:50%;background:rgba(20,23,26,.82)"></i>Number of the 20 shoppers who looked at the pack</span>`,
+    buy:`<span><i class="sw" style="width:14px;height:14px;border-radius:50%;background:#c0392f"></i>Number of the 20 shoppers who bought the pack</span>`};
+  document.getElementById("mapLegend").innerHTML=L[M];
+  document.getElementById("mapNote").innerHTML=M==="buy"?"<b>In the current set, buying clusters on Corrowan at the left end of eye level.</b> In the alternative set it moves to Tidewell in the center.":
+    "<b>The hottest area in both sets is eye level.</b> In the current set it is Corrowan, at the left end of the aisle. In the alternative set it moves to Tidewell in the center. The right end, where Tidewell sits today, stays cool."}
+function setup(){CACHE.cur=intensity(D.cur,7);CACHE.alt=intensity(D.alt,7);
+  let m=0;["cur","alt"].forEach(k=>{const d=CACHE[k].data;for(let i=3;i<d.length;i+=4)if(d[i]>m)m=d[i]});MAXA=m*0.85;drawMaps()}
+document.querySelectorAll("#pogSel button").forEach(b=>b.addEventListener("click",()=>{P=b.dataset.p;document.querySelectorAll("#pogSel button").forEach(x=>x.classList.toggle("on",x===b));drawMaps()}));
+document.querySelectorAll("#modeSel button").forEach(b=>b.addEventListener("click",()=>{M=b.dataset.m;document.querySelectorAll("#modeSel button").forEach(x=>x.classList.toggle("on",x===b));drawMaps()}));
+
+/* top packages */
+const top=k=>D[k].slice().sort((a,b)=>b.n-a.n||(a.ttf-b.ttf)).slice(0,10);
+const tr=(it,i)=>`<tr${it.b==="Tidewell"?' style="background:var(--real-bg)"':""}><td>${i+1}. ${it.b} ${it.f}</td><td class="n">${fmt(it.ttf)} s</td><td class="n">${it.dw} ms</td><td class="n">${it.n}/20</td></tr>`;
+document.getElementById("topCur").innerHTML=top("cur").map(tr).join("");
+document.getElementById("topAlt").innerHTML=top("alt").map(tr).join("");
+const pos=it=>`${ROWN[it.r]}, ${it.c<=2?"left":it.c>=7?"right end":"center"}`;
+document.getElementById("twBody").innerHTML=D.cur.filter(x=>x.b==="Tidewell").map(c=>{const a=D.alt.find(x=>x.b===c.b&&x.f===c.f);
+  return `<tr class="twrow"><td>${c.f}</td><td>${pos(c)} → ${pos(a)}</td><td class="n">${c.n} / <b class="${a.n>c.n?"up":""}">${a.n}</b></td><td class="n">${fmt(c.ttf)} / <b class="${a.ttf<c.ttf?"up":""}">${fmt(a.ttf)}</b></td><td class="n">${c.dw} / <b class="${a.dw>c.dw?"up":""}">${a.dw}</b></td><td class="n">${c.buy} / <b>${a.buy}</b></td></tr>`}).join("");
+
+/* comparison */
+const C=[["Shoppers seeing each pack","avgN"," of 20",2,true],["Time to first look","ttf"," s",2,false],["Looks per pack seen","nd","",2,true],["Looking time per pack seen","dw"," ms",0,true]];
+document.getElementById("cmpCards").innerHTML=C.map(([l,k,u,dg,hi])=>{const c=D.S.cur[k],a=D.S.alt[k],pct=Math.round((a-c)/c*100),good=hi?a>c:a<c,mx=Math.max(c,a)*1.15;
+  return `<div class="card kpi cmp2"><p class="lab">${l}</p><p class="val">${fmt(a,dg)}<small>${u}</small><span class="pill ${good?"up":"dn"}">${pct>0?"+":""}${pct}%</span></p>
+  <div style="margin-top:8px">${hb("Current",c,mx,"var(--ink-3)",fmt(c,dg))}${hb("Alternative",a,mx,"var(--s1)",fmt(a,dg))}</div></div>`}).join("");
+
+/* tabs */
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+setup();
+})();
+</script>
+</body></html>

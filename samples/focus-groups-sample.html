@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Focus Groups Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+
+/* focus group sample additions */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px}
+@media(max-width:1000px){.qgrid{grid-template-columns:1fr}}
+.q{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.qh{display:flex;gap:10px;align-items:baseline;margin:0 0 4px}
+.qn{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:#fff;background:var(--slate);
+  border-radius:3px;padding:2px 6px;flex:none}
+.qt{font-size:13.5px;font-weight:600;line-height:1.4;margin:0}
+.qi{font-size:11px;color:var(--ink-3);margin:2px 0 8px;font-style:italic}
+.opt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:5px 0;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2)}
+.opt:last-child{border-bottom:none}
+.act{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;border-radius:3px;white-space:nowrap;text-align:center}
+.act.t{background:var(--crit-bg);color:var(--crit)}
+.act.c{background:var(--panel-2);color:var(--ink-3)}
+.act.q{background:var(--real-bg);color:var(--real-fg)}
+.act.s{background:var(--good-bg);color:var(--good)}
+.qnote{font-size:11.5px;color:var(--ink-2);background:var(--panel-2);border-radius:4px;padding:7px 10px;margin:9px 0 0;line-height:1.45}
+.qnote b{color:var(--ink)}
+.sechead{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:20px 0 10px}
+.tbar{display:flex;height:30px;border-radius:5px;overflow:hidden;margin:4px 0 10px}
+.tbar span{display:flex;align-items:center;justify-content:center;color:#fff;font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:700;min-width:0;overflow:hidden}
+.gsec{display:grid;grid-template-columns:132px 1fr;gap:18px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;margin-bottom:11px}
+@media(max-width:700px){.gsec{grid-template-columns:1fr;gap:8px}}
+.gtime{border-left:3px solid var(--gc);padding-left:10px}
+.gtime b{display:block;font-family:"JetBrains Mono",monospace;font-size:13px}
+.gtime span{display:block;font-size:11px;color:var(--ink-3);margin-top:2px}
+.gsec h3{font-size:15px;margin:0 0 4px;letter-spacing:-.01em}
+.gpurp{font-size:12px;color:var(--ink-3);margin:0 0 10px}
+.say{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.55;color:var(--ink);background:var(--panel-2);border-radius:4px;padding:9px 12px;margin:0 0 10px}
+.say::before{content:"Moderator: ";font-family:Archivo,sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.gq{margin:0 0 9px;font-size:13px;line-height:1.5}
+.gq>b{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);margin-right:6px;font-weight:500}
+.probes{list-style:none;margin:4px 0 0 0;padding:0 0 0 18px}
+.probes li{font-size:12px;color:var(--ink-2);padding:2px 0;line-height:1.5}
+.probes li::before{content:"Probe";display:inline-block;margin-right:7px;font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--real-fg);background:var(--real-bg);border-radius:2px;padding:1px 4px;vertical-align:1px}
+.stim{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:10px 0}
+@media(max-width:860px){.stim{grid-template-columns:1fr}}
+.board{border:1px solid var(--rule-2);border-radius:5px;padding:11px 13px;background:var(--bg)}
+.board .bl2{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.board b{display:block;font-size:14px;margin:3px 0 4px}
+.board p{font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;line-height:1.5;color:var(--ink-2);margin:0}
+.fnd{display:grid;grid-template-columns:34px 1fr;gap:12px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:15px 17px;margin-bottom:11px}
+.fnd .fn{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700;color:var(--s3);line-height:1}
+.fnd h3{font-size:15px;margin:0 0 5px;letter-spacing:-.01em}
+.fnd p{font-size:12.5px;color:var(--ink-2);margin:0 0 9px;line-height:1.55}
+.fnd .quote{margin-bottom:6px}
+.stk{margin:4px 0 2px}
+.stkrow{display:grid;grid-template-columns:minmax(92px,30%) 1fr;gap:9px;align-items:center;padding:5px 0;font-size:12px}
+.stkrow .lb{color:var(--ink-2);line-height:1.25}
+.stkrow .lb small{display:block;color:var(--ink-3);font-size:10px}
+.stkbar{display:flex;height:22px;border-radius:3px;overflow:hidden;gap:2px}
+.stkbar i{display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:700;min-width:0}
+.tr{font-size:12.5px;line-height:1.55;margin:0;padding:6px 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:64px 1fr;gap:10px}
+.tr:last-child{border-bottom:none}
+.tr .who{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);padding-top:2px}
+.tr .who b{display:block;color:var(--ink);font-size:11px}
+.tr span.tx{font-family:"Source Serif 4",Georgia,serif;color:var(--ink-2)}
+.tr.mod span.tx{color:var(--ink)}
+.dlv .val{font-size:22px}
+.optcard{background:var(--panel-2);border:1px dashed var(--rule-2);border-radius:6px;padding:14px 16px;font-size:13px;color:var(--ink-2);line-height:1.55}
+.optcard b{color:var(--ink)}
+.hero{background:#1e2b3a;border:1px solid var(--rule)}
+#fun .hb{grid-template-columns:minmax(120px,58%) 1fr auto}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product, person, quote and number on this page is made up to show what a focus group project produces. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Bellcourt Premium Thin</b><span>Sample · Frozen pizza focus groups</span></div>
+    <div class="period">Fieldwork Sep 15 and 17, 2026 · 4 groups · 32 participants<br>
+      <span style="color:var(--real-fg)">●</span> measured in the room &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Screener</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Discussion guide</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1a8f65">Topline report</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#e87ba4">Before and after</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">What you get</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SCREENER -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">The <b>screener</b> is the questionnaire recruiters use to decide who gets invited. It does two jobs: it keeps the wrong people out (anyone in the industry, anyone who sat in a group recently, anyone who does not buy the category) and it sorts the right people into distinct groups. Here the split is <b>light buyers</b> versus <b>heavy buyers</b> of frozen pizza, in two markets. Red actions end the call. Blue actions count toward a quota.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Groups</p><p class="val">4</p><p class="sub">2 markets × 2 buyer types</p></div>
+    <div class="card kpi"><p class="lab">Per group</p><p class="val">10<small> / 8</small></p><p class="sub">Recruit 10 to seat 8</p></div>
+    <div class="card kpi"><p class="lab">People screened</p><p class="val">412</p><p class="sub">Phone and online, 9 days</p></div>
+    <div class="card kpi"><p class="lab">Qualified</p><p class="val">48</p><p class="sub">40 invited, 8 on standby</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Group schedule</p>
+      <div class="scroll"><table style="min-width:520px"><thead><tr><th>Group</th><th>Market</th><th>Date</th><th>Time</th><th>Buyer type</th><th>Qualifies at S8</th></tr></thead><tbody>
+        <tr><td class="mdl">Group 1</td><td>Columbus, OH</td><td>Tue Sep 15</td><td class="mono">5:30 pm</td><td>Light</td><td>1 to 3 purchases in 3 months</td></tr>
+        <tr><td class="mdl">Group 2</td><td>Columbus, OH</td><td>Tue Sep 15</td><td class="mono">7:45 pm</td><td>Heavy</td><td>6 or more in 3 months</td></tr>
+        <tr><td class="mdl">Group 3</td><td>Sacramento, CA</td><td>Thu Sep 17</td><td class="mono">5:30 pm</td><td>Light</td><td>1 to 3 purchases in 3 months</td></tr>
+        <tr><td class="mdl">Group 4</td><td>Sacramento, CA</td><td>Thu Sep 17</td><td class="mono">7:45 pm</td><td>Heavy</td><td>6 or more in 3 months</td></tr>
+      </tbody></table></div>
+      <p class="note"><b>Why 4 to 5 purchases terminates:</b> it leaves a gap between the two buyer types so the light and heavy rooms are clearly different people, not neighbors on either side of a line.</p></div>
+    <div class="card"><p class="ttl">Where screened people dropped out <span class="src real">Measured</span></p><div id="fun"></div>
+      <p class="note">412 screened, 364 out, 48 qualified. The biggest single drop is people who do not buy the category at all.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Quota check · seated participants <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:600px"><thead><tr><th>Quota</th><th>Target per group</th><th class="n">G1 Light</th><th class="n">G2 Heavy</th><th class="n">G3 Light</th><th class="n">G4 Heavy</th><th class="n">Total</th></tr></thead><tbody>
+        <tr class="hl"><td class="mdl">Seated</td><td>8</td><td class="n">8</td><td class="n">8</td><td class="n">8</td><td class="n">8</td><td class="n">32</td></tr>
+        <tr><td>Women</td><td>At least 3</td><td class="n">4</td><td class="n">5</td><td class="n">4</td><td class="n">4</td><td class="n">17</td></tr>
+        <tr><td>Men</td><td>At least 3</td><td class="n">4</td><td class="n">3</td><td class="n">4</td><td class="n">4</td><td class="n">15</td></tr>
+        <tr><td>Age 25 to 34 / 35 to 44 / 45 to 54 / 55 to 64</td><td>1 to 3 in each band</td><td class="n">2/3/2/1</td><td class="n">3/2/2/1</td><td class="n">2/2/3/1</td><td class="n">2/3/1/2</td><td class="n">9/10/8/5</td></tr>
+        <tr><td>Children under 18 at home</td><td>3 to 5</td><td class="n">4</td><td class="n">5</td><td class="n">3</td><td class="n">4</td><td class="n">16</td></tr>
+        <tr><td>Usually pays $8 or more</td><td>Light 2+, heavy 3+</td><td class="n">2</td><td class="n">4</td><td class="n">3</td><td class="n">5</td><td class="n">14</td></tr>
+        <tr><td>Buys Bellcourt most often</td><td>No more than 3</td><td class="n">2</td><td class="n">3</td><td class="n">1</td><td class="n">2</td><td class="n">8</td></tr>
+        <tr><td>Last group 6 to 12 months ago</td><td>No more than 2</td><td class="n">1</td><td class="n">0</td><td class="n">2</td><td class="n">1</td><td class="n">4</td></tr>
+      </tbody></table></div>
+      <p class="note">Every quota met in every group. The Bellcourt cap keeps the room from turning into a panel of loyal customers who will praise anything with the logo on it.</p></div>
+  </div>
+
+  <p class="sechead">The screener · 14 questions</p>
+  <div class="qgrid">
+    <div class="q"><p class="qh"><span class="qn">S1</span><span class="qt">Do you or does anyone in your household work in any of these fields?</span></p>
+      <p class="qi">Read list. Accept all that apply.</p>
+      <div class="opt">Market research or advertising<span class="act t">Terminate</span></div>
+      <div class="opt">Food manufacturing or food distribution<span class="act t">Terminate</span></div>
+      <div class="opt">Grocery or convenience retail<span class="act t">Terminate</span></div>
+      <div class="opt">A restaurant or pizzeria<span class="act t">Terminate</span></div>
+      <div class="opt">None of these<span class="act c">Continue</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S2</span><span class="qt">When did you last take part in a research group discussion or interview?</span></p>
+      <p class="qi">If they have ever taken part in one about frozen foods, terminate.</p>
+      <div class="opt">Within the past 6 months<span class="act t">Terminate</span></div>
+      <div class="opt">6 to 12 months ago<span class="act q">Quota: max 2</span></div>
+      <div class="opt">More than 12 months ago, or never<span class="act c">Continue</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S3</span><span class="qt">Which of these groups includes your age?</span></p>
+      <div class="opt">Under 25<span class="act t">Terminate</span></div>
+      <div class="opt">25 to 34 · 35 to 44 · 45 to 54 · 55 to 64<span class="act q">Quota: 1 to 3 each</span></div>
+      <div class="opt">65 or older<span class="act t">Terminate</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S4</span><span class="qt">How do you describe your gender?</span></p>
+      <p class="qi">Record. Do not read options.</p>
+      <div class="opt">Woman<span class="act q">Quota: min 3</span></div>
+      <div class="opt">Man<span class="act q">Quota: min 3</span></div>
+      <div class="opt">Another description<span class="act c">Continue</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S5</span><span class="qt">Who in your household does most of the grocery shopping?</span></p>
+      <div class="opt">I do all or most of it<span class="act c">Continue</span></div>
+      <div class="opt">I share it about equally<span class="act c">Continue</span></div>
+      <div class="opt">Someone else does most of it<span class="act t">Terminate</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S6</span><span class="qt">How many children under 18 live in your household?</span></p>
+      <div class="opt">None<span class="act q">Quota</span></div>
+      <div class="opt">One or more<span class="act q">Quota: 3 to 5</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S7</span><span class="qt">Which of these have you bought for your household in the past 3 months?</span></p>
+      <p class="qi">Read list. Accept all that apply. The other categories hide the topic.</p>
+      <div class="opt">Frozen vegetables<span class="act c">Record</span></div>
+      <div class="opt">Frozen meals or entrees<span class="act c">Record</span></div>
+      <div class="opt">Frozen pizza<span class="act s">Must select</span></div>
+      <div class="opt">Ice cream or frozen desserts<span class="act c">Record</span></div>
+      <div class="opt">Frozen pizza not selected<span class="act t">Terminate</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S8</span><span class="qt">About how many times in the past 3 months have you bought frozen pizza? Count each shopping trip once.</span></p>
+      <div class="opt">None<span class="act t">Terminate</span></div>
+      <div class="opt">1 to 3 times<span class="act s">Light: G1, G3</span></div>
+      <div class="opt">4 to 5 times<span class="act t">Terminate</span></div>
+      <div class="opt">6 or more times<span class="act s">Heavy: G2, G4</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S9</span><span class="qt">Which brands of frozen pizza have you bought in the past 3 months?</span></p>
+      <p class="qi">Read list in rotated order. Accept all that apply.</p>
+      <div class="opt">Bellcourt · Corvetto · Larkspur Oven<span class="act c">Record</span></div>
+      <div class="opt">Sunday Stone · Hollis Farm Kitchen · Pennant<span class="act c">Record</span></div>
+      <div class="opt">A store brand · Other<span class="act c">Record</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S10</span><span class="qt">And which one do you buy most often?</span></p>
+      <div class="opt">Bellcourt<span class="act q">Quota: max 3</span></div>
+      <div class="opt">Any other brand<span class="act c">Continue</span></div>
+      <p class="qnote"><b>Why:</b> the team wants to hear from people Bellcourt has to win, not only from people it already has.</p></div>
+
+    <div class="q"><p class="qh"><span class="qn">S11</span><span class="qt">What do you usually pay for one frozen pizza?</span></p>
+      <div class="opt">Under $5<span class="act c">Continue</span></div>
+      <div class="opt">$5 to $7.99<span class="act c">Continue</span></div>
+      <div class="opt">$8 to $10.99<span class="act q">Quota</span></div>
+      <div class="opt">$11 or more<span class="act q">Quota</span></div>
+      <p class="qnote"><b>$8 or more:</b> at least 2 per light group, at least 3 per heavy group.</p></div>
+
+    <div class="q"><p class="qh"><span class="qn">S12</span><span class="qt">If a new thin-crust frozen pizza cost about $10 to $12, how likely would you be to try it?</span></p>
+      <div class="opt">Definitely or probably would<span class="act c">Continue</span></div>
+      <div class="opt">Might or might not<span class="act c">Continue</span></div>
+      <div class="opt">Probably or definitely would not<span class="act t">Terminate</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S13</span><span class="qt">Tell me about the last time frozen pizza was dinner at your house. What was that night like?</span></p>
+      <p class="qi">Open end. Recruiter rates the answer 1 to 5 for detail and ease of speaking.</p>
+      <div class="opt">Rated 4 or 5<span class="act c">Continue</span></div>
+      <div class="opt">Rated 1 to 3<span class="act t">Terminate</span></div></div>
+
+    <div class="q"><p class="qh"><span class="qn">S14</span><span class="qt">The discussion lasts 90 minutes. It is audio and video recorded, and the research team watches from another room. Are you comfortable with that, and can you attend on the date and time offered?</span></p>
+      <div class="opt">Yes to both<span class="act s">Invite</span></div>
+      <div class="opt">No to either<span class="act t">Terminate</span></div>
+      <p class="qnote"><b>At invite:</b> confirm the thank-you payment, ask them to arrive 15 minutes early with photo ID and any reading glasses they use. Confirmation call the day before.</p></div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">The <b>discussion guide</b> is the moderator's plan for the 90 minutes. Each section has a time budget and a purpose, the main questions are written out, and the <b>probes</b> under each one are follow-ups the moderator uses when an answer needs more. The guide keeps all four groups on the same ground. It is not a script to be read word for word.</p>
+
+  <div class="card" style="margin-bottom:13px"><p class="ttl">Time budget · 90 minutes</p>
+    <div class="tbar" id="tbar"></div><div class="legend" id="tleg"></div></div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Objectives</p>
+      <ul class="lst">
+        <li>How light and heavy buyers choose frozen pizza, and where "premium" starts<span>Sections 3, 4</span></li>
+        <li>Which of three positions has the most pull, and with whom<span>Section 5</span></li>
+        <li>What thin crust has to deliver to justify a higher price<span>Sections 4, 5</span></li>
+        <li>Which packaging direction to carry into quantitative testing<span>Section 6</span></li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Stimulus rotation</p>
+      <div class="scroll"><table><thead><tr><th>Group</th><th>Concept order</th><th>Package order</th></tr></thead><tbody>
+        <tr><td>G1 Light, Columbus</td><td class="mono">A · B · C</td><td class="mono">X · Y · Z</td></tr>
+        <tr><td>G2 Heavy, Columbus</td><td class="mono">B · C · A</td><td class="mono">Y · Z · X</td></tr>
+        <tr><td>G3 Light, Sacramento</td><td class="mono">C · A · B</td><td class="mono">Z · X · Y</td></tr>
+        <tr><td>G4 Heavy, Sacramento</td><td class="mono">A · C · B</td><td class="mono">X · Z · Y</td></tr>
+      </tbody></table></div>
+      <p class="note">Rotating the order keeps any one idea from always going first, when attention is highest, or last, when the room is tired.</p></div>
+  </div>
+
+  <div class="gsec" style="--gc:#3d5a80"><div class="gtime"><b>0:00 to 0:05</b><span>5 min</span></div><div>
+    <h3>1. Welcome and ground rules</h3><p class="gpurp">Purpose: settle the room and disclose recording and observers.</p>
+    <p class="say">Thanks for coming. I am an independent moderator. I do not work for the company whose products we will look at tonight, so you cannot hurt my feelings. There are no right answers. We are recording so I do not have to take notes, and a few people from the team are watching from the next room. Please talk to each other, not just to me.</p>
+    <ul class="probes"><li>One person at a time, so the recording can follow.</li><li>Disagreeing is useful. If you see it differently, say so.</li><li>Phones away until the end.</li></ul></div></div>
+
+  <div class="gsec" style="--gc:#2a78d6"><div class="gtime"><b>0:05 to 0:12</b><span>7 min</span></div><div>
+    <h3>2. Warm-up</h3><p class="gpurp">Purpose: get every voice in the room early. No pizza talk yet.</p>
+    <p class="gq"><b>2.1</b>First name, who is at home with you, and the last thing you cooked that you were proud of.</p>
+    <ul class="probes"><li>Is cooking something you enjoy, or something that has to get done?</li></ul><p class="qi" style="margin-top:6px">Moderator note: listen for cooking confidence. It shapes how people talk about convenience later.</p></div></div>
+
+  <div class="gsec" style="--gc:#1baf7a"><div class="gtime"><b>0:12 to 0:30</b><span>18 min</span></div><div>
+    <h3>3. Category habits</h3><p class="gpurp">Purpose: how frozen pizza actually gets chosen, and what it competes with.</p>
+    <p class="gq"><b>3.1</b>Walk me through the last time frozen pizza was dinner. Who decided, and why that night?</p>
+    <ul class="probes"><li>What else was on the table that night: delivery, takeout, cooking?</li><li>Was it the whole meal, or one part of it?</li></ul>
+    <p class="gq"><b>3.2</b>What is in your freezer right now? Why that one?</p>
+    <ul class="probes"><li>How many do you usually keep on hand?</li><li>Is it planned for a night, or a backup?</li></ul>
+    <p class="gq"><b>3.3</b>What separates a good frozen pizza from a disappointing one?</p>
+    <ul class="probes"><li>Crust, sauce, cheese, toppings: which one decides it?</li><li>Tell me about one that let you down.</li></ul>
+    <p class="gq"><b>3.4</b>Where in this aisle does "premium" start?</p>
+    <ul class="probes"><li>What would you have to see on the box?</li><li>At what price do you stop and read the box before buying?</li></ul></div></div>
+
+  <div class="gsec" style="--gc:#eda100"><div class="gtime"><b>0:30 to 0:40</b><span>10 min</span></div><div>
+    <h3>4. Thin crust expectations</h3><p class="gpurp">Purpose: what "thin" promises before anyone sees a concept.</p>
+    <p class="gq"><b>4.1</b>When a box says thin crust, what do you expect to get?</p>
+    <ul class="probes"><li>What does "crisp" mean to you? How do you know if it is?</li><li>Thin crust for whom: kids, adults, guests?</li></ul>
+    <p class="gq"><b>4.2</b>Written exercise: on your sheet, write three words for the best thin crust you have had anywhere.</p>
+    <ul class="probes"><li>Was that at a restaurant or at home? What would frozen need to match it?</li></ul></div></div>
+
+  <div class="gsec" style="--gc:#e87ba4"><div class="gtime"><b>0:40 to 1:05</b><span>25 min</span></div><div>
+    <h3>5. Concept exposure</h3><p class="gpurp">Purpose: reactions to three positions for the line. Show one board at a time in the rotated order. Each person rates the board on their sheet (appeal 1 to 5, plus one word) before any discussion, and marks a private first choice after the third board, so first reactions are captured before anyone hears anyone else.</p>
+    <div class="stim">
+      <div class="board"><span class="bl2">Concept A</span><b>Hearthstone Snap</b><p>Baked on a stone hearth for a crust that snaps when you cut it. Six toppings, farm-sourced. Ready in 11 minutes.</p></div>
+      <div class="board"><span class="bl2">Concept B</span><b>Seasonal Table</b><p>A lighter thin crust with vegetables that change four times a year. Sized for two people, so there are no leftovers. Made for a weeknight.</p></div>
+      <div class="board"><span class="bl2">Concept C</span><b>Night Off</b><p>Pizzeria-style thin crust with a crisping tray in the box. Everything you like about ordering out, without the wait or the delivery fee.</p></div>
+    </div>
+    <p class="gq"><b>5.1</b>For each board: what is the first thing you noticed?</p>
+    <ul class="probes"><li>What is believable here, and what is not?</li><li>Who is this for? Is it for you?</li><li>When would you serve it? What would it replace?</li><li>What would make you put it back on the shelf?</li></ul>
+    <p class="gq"><b>5.2</b>If only one of these were in the store next week, which would you buy first? Hold up the card.</p>
+    <ul class="probes"><li>What would the runner-up need to change to win?</li></ul></div></div>
+
+  <div class="gsec" style="--gc:#8a63d2"><div class="gtime"><b>1:05 to 1:20</b><span>15 min</span></div><div>
+    <h3>6. Packaging reactions</h3><p class="gpurp">Purpose: pick a box direction. Three mockups on a mock freezer shelf next to the current competitive set. X: dark matte with a window. Y: kraft look with an illustration. Z: white with a full food photo.</p>
+    <p class="gq"><b>6.1</b>You have thirty seconds at the shelf. Which box do you pick up?</p>
+    <ul class="probes"><li>What did you see first?</li><li>Which one looks like it costs the most? Is that good or bad?</li><li>If there is a window, what do you want to see through it?</li><li>Is anything confusing or missing?</li></ul>
+    <p class="gq"><b>6.2</b>Hand vote: which box would you be most likely to buy?</p></div></div>
+
+  <div class="gsec" style="--gc:#767f86"><div class="gtime"><b>1:20 to 1:25</b><span>5 min</span></div><div>
+    <h3>7. Back room check</h3><p class="gpurp">Purpose: collect observer questions. The moderator steps out briefly.</p>
+    <ul class="probes"><li>Observers write questions on cards. No more than three are brought back into the room.</li><li>The moderator rephrases them so they do not lead.</li></ul></div></div>
+
+  <div class="gsec" style="--gc:#1e2b3a"><div class="gtime"><b>1:25 to 1:30</b><span>5 min</span></div><div>
+    <h3>8. Wrap-up</h3><p class="gpurp">Purpose: a final word from everyone, then release.</p>
+    <p class="gq"><b>8.0</b>Exit ballot, on your own and in quiet: turn to the last page of your sheet, rate the three ideas again and mark your first choice. Two minutes, no talking.</p>
+    <p class="gq"><b>8.1</b>If you could tell Bellcourt one thing before it launches this line, what would it be? We will go around the table.</p>
+    <p class="say">Thank you. That is everything. Please leave your sheets on the table. Your thank-you is at the front desk on the way out.</p></div></div>
+</div>
+
+<!-- TOPLINE -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">The <b>topline report</b> arrives a few days after the last group. It says what happened, what it means and what to do next, before the full report is written. Counts come from hand votes in the room. With 8 people per group they show <b>direction, not size</b>: they point to what is worth measuring next.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Participants</p><p class="val">32</p><p class="sub">4 groups of 8 · 17 women, 15 men</p></div>
+    <div class="card kpi"><p class="lab">Most first-choice votes</p><p class="val">12<small> of 32</small></p><p class="sub">C. Night Off</p></div>
+    <div class="card kpi"><p class="lab">Heavy buyers' pick</p><p class="val">9<small> of 16</small></p><p class="sub">C. Night Off</p></div>
+    <div class="card kpi"><p class="lab">Light buyers' pick</p><p class="val">8<small> of 16</small></p><p class="sub">B. Seasonal Table</p></div>
+  </div>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:15px 20px">
+      <div><p class="ttl" style="margin:0 0 3px">The headline</p>
+        <p class="hbig">Heavy buyers want a night off.<br>Light buyers want permission.</p></div>
+      <p style="flex:1;min-width:240px;margin:0;font-size:12.5px;color:rgba(243,244,240,.84);line-height:1.55">The two buyer types wanted different things from the same line, and the split held in both markets. Heavy buyers judged a premium pizza against delivery, not against the freezer case. Light buyers wanted a reason to feel good about buying frozen at all. Crispness was the promise everyone doubted.</p>
+    </div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">First choice, concept <span class="src real">Measured · hand vote</span></p>
+      <div class="mkt" style="margin:2px 0 8px"><span class="mktlab">View</span><button class="on" data-v="g" data-c="cv">By group</button><button data-v="b" data-c="cv">By buyer type</button></div>
+      <div class="stk" id="cv"></div><div class="legend" id="cvl"></div></div>
+    <div class="card"><p class="ttl">First choice, package <span class="src real">Measured · hand vote</span></p>
+      <div class="mkt" style="margin:2px 0 8px"><span class="mktlab">View</span><button class="on" data-v="g" data-c="pv">By group</button><button data-v="b" data-c="pv">By buyer type</button></div>
+      <div class="stk" id="pv"></div><div class="legend" id="pvl"></div></div>
+  </div>
+
+  <p class="sechead">Key findings</p>
+  <div class="fnd"><span class="fn">1</span><div>
+    <h3>Heavy buyers are shopping against delivery, not against other frozen pizza.</h3>
+    <p>Night Off took 9 of 16 heavy-buyer votes. Heavy buyers did the math out loud: a $12 pizza looked expensive next to the freezer case and cheap next to an order for the table. The "no wait" line mattered as much as the money.</p>
+    <p class="quote">"Twelve dollars is nothing next to delivery. If it really comes out like a pizzeria, I'm in."<cite>Heavy buyer, Group 2</cite></p>
+    <p class="quote">"Friday is the night nobody wants to cook. That's the night this is for."<cite>Heavy buyer, Group 4</cite></p></div></div>
+
+  <div class="fnd"><span class="fn">2</span><div>
+    <h3>Light buyers want a reason to feel good about it.</h3>
+    <p>Seasonal Table took 8 of 16 light-buyer votes and only 2 of 16 heavy. Light buyers liked "lighter" and "sized for two" more than the vegetables themselves. Several said frozen pizza felt like a fallback they were slightly embarrassed by.</p>
+    <p class="quote">"I don't buy frozen pizza much because I feel bad after. This one sounds like dinner."<cite>Light buyer, Group 3</cite></p>
+    <p class="quote">"Two of us, one pizza, nothing left in the fridge. That's actually the selling point."<cite>Light buyer, Group 1</cite></p></div></div>
+
+  <div class="fnd"><span class="fn">3</span><div>
+    <h3>"Crisp" is a promise people have been burned on.</h3>
+    <p>A soggy center came up without prompting in all four groups. The crisping tray in Night Off was the most discussed single feature of the night, and the first question about it was always whether it really works.</p>
+    <p class="quote">"Every box says crispy. Then you cut it and the middle folds like a napkin."<cite>Heavy buyer, Group 4</cite></p></div></div>
+
+  <div class="fnd"><span class="fn">4</span><div>
+    <h3>Sourcing claims only help when they are specific.</h3>
+    <p>"Farm-sourced" on Hearthstone Snap read as filler in every group. When the moderator offered a specific example, a named dairy and a named tomato variety, interest rose in both light-buyer groups. Hearthstone Snap's "snap" language was well liked; its claims were not.</p>
+    <p class="quote">"Which farms? If you're going to say it, tell me who."<cite>Light buyer, Group 1</cite></p></div></div>
+
+  <div class="fnd"><span class="fn">5</span><div>
+    <h3>Dark matte with a window wins the shelf, if the window shows the crust edge.</h3>
+    <p>Package X led with 15 of 32 votes, including 10 of 16 heavy buyers. People wanted the window to show the edge of the crust, not the toppings. The white full-photo box was a solid second at 11 of 32.</p>
+    <p class="quote">"Show me the edge. I can tell from the edge if it's going to be cardboard."<cite>Heavy buyer, Group 2</cite></p></div></div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What surprised the team</p>
+      <div class="mv"><span class="sev q">Market</span><div><b>Buyer type mattered more than city</b><em>Within each buyer type, Columbus and Sacramento differed by no more than one vote on any concept.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Package</span><div><b>Kraft read as "health food" to heavy buyers</b><em>The team expected it to read premium. It got 1 of 16 heavy-buyer votes, but 4 of 8 in the Sacramento light group.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev g">Habit</span><div><b>The freezer backup plan</b><em>6 of 16 heavy buyers described keeping one pizza "for nights that fall apart". That points to a two-pack.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Price</span><div><b>Two different ceilings</b><em>Most heavy buyers put the limit near $12. Most light buyers stopped near $10.</em></div><span></span><span></span></div></div>
+    <div class="card pad"><p class="ttl">Implications and next steps</p>
+      <ul class="lst">
+        <li>Lead the line with the Night Off position, framed against delivery<span>positioning</span></li>
+        <li>Hold Seasonal Table as a second product aimed at light buyers, not the launch lead<span>range</span></li>
+        <li>Make crisp provable: keep the tray, show the crust edge, confirm in a home-use test before it goes on the box<span>product</span></li>
+        <li>Replace "farm-sourced" with one specific, checkable ingredient claim<span>claims</span></li>
+        <li>Size it: a quantitative concept test of Night Off vs Hearthstone Snap, with a two-pack price check<span>next study</span></li>
+      </ul>
+      <p class="note"><b>What four groups cannot tell you:</b> how many buyers feel this way, or what share Night Off would take. That is the next study's job.</p></div>
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">A group has a bias of its own. Once a confident voice speaks, others drift toward it. So the guide builds in a short <b>paper ballot</b>: each person rates the concepts <b>alone, in quiet</b>, before any discussion, and again at the very end. It breaks the flow of the room for a few minutes. In return it shows what people thought before the group got to them, and how far the conversation moved them.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Private favorite, before talk</p><p class="val">13<small> of 32</small></p><p class="sub">A. Hearthstone Snap</p></div>
+    <div class="card kpi"><p class="lab">Private favorite, after talk</p><p class="val">14<small> of 32</small></p><p class="sub">C. Night Off, up from 10</p></div>
+    <div class="card kpi"><p class="lab">Changed first choice</p><p class="val">9<small> of 32</small></p><p class="sub">Between the first and the exit ballot</p></div>
+    <div class="card kpi"><p class="lab">Hand vote differed from sheet</p><p class="val">5<small> of 32</small></p><p class="sub">Raised a different card minutes after marking a private pick</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">First choice, three ways <span class="src real">Measured · paper ballot</span></p><div id="bav"></div>
+      <div class="legend"><span><i class="sw" style="width:10px;height:10px;border-radius:2px;background:var(--s4)"></i>A. Hearthstone Snap</span><span><i class="sw" style="width:10px;height:10px;border-radius:2px;background:var(--s3)"></i>B. Seasonal Table</span><span><i class="sw" style="width:10px;height:10px;border-radius:2px;background:var(--s2)"></i>C. Night Off</span></div>
+      <p class="note">The hand vote sits in the middle of the night, after discussion has started. It looks like a three-way tie. The private ballots on either side of it tell a clearer story.</p></div>
+    <div class="card pad"><p class="ttl">Where the votes went <span class="src real">Measured · paper ballot</span></p>
+      <div class="scroll"><table style="min-width:380px"><thead><tr><th>Before talk</th><th class="n">Stayed</th><th class="n">To A</th><th class="n">To B</th><th class="n">To C</th></tr></thead><tbody>
+        <tr><td>A. Hearthstone Snap <span class="brd">13</span></td><td class="n">7</td><td class="n">·</td><td class="n">2</td><td class="n"><b>4</b></td></tr>
+        <tr><td>B. Seasonal Table <span class="brd">9</span></td><td class="n">7</td><td class="n">1</td><td class="n">·</td><td class="n">1</td></tr>
+        <tr><td>C. Night Off <span class="brd">10</span></td><td class="n">9</td><td class="n">0</td><td class="n">1</td><td class="n">·</td></tr>
+      </tbody></table></div>
+      <p class="note">Hearthstone Snap lost six of its thirteen. Four went to Night Off, all after the crisping tray discussion.</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Average appeal, 1 to 5 <span class="src real">Measured · paper ballot</span></p>
+      <div class="scroll"><table style="min-width:340px"><thead><tr><th>Concept</th><th class="n">Before</th><th class="n">After</th><th class="n">Change</th></tr></thead><tbody>
+        <tr><td>A. Hearthstone Snap</td><td class="n">3.9</td><td class="n">3.4</td><td class="n dn">−0.5</td></tr>
+        <tr><td>B. Seasonal Table</td><td class="n">3.5</td><td class="n">3.6</td><td class="n">+0.1</td></tr>
+        <tr><td>C. Night Off</td><td class="n">3.6</td><td class="n">4.0</td><td class="n up">+0.4</td></tr></tbody></table></div>
+      <p class="note">Before talk, light buyers split 6 Hearthstone, 7 Seasonal, 3 Night Off; heavy buyers 7, 2, 7. After: light 4, 8, 4; heavy 4, 2, 10.</p></div>
+    <div class="card pad"><p class="ttl">What the ballots add</p>
+      <p class="small" style="margin-bottom:8px"><b>Hearthstone Snap is stronger than the room made it look.</b> It was the top private pick before anyone spoke. It fell once the groups picked apart "farm-sourced," and the "snap" crust language was never the problem. Fix the claims and it earns a place in the quantitative test.</p>
+      <p class="small"><b>Night Off's gain held up in private.</b> The exit ballot is filled in alone, so the four people who moved to it after hearing about the crisping tray were persuaded, not just agreeing with the table.</p></div>
+  </div>
+</div>
+
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">A focus group project produces more than a report. The team gets <b>transcripts</b> to search, <b>recordings</b> and a <b>highlight reel</b> to show people who were not in the back room, a fast <b>topline</b> and a fuller <b>report</b>. The usual pace is about <b>three weeks from kickoff to topline</b>.</p>
+
+  <div class="row k4">
+    <div class="card kpi dlv"><p class="lab">Transcripts</p><p class="val">2<small> business days</small></p><p class="sub">after each group, verbatim, speaker-labeled</p></div>
+    <div class="card kpi dlv"><p class="lab">Highlight reel</p><p class="val">13:20</p><p class="sub">8 clips cut by theme, plus full recordings</p></div>
+    <div class="card kpi dlv"><p class="lab">Topline</p><p class="val">3<small> business days</small></p><p class="sub">after the last group, with a live debrief</p></div>
+    <div class="card kpi dlv"><p class="lab">Full report</p><p class="val">2<small> weeks</small></p><p class="sub">after the topline, with a quote bank</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Timeline · kickoff to full report <span class="src ill">Illustrative</span></p>
+      <div class="scroll"><div id="gantt" style="min-width:680px"></div></div>
+      <p class="note"><b>Kickoff Tue Sep 1, groups Sep 15 and 17, topline Tue Sep 22.</b> Recruiting is the longest step and the one most worth protecting. A tight screener with hard quotas can need the full ten days.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Report formats</p>
+      <div class="scroll"><table style="min-width:640px"><thead><tr><th>Format</th><th>What it is</th><th>When</th><th>Best for</th></tr></thead><tbody>
+        <tr><td class="mdl">Topline</td><td>6 to 8 pages: headline, findings, votes, next steps</td><td>3 business days after the last group</td><td>Decisions that cannot wait for the full report</td></tr>
+        <tr><td class="mdl">Debrief</td><td>60 minutes, live, with the topline</td><td>Same week as the topline</td><td>Agreeing on what it means as a team</td></tr>
+        <tr><td class="mdl">Full report</td><td>25 to 35 pages by guide section, with group-by-group differences and a quote bank</td><td>2 weeks after the topline</td><td>The record of the study, and the brief for the next one</td></tr>
+        <tr><td class="mdl">Transcripts</td><td>Verbatim, one per group, participants labeled by number and buyer type</td><td>2 business days after each group</td><td>Finding the exact words people used</td></tr>
+        <tr><td class="mdl">Video</td><td>Full recordings plus a highlight reel of 12 to 15 minutes</td><td>Recordings next day, reel about a week after the last group</td><td>Showing people who were not in the back room</td></tr>
+      </tbody></table></div></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Transcript excerpt · Group 4, heavy buyers, 0:52 <span class="src ill">Illustrative</span></p>
+      <p class="tr mod"><span class="who"><b>MOD</b>52:10</span><span class="tx">You've had the Night Off board for a minute. What's the first thing you noticed?</span></p>
+      <p class="tr"><span class="who"><b>P3</b>52:16</span><span class="tx">The tray. Is that a real tray or a piece of cardboard with a shiny side?</span></p>
+      <p class="tr mod"><span class="who"><b>MOD</b>52:22</span><span class="tx">Say more about why that matters.</span></p>
+      <p class="tr"><span class="who"><b>P3</b>52:25</span><span class="tx">Every box says crispy. Then you cut it and the middle folds like a napkin.</span></p>
+      <p class="tr"><span class="who"><b>P6</b>52:33</span><span class="tx">Same. If the tray works I'd pay the twelve. If it doesn't, I'm not buying it twice.</span></p>
+      <p class="tr mod"><span class="who"><b>MOD</b>52:41</span><span class="tx">What would tell you, before you buy it, that it works?</span></p>
+      <p class="tr"><span class="who"><b>P1</b>52:46</span><span class="tx">Honestly, a picture of the bottom. Nobody ever shows you the bottom.</span></p>
+      <p class="note">Each participant keeps the same number for the whole group, so a line in the report can be traced back to the moment it was said.</p></div>
+    <div class="card pad"><p class="ttl">Highlight reel · clip list <span class="src ill">Illustrative</span></p>
+      <ul class="lst" id="clips"></ul>
+      <p class="note">Clips are tagged by theme and group, so the reel can be re-cut for a different audience.</p></div>
+  </div>
+
+  <div class="optcard">Online groups and bulletin boards are options. Online groups use the same screener and guide over video, with people from anywhere. A bulletin board runs over three to five days, with participants answering at their own pace, which suits home-use tests and topics people want time to think about.</div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. People, quotes and schedules are invented for illustration only, and the city names stand in for any two markets.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+
+/* screener funnel */
+const fun=[["S1 Works in a related field",21],["S2 Recent research group",34],["S3 Outside age range",29],["S5 Not the main shopper",17],["S7 Does not buy frozen pizza",88],["S8 Buys 0 or 4 to 5 times",41],["S12 Would not try at $10 to $12",37],["S13 Could not describe a pizza night",19],["Quota full or not available",74],["S14 Declined recording",4],["Qualified",48]];
+const fmax=88;
+document.getElementById("fun").innerHTML=fun.map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/fmax*100}%;background:${r[0]==="Qualified"?"var(--good)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+
+/* time budget */
+const secs=[["Welcome",5,"#3d5a80"],["Warm-up",7,"#2a78d6"],["Category habits",18,"#1baf7a"],["Thin crust",10,"#eda100"],["Concepts",25,"#e87ba4"],["Packaging",15,"#8a63d2"],["Back room",5,"#767f86"],["Wrap-up",5,"#1e2b3a"]];
+document.getElementById("tbar").innerHTML=secs.map(s=>`<span style="flex:${s[1]};background:${s[2]}" title="${s[0]}, ${s[1]} min">${s[1]>=7?s[1]:""}</span>`).join("");
+document.getElementById("tleg").innerHTML=secs.map(s=>`<span><i class="sw" style="background:${s[2]};height:8px;width:8px"></i>${s[0]} · ${s[1]} min</span>`).join("");
+
+/* stacked votes */
+const C={cv:{keys:["A. Hearthstone Snap","B. Seasonal Table","C. Night Off"],cols:["var(--s4)","var(--s3)","var(--s2)"],
+  g:[["Group 1","Light · Columbus",[2,4,2]],["Group 2","Heavy · Columbus",[2,1,5]],["Group 3","Light · Sacramento",[3,4,1]],["Group 4","Heavy · Sacramento",[3,1,4]]],
+  b:[["Light buyers","Groups 1 and 3",[5,8,3]],["Heavy buyers","Groups 2 and 4",[5,2,9]],["All","32 participants",[10,10,12]]]},
+ pv:{keys:["X. Dark matte, window","Y. Kraft, illustrated","Z. White, full photo"],cols:["var(--slate)","var(--s4)","var(--s1)"],
+  g:[["Group 1","Light · Columbus",[3,1,4]],["Group 2","Heavy · Columbus",[5,0,3]],["Group 3","Light · Sacramento",[2,4,2]],["Group 4","Heavy · Sacramento",[5,1,2]]],
+  b:[["Light buyers","Groups 1 and 3",[5,5,6]],["Heavy buyers","Groups 2 and 4",[10,1,5]],["All","32 participants",[15,6,11]]]}};
+function stack(id,v){const d=C[id],rows=d[v];
+  document.getElementById(id).innerHTML=rows.map(r=>{const t=r[2].reduce((a,b)=>a+b,0);
+    return `<div class="stkrow"><span class="lb">${r[0]}<small>${r[1]} · n=${t}</small></span><span class="stkbar">${r[2].map((x,i)=>x?`<i style="flex:${x};background:${d.cols[i]};color:${id==="pv"&&i===0?"var(--bg)":"#fff"}" title="${d.keys[i]}: ${x} of ${t}">${x}</i>`:"").join("")}</span></div>`}).join("");
+  document.getElementById(id+"l").innerHTML=d.keys.map((k,i)=>`<span><i class="sw" style="background:${d.cols[i]};height:8px;width:8px"></i>${k}</span>`).join("")}
+stack("cv","g");stack("pv","g");
+document.querySelectorAll(".mkt button[data-v]").forEach(b=>b.addEventListener("click",()=>{
+  b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));stack(b.dataset.c,b.dataset.v)}));
+
+/* clips */
+const clips=[["Friday is the night nobody cooks","G4","1:12"],["Twelve dollars versus delivery","G2","1:40"],["The soggy middle","G4","1:25"],["Two of us, one pizza","G1","2:05"],["Which farms?","G1","1:30"],["The kraft box reads health food","G2","1:50"],["Show me the edge","G2","1:18"],["The freezer backup plan","G4","2:20"]];
+document.getElementById("clips").innerHTML=clips.map((c,i)=>`<li>${String(i+1).padStart(2,"0")} · ${c[0]}<span>${c[1]} · ${c[2]}</span></li>`).join("")+`<li><b>Total</b><span>13:20</span></li>`;
+
+/* gantt: day 0 = Tue Sep 1, day 35 = Tue Oct 6 */
+const g=document.getElementById("gantt"),W=900,L=190,R=14,T=28,RH=26;
+const tasks=[["Kickoff call",0,0,"#3d5a80","m"],["Screener draft and approval",0,3,"#3d5a80"],["Recruiting and confirmations",3,13,"#3d5a80"],["Discussion guide drafts",2,10,"#2a78d6"],["Concepts and package mockups",2,10,"#2a78d6"],["Groups: Columbus, Sacramento",14,16,"#1a8f65","g"],["Transcripts",15,20,"#8a63d2"],["Topline report and debrief",17,21,"#1a8f65"],["Highlight reel",20,28,"#8a63d2"],["Full report",22,35,"#8a63d2"]];
+const H=T+tasks.length*RH+34,s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":"Project timeline from kickoff on September 1 to full report on October 6"},g);
+const X=d=>L+d*(W-L-R)/36;
+const ticks=[[0,"Sep 1"],[7,"Sep 8"],[14,"Sep 15"],[21,"Sep 22"],[28,"Sep 29"],[35,"Oct 6"]];
+ticks.forEach(t=>{el("line",{x1:X(t[0]),x2:X(t[0]),y1:T-6,y2:H-30,class:"gl"},s);el("text",{x:X(t[0]),y:T-12,"text-anchor":"middle",class:"ax"},s).textContent=t[1]});
+tasks.forEach((t,i)=>{const y=T+i*RH;
+  el("text",{x:L-10,y:y+15,"text-anchor":"end",fill:"var(--ink-2)","font-size":"11.5","font-family":"Archivo,sans-serif"},s).textContent=t[0];
+  if(t[4]==="m"){el("rect",{x:X(t[1])-1,y:y+5,width:13,height:13,rx:2,fill:t[3],transform:`rotate(45 ${X(t[1])+5.5} ${y+11.5})`},s)}
+  else if(t[4]==="g"){[14,16].forEach(d=>el("rect",{x:X(d),y:y+4,width:X(d+1)-X(d),height:16,rx:3,fill:t[3]},s))}
+  else el("rect",{x:X(t[1]),y:y+4,width:X(t[2]+1)-X(t[1]),height:16,rx:3,fill:t[3],opacity:.9},s)});
+const by=H-22;el("line",{x1:X(0),x2:X(22),y1:by,y2:by,stroke:"var(--ink)","stroke-width":1.5},s);
+[0,22].forEach(d=>el("line",{x1:X(d),x2:X(d),y1:by-5,y2:by+5,stroke:"var(--ink)","stroke-width":1.5},s));
+el("text",{x:X(11),y:by+15,"text-anchor":"middle",class:"dl",fill:"var(--ink)"},s).textContent="Kickoff to topline: 3 weeks";
+
+/* tabs */
+
+/* before and after */
+(function(){const R=[["Quiet ballot, before talk",[13,9,10]],["Hand vote, in the room",[10,10,12]],["Exit ballot, after talk",[8,10,14]]],cl=["var(--s4)","var(--s3)","var(--s2)"];
+document.getElementById("bav").innerHTML=R.map(r=>`<div class="stlab" style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-top:10px"><span>${r[0]}</span><span class="mono">n=32</span></div><div style="display:flex;height:24px;border-radius:4px;overflow:hidden;margin-top:4px">${r[1].map((v,i)=>`<i style="width:${v/32*100}%;background:${cl[i]};display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-size:11px;font-weight:700">${v}</i>`).join("")}</div>`).join("")})();
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

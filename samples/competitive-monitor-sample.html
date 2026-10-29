@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Competitive Monitor Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:#1e2b3a;color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product and number on this page is made up to show what a competitive monitoring dashboard looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Competitive Monitor</b><span>Sample · Home espresso machines</span></div>
+    <div class="period">Q3 2026 · US · six brands<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> modeled</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Dashboard</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Competitive Sweep</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Purchase Diary</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#8a63d2">Social Listening</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DASHBOARD -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">This is what one page of a competitive monitor looks like when three methods feed it. <b>Social listening</b> reads what people post publicly and flags change early. A <b>competitive sweep</b> records what is on the shelf, in stores and online, at what price. A <b>purchase diary</b> asks real buyers what they bought, what they almost bought, and why. Every number says which method it came from and whether it was measured or modeled.</p>
+
+  <div class="row k6">
+    <div class="card kpi"><p class="lab">Halvard price index</p><p class="val">100<span class="pill fl">+0.6%</span></p>
+      <p class="sub">Held four waves. Category fell 6.8%.</p><div class="spark" id="kp1"></div></div>
+    <div class="card kpi"><p class="lab">Share of purchase</p><p class="val">24<small>%</small></p>
+      <p class="sub">Second to Brightwell at 29%.</p><div class="spark" id="kp2"></div></div>
+    <div class="card kpi"><p class="lab">Halvard SKUs</p><p class="val">14<span class="pill fl">0</span></p>
+      <p class="sub">Flat 18 mo. Norvik 9 to 17.</p><div class="spark" id="kp3"></div></div>
+    <div class="card kpi"><p class="lab">Channel depth</p><p class="val">4.1<span class="pill up">#1</span></p>
+      <p class="sub">Retailers per SKU. Set avg 3.0.</p><div class="spark" id="kp4"></div></div>
+    <div class="card kpi"><p class="lab">Share of voice</p><p class="val">18<small>%</small><span class="pill dn">−4</span></p>
+      <p class="sub">Brightwell 31%, Norvik rising.</p><div class="spark" id="kp5"></div></div>
+    <div class="card kpi"><p class="lab">Review rating</p><p class="val">4.3<span class="pill fl">avg</span></p>
+      <p class="sub">Heat-up time is the top complaint.</p><div class="spark" id="kp6"></div></div>
+  </div>
+
+  <div class="row" style="grid-template-columns:1fr;margin-bottom:11px">
+    <div class="hero" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:15px 20px">
+      <div><p class="ttl" style="margin:0 0 3px">The headline</p>
+        <p class="hbig">Best on the shelf,<br>quiet in the feed</p></div>
+      <p style="flex:1;min-width:280px;margin:0;font-size:12.5px;color:rgba(243,244,240,.84);line-height:1.55">
+        Halvard has the deepest distribution and the steadiest price in the set <span style="color:rgba(243,244,240,.55)">[sweep, measured]</span>, yet its share of voice fell four points this quarter while Norvik's doubled <span style="color:rgba(243,244,240,.55)">[listening, modeled]</span>. The diary says why: buyers who considered Halvard and chose Norvik named heat-up time and a smaller footprint, not price <span style="color:rgba(243,244,240,.55)">[diary, measured]</span>.</p>
+    </div>
+  </div>
+
+  <p class="ttl" style="margin:16px 0 9px">Brand watch · Q3 2026</p>
+  <div class="gkey">
+    <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Grade</span>
+    <span class="gk"><b style="background:var(--good)">A</b> Commanding</span>
+    <span class="gk"><b style="background:var(--s1)">B</b> Advancing</span>
+    <span class="gk"><b style="background:var(--warn)">C</b> Holding</span>
+    <span class="gk"><b style="background:var(--crit)">D</b> Losing ground</span>
+    <span class="gnote">A composite of the five areas on each card, graded on competitive position this quarter, not product quality. Dots read from Halvard's point of view: <b style="color:var(--good)">●</b> good · <b style="color:var(--dot-y)">●</b> mixed · <b style="color:var(--dot-o)">●</b> concerning · <b style="color:var(--crit)">●</b> serious.</span>
+  </div>
+  <div class="badges" id="badges"></div>
+
+  <div class="row k3">
+    <div class="card"><p class="ttl">Average shelf price · 6 waves <span class="src real">Measured</span></p><div id="c2"></div><div class="legend" id="lg2"></div></div>
+    <div class="card"><p class="ttl">SKU count by brand <span class="src real">Measured</span></p><div id="c7"></div></div>
+    <div class="card"><p class="ttl">Monthly mentions <span class="src ill">Modeled</span></p><div id="s2"></div><div class="legend" id="lgs2"></div></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card"><p class="ttl">Sweep · channel coverage movers <span class="src real">Measured</span></p><div id="c8"></div>
+      <p class="note">Norvik Air 2 went from one retailer to six. Celera Flex lost three.</p></div>
+    <div class="card"><p class="ttl">Diary · where buyers got information <span class="src real">Measured</span></p><div id="d5"></div>
+      <p class="note"><b>The online marketplace is a research stop before it is a checkout.</b> Video reviews outrank friends and family.</p></div>
+    <div class="card"><p class="ttl">Triangulation</p>
+      <table><thead><tr><th>Method</th><th>Speed</th><th>Tells you</th></tr></thead><tbody>
+        <tr><td><span class="dot" style="background:var(--s7)"></span> Listening</td><td>Weeks ahead</td><td>Something is changing</td></tr>
+        <tr><td><span class="dot" style="background:var(--s1)"></span> Sweep</td><td>Days</td><td>What the competitor did</td></tr>
+        <tr><td><span class="dot" style="background:var(--s3)"></span> Diary</td><td>Months</td><td>Why it worked</td></tr>
+      </tbody></table>
+      <p class="note">Where two methods disagree is usually the most useful finding on the page.</p></div>
+  </div>
+
+  <div class="row w12">
+    <div class="card pad"><p class="ttl">Watch list · next quarter</p>
+      <ul class="lst"><li>Does Norvik Air 2 hold $249?<span>sweep · monthly</span></li>
+      <li>Halvard heat-up complaints<span>listening · monthly</span></li>
+      <li>Halvard to Norvik switching<span>diary · quarterly</span></li>
+      <li>Duvo club-store pack<span>sweep · monthly</span></li></ul></div>
+    <div class="card pad"><p class="ttl">Open question this quarter</p>
+      <div class="row k2" style="margin-bottom:11px;gap:11px">
+        <div><p class="mini" style="color:var(--s7)">Listening says: quiet</p>
+          <p class="small">Pinecrest has almost no conversation and no launches in its own news feed for nine months.</p></div>
+        <div><p class="mini" style="color:var(--s1)">Sweep says: expanding</p>
+          <p class="small">Pinecrest added four SKUs and dropped none, and moved into two new retailers.</p></div>
+      </div>
+      <p class="note"><b>Either a brand fading from conversation while holding the shelf, or one about to launch into space it already secured.</b> Opposite implications. The diary settles it by showing whether Pinecrest starts appearing on shortlists.</p></div>
+  </div>
+</div>
+
+<!-- SWEEP -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">A <b>competitive sweep</b> is a structured walk of the shelf: every tracked model, at every tracked retailer, in stores and online, recorded on the same day each wave. Price, list price, promotion, stock and claims. Measured, not modeled.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Tracked SKUs</p><p class="val">84</p><p class="sub">6 brands, 7 retailers</p></div>
+    <div class="card kpi"><p class="lab">New this wave</p><p class="val">6</p><p class="sub">4 Norvik, 2 Pinecrest</p></div>
+    <div class="card kpi"><p class="lab">On promotion</p><p class="val">38<small>%</small></p><p class="sub">of SKUs, sweep day</p></div>
+    <div class="card kpi"><p class="lab">Price spread above 40%</p><p class="val" style="color:var(--crit)">9</p><p class="sub">same SKU, cheapest vs priciest retailer</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Brand movement · 18 months <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:480px"><thead><tr><th>Brand</th><th class="n">SKUs then</th><th class="n">SKUs now</th><th class="n">Added</th><th class="n">Dropped</th><th class="n">Retailers per SKU</th></tr></thead>
+        <tbody id="brandBody"></tbody></table></div>
+      <p class="note"><b>Halvard is the only brand that did not add a model.</b> It also has the deepest distribution per SKU.</p></div>
+    <div class="card"><p class="ttl">Channel coverage movers · last 6 months <span class="src real">Measured</span></p><div id="c8b"></div>
+      <p class="note">The bar is the change in the <b>number of retailers carrying that model</b> between waves.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Shelf summary · sweep day <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:760px"><thead><tr><th>Brand</th><th>Model</th><th class="n">Price</th><th class="n">List</th><th class="n">Discount</th><th class="c">Promo months / 12</th><th class="c">In stock</th><th class="n">Spread</th><th class="c">Status</th></tr></thead>
+        <tbody id="sweepBody"></tbody></table></div></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card"><p class="ttl">Retailer spread <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Model</th><th class="n">Low</th><th class="n">High</th><th class="n">Spread</th></tr></thead><tbody>
+        <tr class="hl"><td class="mdl">Celera Flex</td><td class="n">$179</td><td class="n">$299</td><td class="n dn">67%</td></tr>
+        <tr><td class="mdl">Duvo Max</td><td class="n">$149</td><td class="n">$229</td><td class="n dn">54%</td></tr>
+        <tr><td class="mdl">Brightwell V9</td><td class="n">$399</td><td class="n">$549</td><td class="n dn">38%</td></tr>
+        <tr><td class="mdl">Halvard Barista 7</td><td class="n">$329</td><td class="n">$379</td><td class="n">15%</td></tr>
+      </tbody></table></div>
+      <p class="note">An average hides the range. The range is the number that tells you who is discounting.</p></div>
+    <div class="card"><p class="ttl">Months on promotion · last 12 <span class="src ill">Modeled</span></p><div id="c3"></div>
+      <p class="note">A model on promotion eight months of twelve has a list price nobody pays.</p></div>
+    <div class="card pad"><p class="ttl">Exceptions this wave</p>
+      <div class="mv"><span class="sev c">Price</span><div><b>Celera Flex down a third straight wave</b><em>$249 to $199 at the online marketplace.</em></div><span class="when">Sep</span></div>
+      <div class="mv"><span class="sev w">Launch</span><div><b>Four new Norvik SKUs</b><em>All entered at four or more retailers.</em></div><span class="when">Sep</span></div>
+      <div class="mv"><span class="sev g">Position</span><div><b>Halvard Barista 7 holds price a fourth wave</b><em>$349, up 0.6% over 18 months.</em></div><span class="when">Sep</span></div>
+      <div class="mv"><span class="sev q">QA</span><div><b>One listing held back</b><em>A refurbished unit priced as new. Excluded, not reported.</em></div><span class="when">Held</span></div></div>
+  </div>
+</div>
+
+<!-- DIARY -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">A <b>purchase diary</b> follows a few dozen to a few hundred real buyers in the category. Each one logs a purchase when it happens, photographs the receipt, and answers a short follow-up: what else they considered, what came second, and why it lost. AI-moderated follow-up interviews make this far cheaper and faster than it used to be.</p>
+  <div class="row k6">
+    <div class="card kpi"><p class="lab">Purchases logged</p><p class="val">212</p><p class="sub">this quarter</p></div>
+    <div class="card kpi"><p class="lab">Halvard share</p><p class="val">24<small>%</small></p><p class="sub">of logged purchases</p></div>
+    <div class="card kpi"><p class="lab">Halvard considered</p><p class="val">51<small>%</small></p><p class="sub">on the shortlist</p></div>
+    <div class="card kpi"><p class="lab">Avg price paid</p><p class="val">$286</p><p class="sub">receipt-verified</p></div>
+    <div class="card kpi"><p class="lab">Halvard retention</p><p class="val" style="color:var(--good)">64<small>%</small></p><p class="sub">Halvard replaced by Halvard</p></div>
+    <div class="card kpi"><p class="lab">Lost to Norvik</p><p class="val" style="color:var(--crit)">38<small>%</small></p><p class="sub">of Halvard shortlist losses</p></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card"><p class="ttl">Considered vs bought <span class="src real">Measured</span></p><div id="d1"></div>
+      <p class="note">Halvard converts half its shortlist. Norvik converts more than two thirds.</p></div>
+    <div class="card"><p class="ttl">Reason ranked first <span class="src real">Measured</span></p><div id="d2"></div>
+      <p class="note">Price is rarely the first reason. It works as a gate, not a driver.</p></div>
+    <div class="card"><p class="ttl">Where they bought <span class="src real">Measured</span></p><div id="d3"></div>
+      <p class="note">More than half of purchases involved no store visit.</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Why the runner-up lost <span class="src real">Measured</span></p><div id="d4"></div>
+      <p class="note"><b>The question a closed-list tracker cannot answer:</b> not what was considered, but why each shortlisted model lost.</p></div>
+    <div class="card pad"><p class="ttl">Sample logged purchase <span class="src ill">Illustrative</span></p>
+      <p class="small" style="margin:0 0 6px"><b>Diarist 118</b> · Bought: Norvik Air 2 · logged 2 days after purchase</p>
+      <p class="quote">"I had the Halvard in my cart. The reviews kept saying it takes forever to heat up in the morning, and the Norvik was half the width on the counter. Same price, so I switched."<cite>AI-moderated follow-up, 4 minutes</cite></p>
+      <p class="small" style="margin:0"><b>Probe:</b> what would Halvard have needed to keep the sale?</p></div>
+  </div>
+</div>
+
+<!-- SOCIAL -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro"><b>Social listening</b> is software that reads what people post publicly about a category, including reviews, social posts, videos and forums, and counts what is being said and how it changes. It is the earliest signal and the least precise. Use it to spot movement, then confirm it with the sweep and explain it with the diary.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Category mentions</p><p class="val">41k</p><p class="sub">per month, filtered</p></div>
+    <div class="card kpi"><p class="lab">Halvard share of voice</p><p class="val">18<small>%</small></p><p class="sub">down 4 points</p></div>
+    <div class="card kpi"><p class="lab">Net sentiment</p><p class="val">+22</p><p class="sub">−100 to +100, use as a trend only</p></div>
+    <div class="card kpi"><p class="lab">Products seen in photos</p><p class="val">3.1k</p><p class="sub">no brand named in the text</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Share of voice by brand <span class="src ill">Modeled</span></p><div id="s1"></div></div>
+    <div class="card"><p class="ttl">What people talk about <span class="src ill">Modeled</span></p>
+      <div class="scroll"><table><thead><tr><th>Theme</th><th class="n">Share</th><th>Who it helps</th></tr></thead><tbody>
+        <tr><td>Heat-up time vs claimed</td><td class="n">24%</td><td>Norvik</td></tr>
+        <tr><td>Counter footprint</td><td class="n">17%</td><td>Norvik</td></tr>
+        <tr><td>Milk frothing quality</td><td class="n">15%</td><td>Brightwell, Halvard</td></tr>
+        <tr><td>Grind consistency</td><td class="n">14%</td><td>Halvard</td></tr>
+        <tr><td>Cleaning and descaling</td><td class="n">11%</td><td>Duvo</td></tr>
+        <tr><td>Replacement parts and service</td><td class="n">9%</td><td>Halvard</td></tr>
+      </tbody></table></div>
+      <p class="note">Halvard owns the grind and parts conversation. It is losing the heat-up one.</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Monthly mentions and events <span class="src ill">Modeled</span></p><div id="s2b"></div>
+      <p class="note">Spikes line up with launches and one viral review video in June. Volume is event-driven, not steady.</p></div>
+    <div class="card pad"><p class="ttl">What social listening cannot do</p>
+      <div class="mv"><span class="sev w">Sentiment</span><div><b>Absolute scores</b><em>Sarcasm and slang skew them. Read the trend, never the level.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Pricing</span><div><b>Systematic prices</b><em>No reliable feed. That is the sweep's job.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Motive</span><div><b>Why people bought</b><em>Posts are loud and self-selected. That is the diary's job.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Private</span><div><b>Closed groups</b><em>Private groups and messaging threads are invisible to every platform.</em></div><span></span><span></span></div></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products, retailers and figures on this page are fictional and shown for illustration only. A live version is built on your category, your competitors and your own research.</footer>
+</div>
+
+<script>
+(function(){
+const B=[{n:"Halvard",c:"var(--s1)",you:1},{n:"Brightwell",c:"var(--s2)"},{n:"Norvik",c:"var(--s3)"},{n:"Celera",c:"var(--s4)"},{n:"Duvo",c:"var(--s5)"},{n:"Pinecrest",c:"var(--s7)"}];
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const svgBox=(id,w,h)=>{const d=document.getElementById(id);const s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img"});d.appendChild(s);return s};
+function spark(id,v,c){const w=120,h=26,s=svgBox(id,w,h),mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;
+  el("polyline",{points:v.map((x,i)=>`${i*(w/(v.length-1))},${h-3-(x-mn)/r*(h-6)}`).join(" "),fill:"none",stroke:c||"var(--s1)","stroke-width":2},s)}
+function lines(id,labels,series,lg,fmt){const w=360,h=190,L=36,R=8,T=10,Bm=22,s=svgBox(id,w,h);
+  const all=series.flatMap(x=>x.v),mn=Math.min(...all)*0.95,mx=Math.max(...all)*1.03;
+  const X=i=>L+i*(w-L-R)/(labels.length-1),Y=v=>T+(1-(v-mn)/(mx-mn))*(h-T-Bm);
+  for(let k=0;k<4;k++){const v=mn+k*(mx-mn)/3,y=Y(v);el("line",{x1:L,x2:w-R,y1:y,y2:y,class:"gl"},s);el("text",{x:L-5,y:y+3,"text-anchor":"end",class:"ax"},s).textContent=fmt?fmt(v):Math.round(v)}
+  labels.forEach((t,i)=>{el("text",{x:X(i),y:h-6,"text-anchor":"middle",class:"ax"},s).textContent=t});
+  series.forEach(x=>{el("polyline",{points:x.v.map((v,i)=>`${X(i)},${Y(v)}`).join(" "),fill:"none",stroke:x.c,"stroke-width":x.you?3:1.6,opacity:x.you?1:.85},s)});
+  if(lg)document.getElementById(lg).innerHTML=series.map(x=>`<span><i class="sw" style="background:${x.c}"></i>${x.n}</span>`).join("")}
+function hbars(id,rows,unit,max){const d=document.getElementById(id);max=max||Math.max(...rows.map(r=>Math.abs(r.v)));
+  d.innerHTML=rows.map(r=>`<div class="hb"><span class="hbl">${r.n}</span><span class="hbt"><i style="width:${Math.abs(r.v)/max*100}%;background:${r.c||"var(--s1)"}"></i></span><span class="hbv mono">${r.v}${unit||""}</span></div>`).join("")}
+function dbars(id,rows){const d=document.getElementById(id),max=Math.max(...rows.map(r=>Math.abs(r.v)));
+  d.innerHTML=rows.map(r=>`<div class="db"><span class="hbl">${r.n}</span><span class="dbt"><span class="dbn">${r.v<0?`<i style="width:${-r.v/max*100}%;background:var(--crit)"></i>`:""}</span><span class="dbp">${r.v>0?`<i style="width:${r.v/max*100}%;background:var(--good)"></i>`:""}</span></span><span class="hbv mono">${r.v>0?"+":""}${r.v} <small>${r.f}</small></span></div>`).join("")}
+function pairs(id,rows){const d=document.getElementById(id);
+  d.innerHTML=rows.map(r=>`<div class="hb"><span class="hbl">${r.n}</span><span class="hbt"><i style="width:${r.a}%;background:var(--panel-2);border:1px solid var(--rule-2)"></i><i style="width:${r.b}%;background:${r.c};position:absolute;left:0;top:3px;height:8px"></i></span><span class="hbv mono">${r.b}% of ${r.a}%</span></div>`).join("")}
+
+spark("kp1",[100,99.8,100.2,100,100.4,100.6]);spark("kp2",[26,25,25,24,24,24]);spark("kp3",[14,14,14,14,14,14],"var(--ink-3)");
+spark("kp4",[4.4,4.3,4.3,4.2,4.1,4.1]);spark("kp5",[23,22,22,21,20,18],"var(--crit)");spark("kp6",[4.4,4.4,4.3,4.3,4.3,4.3]);
+
+const grades=[
+ {n:"Halvard",g:"B",gc:"var(--s1)",m:"fl",mt:"Flat",st:"14 SKUs · 4.1 retailers/SKU",top:"Strongest shelf in the set and the steadiest price. Losing the heat-up argument online.",rows:[["Price","var(--good)","<b>Held four waves</b> while the set fell 6.8%."],["Range","var(--dot-y)","No new models in 18 months."],["Channel","var(--good)","Deepest coverage per SKU."],["Voice","var(--dot-o)","Share of voice down 4 points."],["Buyers","var(--dot-y)","Converts half its shortlist."]]},
+ {n:"Brightwell",g:"A−",gc:"var(--good)",m:"fl",mt:"Steady",st:"22 SKUs · 3.4 retailers/SKU",top:"Category leader on share and voice. Premium price is holding.",rows:[["Price","var(--dot-y)","Flat at the top of the range."],["Range","var(--dot-y)","Two launches, two drops."],["Channel","var(--dot-y)","Steady."],["Voice","var(--dot-o)","31% share of voice."],["Buyers","var(--dot-o)","Most often the brand Halvard loses to on taste."]]},
+ {n:"Norvik",g:"B+",gc:"var(--s1)",m:"up",mt:"Rising",st:"17 SKUs · 2.9 retailers/SKU",top:"The mover this year. Smaller, faster-heating models and fast retail gains.",rows:[["Price","var(--dot-y)","Air 2 entered at $249."],["Range","var(--crit)","9 to 17 SKUs in 18 months."],["Channel","var(--dot-o)","Air 2 went from 1 to 6 retailers."],["Voice","var(--crit)","Share of voice doubled."],["Buyers","var(--crit)","Takes 38% of Halvard's losses."]]},
+ {n:"Celera",g:"C",gc:"var(--warn)",m:"dn",mt:"Slipping",st:"11 SKUs · 2.6 retailers/SKU",top:"Discounting hard and losing shelf space. Watch for a price floor.",rows:[["Price","var(--dot-o)","Flex down a third straight wave."],["Range","var(--good)","One drop, no adds."],["Channel","var(--good)","Flex lost three retailers."],["Voice","var(--good)","Mentions falling."],["Buyers","var(--good)","Rarely on Halvard shortlists."]]},
+ {n:"Duvo",g:"C+",gc:"var(--warn)",m:"fl",mt:"Steady",st:"9 SKUs · 2.8 retailers/SKU",top:"Value player living on promotion. A club-store pack is the thing to watch.",rows:[["Price","var(--dot-y)","On promotion 8 months of 12."],["Range","var(--good)","Two adds, one drop."],["Channel","var(--dot-y)","Max added one retailer."],["Voice","var(--good)","12% share of voice, flat."],["Buyers","var(--good)","Rarely on Halvard shortlists."]]},
+ {n:"Pinecrest",g:"C",gc:"var(--warn)",m:"up",mt:"Quiet build",st:"11 SKUs · 2.2 retailers/SKU",top:"Almost silent online but quietly adding models and retailers. The open question this quarter.",rows:[["Price","var(--good)","Mid-range, no discounting."],["Range","var(--dot-o)","Four adds, nothing dropped."],["Channel","var(--dot-o)","Into two new retailers."],["Voice","var(--good)","9% share of voice."],["Buyers","var(--dot-y)","Starting to appear on shortlists."]]},
+];
+document.getElementById("badges").innerHTML=grades.map(b=>{const c=B.find(x=>x.n===b.n).c;return `<div class="badge"><div class="accent" style="background:${c}"></div>
+ <div class="bhead"><div><span class="bname">${b.n}${b.n==="Halvard"?' <small class="you">your brand</small>':""}<span class="mom ${b.m}">${b.mt}</span></span><span class="bstat">${b.st}</span></div><span class="grade" style="background:${b.gc}">${b.g}</span></div>
+ <div class="btop">${b.top}</div><div class="brows">${b.rows.map(r=>`<div class="brow"><span class="bl">${r[0]}</span><span class="bd" style="background:${r[1]}"></span><span class="bt">${r[2]}</span></div>`).join("")}</div></div>`}).join("");
+
+const waves=["Apr 25","Jul","Oct","Jan 26","Apr","Jul"];
+lines("c2",waves,[{n:"Halvard",c:"var(--s1)",you:1,v:[347,346,348,347,348,349]},{n:"Brightwell",c:"var(--s2)",v:[489,489,479,479,469,469]},{n:"Norvik",c:"var(--s3)",v:[279,269,269,259,249,249]},{n:"Celera",c:"var(--s4)",v:[269,259,249,239,219,199]}],"lg2",v=>"$"+Math.round(v));
+hbars("c7",[{n:"Brightwell",v:22,c:"var(--s2)"},{n:"Norvik",v:17,c:"var(--s3)"},{n:"Halvard",v:14,c:"var(--s1)"},{n:"Celera",v:11,c:"var(--s4)"},{n:"Pinecrest",v:11,c:"var(--s7)"},{n:"Duvo",v:9,c:"var(--s5)"}]);
+lines("s2",["Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"],[{n:"Halvard",c:"var(--s1)",you:1,v:[8.1,7.9,8.4,7.6,9.2,7.8,7.5,7.4]},{n:"Brightwell",c:"var(--s2)",v:[12.5,12.9,13.4,12.8,14.1,13.0,12.7,12.8]},{n:"Norvik",c:"var(--s3)",v:[3.9,4.2,5.1,5.6,9.8,7.1,7.6,8.0]}],"lgs2",v=>v.toFixed(0)+"k");
+const movers=[{n:"Norvik Air 2",v:5,f:"1 → 6"},{n:"Pinecrest Crema",v:2,f:"2 → 4"},{n:"Duvo Max",v:1,f:"3 → 4"},{n:"Halvard Barista 7",v:-1,f:"7 → 6"},{n:"Celera Flex",v:-3,f:"5 → 2"}];
+dbars("c8",movers);dbars("c8b",movers);
+hbars("d5",[{n:"Online marketplace",v:48,c:"var(--s3)"},{n:"Video reviews",v:31,c:"var(--s3)"},{n:"In store",v:27,c:"var(--s3)"},{n:"Friends, family",v:22,c:"var(--s3)"},{n:"Brand website",v:15,c:"var(--s3)"}],"%",60);
+document.getElementById("brandBody").innerHTML=[["Brightwell",20,22,4,2,"3.4"],["Norvik",9,17,8,0,"2.9"],["Halvard",14,14,0,0,"4.1"],["Celera",12,11,0,1,"2.6"],["Pinecrest",7,11,4,0,"2.2"],["Duvo",8,9,2,1,"2.8"]].map(r=>`<tr${r[0]==="Halvard"?' class="hl"':""}><td class="mdl">${r[0]}</td><td class="n">${r[1]}</td><td class="n">${r[2]}</td><td class="n up">${r[3]?"+"+r[3]:"0"}</td><td class="n${r[4]?" dn":""}">${r[4]?"−"+r[4]:"0"}</td><td class="n">${r[5]}</td></tr>`).join("");
+document.getElementById("sweepBody").innerHTML=[["Brightwell","V9","$469","$549","15%","5","7/7","38%","Hold"],["Brightwell","V7 Lite","$329","$379","13%","6","6/7","22%","Hold"],["Halvard","Barista 7","$349","$379","8%","2","7/7","15%","Hold"],["Halvard","Duo 5","$279","$299","7%","3","6/7","12%","Hold"],["Norvik","Air 2","$249","$279","11%","4","6/7","19%","New"],["Norvik","Air Max","$299","$329","9%","3","4/7","24%","New"],["Celera","Flex","$199","$299","33%","9","2/7","67%","Watch"],["Duvo","Max","$179","$229","22%","8","4/7","54%","Hold"],["Pinecrest","Crema","$219","$249","12%","4","4/7","20%","New"]].map(r=>`<tr${r[0]==="Halvard"?' class="hl"':""}><td class="brd">${r[0]}</td><td class="mdl">${r[1]}</td><td class="n">${r[2]}</td><td class="n">${r[3]}</td><td class="n">${r[4]}</td><td class="c mono">${r[5]}</td><td class="c mono">${r[6]}</td><td class="n${parseInt(r[7])>40?" dn":""}">${r[7]}</td><td class="c">${r[8]==="New"?'<span class="sev g">New</span>':r[8]==="Watch"?'<span class="sev c">Watch</span>':'<span class="sev q">Hold</span>'}</td></tr>`).join("");
+hbars("c3",[{n:"Celera Flex",v:9,c:"var(--crit)"},{n:"Duvo Max",v:8,c:"var(--warn)"},{n:"Brightwell V7",v:6,c:"var(--s2)"},{n:"Norvik Air 2",v:4,c:"var(--s3)"},{n:"Halvard Barista 7",v:2,c:"var(--s1)"}]," mo",12);
+pairs("d1",[{n:"Brightwell",a:58,b:36,c:"var(--s2)"},{n:"Halvard",a:51,b:24,c:"var(--s1)"},{n:"Norvik",a:33,b:22,c:"var(--s3)"},{n:"Celera",a:21,b:7,c:"var(--s4)"},{n:"Duvo",a:18,b:6,c:"var(--s5)"}]);
+hbars("d2",[{n:"Heat-up time",v:27},{n:"Taste",v:22},{n:"Counter size",v:16},{n:"Easy to clean",v:13},{n:"Brand trust",v:12},{n:"Price",v:10}],"%",30);
+hbars("d3",[{n:"Online marketplace",v:41,c:"var(--s3)"},{n:"Big-box store",v:26,c:"var(--s3)"},{n:"Brand website",v:12,c:"var(--s3)"},{n:"Club store",v:11,c:"var(--s3)"},{n:"Home center",v:10,c:"var(--s3)"}],"%",50);
+hbars("d4",[{n:"Slow heat-up in reviews",v:34,c:"var(--crit)"},{n:"Took more counter space",v:21,c:"var(--warn)"},{n:"Same price, more features",v:17,c:"var(--warn)"},{n:"Out of stock that day",v:11,c:"var(--ink-3)"},{n:"Didn't trust the brand",v:9,c:"var(--ink-3)"}],"%",40);
+hbars("s1",[{n:"Brightwell",v:31,c:"var(--s2)"},{n:"Norvik",v:19,c:"var(--s3)"},{n:"Halvard",v:18,c:"var(--s1)"},{n:"Duvo",v:12,c:"var(--s5)"},{n:"Celera",v:11,c:"var(--s4)"},{n:"Pinecrest",v:9,c:"var(--s7)"}],"%",35);
+lines("s2b",["Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"],[{n:"Category",c:"var(--s7)",you:1,v:[34,35,38,37,52,42,40,41]}],null,v=>v.toFixed(0)+"k");
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

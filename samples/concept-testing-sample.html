@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Concept Test Readout Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+
+/* concept test additions */
+:root{--dw:#1f4f8f;--band:rgba(42,120,214,.11);--hm-up:#1a7f4b;--hm-dn:#c0392f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--dw:#1d4f94;--band:rgba(57,135,229,.16);--hm-up:#4caf7d;--hm-dn:#e07064}}
+:root[data-theme="dark"]{--dw:#1d4f94;--band:rgba(57,135,229,.16);--hm-up:#4caf7d;--hm-dn:#e07064}
+.boards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px;margin-bottom:6px}
+.board{background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.board .accent{height:7px}
+.board .bh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:11px 16px 0}
+.board .cell{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.board .bn{font-family:"Source Serif 4",Georgia,serif;font-size:21px;font-weight:600;line-height:1.2;margin:6px 16px 6px;letter-spacing:-.01em}
+.board .idea{font-family:"Source Serif 4",Georgia,serif;font-size:14px;line-height:1.5;color:var(--ink-2);margin:0 16px 12px}
+.board ul{margin:0;padding:10px 16px 12px 16px;list-style:none;border-top:1px solid var(--rule);flex:1}
+.board li{font-size:12.5px;color:var(--ink);padding:4px 0 4px 18px;position:relative;line-height:1.45}
+.board li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--bc)}
+.board .price{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-top:1px solid var(--rule);background:var(--panel-2)}
+.board .price b{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700}
+.board .price span{font-size:11px;color:var(--ink-3)}
+.board.bm{border-style:dashed}
+.rec{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--good-bg);color:var(--good)}
+sup.sg{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;color:var(--real-fg);margin-left:2px;letter-spacing:.02em}
+table.sc td{vertical-align:middle;padding:9px}
+table.sc td.c{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+table.sc td.c .ar{font-size:9px;margin-right:4px}
+table.sc .ab{color:var(--good);font-weight:700}
+table.sc .be{color:var(--crit);font-weight:700}
+table.sc .wi{color:var(--ink)}
+table.sc th.hlh,table.sc td.hlc{background:var(--panel-2)}
+table.sc .mname{font-weight:600;display:block}
+table.sc .mq{font-size:11px;color:var(--ink-3);display:block;line-height:1.35;white-space:normal}
+table.sc .nb{color:var(--ink-3);font-size:11.5px}
+table.hm td.c{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px;padding:8px 6px;white-space:nowrap}
+table.hm td.c span.v{display:inline-block;min-width:46px;padding:4px 6px;border-radius:4px;border:1.5px solid transparent}
+table.hm td.c span.win{border-color:var(--ink)}
+table.hm td.c small{display:block;font-size:9.5px;color:var(--ink-3);margin-top:2px}
+table.hm tr.tot td{border-top:1.5px solid var(--rule-2);font-weight:700}
+table.hm .sb{font-size:10.5px;color:var(--ink-3);display:block}
+.lowb{color:var(--warn);font-weight:700}
+.step{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:start;padding:11px 0;border-bottom:1px solid var(--rule)}
+.step:last-child{border-bottom:none}
+.step .sn{width:26px;height:26px;border-radius:50%;background:var(--slate);color:var(--bg);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+.step b{font-size:13.5px;font-weight:600;display:block;margin-bottom:3px}
+.step .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+.bar-hit{cursor:default}
+.bar-hit:hover+.bar-mark,.bar-mark:hover{opacity:.85}
+.stk{display:grid;grid-template-columns:minmax(96px,24%) 1fr;gap:10px;align-items:center;padding:6px 0;font-size:12px}
+.stk .sl{color:var(--ink-2);line-height:1.3}
+.stk .sl small{display:block;color:var(--ink-3);font-size:10px;font-family:"JetBrains Mono",monospace}
+.stkbar{display:flex;height:22px;gap:2px}
+.stkbar i{display:block;height:100%;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:Archivo,sans-serif;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap;min-width:0}
+.stkbar i:first-child{border-radius:4px 0 0 4px}.stkbar i:last-child{border-radius:0 4px 4px 0}
+.vq{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 12px;font-size:13px;color:var(--ink);font-family:"Source Serif 4",serif;line-height:1.5}
+.vq cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.read{padding:8px 0;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.read:last-child{border-bottom:none}
+.hbv{min-width:30px;text-align:right}
+#oeLike .hbl,#oeDis .hbl{white-space:normal;line-height:1.3}
+@media(max-width:560px){#oeLike .hb,#oeDis .hb{grid-template-columns:minmax(110px,48%) 1fr auto}}.read b{color:var(--ink)}
+@media(max-width:560px){.step{grid-template-columns:28px 1fr}.step .when{grid-column:2}.stk{grid-template-columns:1fr;gap:4px}}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product, person and number on this page is made up to show what a concept test readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Concept Test Readout</b><span>Sample · Frozen single-serve meals</span></div>
+    <div class="period">Greywater Kitchen · Wave 1 · September 2026<br>
+      Monadic · 5 cells · n=1,500 · <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> modeled</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Summary</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Concepts</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1f6fb8">Purchase intent</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#1baf7a">Scorecard</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#c4741f">Open ends</button>
+      <button role="tab" aria-selected="false" aria-controls="p5" id="t5b" style="--tc:#8a63d2">Segments</button>
+      <button role="tab" aria-selected="false" aria-controls="p6" id="t6b" style="--tc:#b84f7a">Source of volume</button>
+      <button role="tab" aria-selected="false" aria-controls="p7" id="t7b" style="--tc:#4b5359">Next steps</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SUMMARY -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Greywater Kitchen wrote up <b>four new frozen meal ideas</b> and wanted to know which one to develop. Each idea was shown, on its own, to about 300 people who buy frozen single-serve meals. A fifth group saw Greywater's current best seller written up the same way, so every idea is judged against something already on the shelf. This page is the answer in one screen. The tabs behind it show the evidence.</p>
+
+  <div class="row" style="grid-template-columns:1fr;margin-bottom:13px">
+    <div class="hero" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:17px 20px">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p>
+        <p class="hbig">Develop Night Market<br>Noodles (Concept C)</p></div>
+      <p style="flex:1;min-width:260px;margin:0;font-size:12.5px;color:rgba(243,244,240,.86);line-height:1.55">
+        It is the only idea that beats the current bowl <b>and</b> all three other ideas on purchase intent, at a level above the category norm. People see it as new, they find it believable, and 86% of the volume it would win comes from outside Greywater: other frozen brands and takeout, not Greywater's own bowls.</p>
+    </div>
+  </div>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Purchase intent · Concept C</p><p class="val">58<small>%</small><span class="pill up">ABDE</span></p>
+      <p class="sub">Top two box. Significantly ahead of every other cell.</p></div>
+    <div class="card kpi"><p class="lab">Versus current bowl</p><p class="val">+17<small> pts</small></p>
+      <p class="sub">Current Chicken &amp; Rice Bowl scored 41%.</p></div>
+    <div class="card kpi"><p class="lab">Category norm band</p><p class="val">40<small> to </small>52</p>
+      <p class="sub">C is the only concept above the band.</p></div>
+    <div class="card kpi"><p class="lab">Net new to Greywater</p><p class="val">86<small>%</small></p>
+      <p class="sub">of C's intended purchases. Minis: 59%.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Purchase intent, top two box <span class="src real">Measured</span></p><div class="chartwrap" id="sumChartW"><div id="sumChart"></div><div class="tip" id="tipSum"></div></div>
+      <p class="note">Letters mark a significant lead over that cell at 95% confidence. The shaded band is the category norm.</p></div>
+    <div class="card pad"><p class="ttl">Why C, in four lines</p>
+      <div class="mv"><span class="sev g">Appeal</span><div><b>Highest purchase intent in the test</b><em>58% top two box. 24% "definitely would buy", nearly double the current bowl's 13%.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev g">Newness</span><div><b>Seen as different, and still believed</b><em>57% unique, 66% believable. Skillet Finish was unique too, but only 52% believed it.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev g">Volume</span><div><b>Grows the brand instead of moving shoppers around</b><em>Only 14% of C's volume would replace a Greywater meal.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Watch</span><div><b>Spice worry and the 55+ buyer</b><em>17% worried it would be too hot. Intent falls to 44% among buyers 55 and over.</em></div><span></span><span></span></div>
+    </div>
+  </div>
+
+  <div class="row k4">
+    <div class="card pad"><p class="mini" style="color:var(--good)">C · Night Market Noodles</p><p class="small"><b>Develop.</b> Clear winner. Fix the heat-level message and confirm the price before launch.</p></div>
+    <div class="card pad"><p class="mini" style="color:var(--s1)">B · Garden Forward Bowls</p><p class="small"><b>Hold for wave two.</b> Most relevant idea and the leader with buyers 55+, but too familiar to stand out.</p></div>
+    <div class="card pad"><p class="mini" style="color:var(--warn)">A · Skillet Finish</p><p class="small"><b>Rework.</b> Unique, but the pan step and $5.49 price pull believability and value below norm.</p></div>
+    <div class="card pad"><p class="mini" style="color:var(--crit)">D · Comfort Minis</p><p class="small"><b>Do not proceed.</b> Strong on value, but 41% of its volume would come out of Greywater's own bowls.</p></div>
+  </div>
+
+  <div class="card"><p class="ttl">How this test was run</p>
+    <p class="small">Online survey, September 8 to 19, 2026. 1,500 US adults 18+ who bought a frozen single-serve meal in the past 30 days, split into five matched cells of about 300 (balanced on age, gender, region and household size). <b>Monadic:</b> each person saw one board only, so no idea is judged against another. Significance is a two-tailed test of proportions at 95% confidence. The norm band is the middle range of earlier frozen meal concept tests run to the same questionnaire.</p></div>
+</div>
+
+<!-- CONCEPTS -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">These are the boards respondents saw, word for word. Each board has a <b>name, a one-line idea, three benefits and a price</b>, with no photography, so the test measures the idea and not the styling. The current best seller was written up in exactly the same format to serve as the benchmark. Each person saw one board.</p>
+  <div class="boards" id="boards"></div>
+  <p class="note">Boards are written to the same length and reading level. Prices are suggested retail per meal.</p>
+</div>
+
+<!-- PURCHASE INTENT -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro"><b>Purchase intent</b> is the headline measure: after reading the board, how likely are you to buy it? The <b>top two box</b> is the share who said "definitely" or "probably" would buy. Letters show which cells a score is significantly higher than. With about 300 per cell, a gap needs to be roughly eight points to count.</p>
+  <div class="row w21">
+    <div class="card"><p class="ttl">Top two box purchase intent by cell <span class="src real">Measured</span></p>
+      <div class="chartwrap"><div id="piChart"></div><div class="tip" id="tipPi"></div></div>
+      <div class="legend"><span><i class="sw" style="background:var(--band);height:10px"></i>Category norm band, 40% to 52%</span><span><i class="sw" style="background:var(--ink-3)"></i>Benchmark (current product)</span></div></div>
+    <div class="card pad"><p class="ttl">How to read the letters</p>
+      <table><thead><tr><th>Cell</th><th>Concept</th><th class="n">n</th></tr></thead><tbody id="cellKey"></tbody></table>
+      <p class="note">C carries <b>A B D E</b>: it beats every other cell. B carries <b>E</b>: it beats the current bowl but not A or D. A and D are not significantly different from the current bowl.</p></div>
+  </div>
+  <div class="row">
+    <div class="card"><p class="ttl">Full five-point scale <span class="src real">Measured</span></p>
+      <div id="distChart"></div>
+      <div class="legend" id="distLg"></div>
+      <p class="note"><b>The top box matters more than the second box.</b> "Definitely would buy" is the answer that best predicts trial. C's 24% is the only top box score above 20%.</p></div>
+  </div>
+</div>
+
+<!-- SCORECARD -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">Purchase intent says which idea wins. The <b>diagnostics</b> say why, and what to fix. Every score is a top two box on a five-point scale, except frequency, which is the share expecting to buy it twice a month or more. Each score is colored against the category norm band, and letters show significant leads over other cells.</p>
+  <div class="gkey">
+    <span style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Versus norm</span>
+    <span class="gk"><b style="background:var(--good)">▲</b> Above band</span>
+    <span class="gk"><b style="background:var(--ink-3)">●</b> Within band</span>
+    <span class="gk"><b style="background:var(--crit)">▼</b> Below band</span>
+    <span class="gnote">Superscript letters: significantly higher than that cell at 95% confidence. A = Skillet Finish, B = Garden Forward, C = Night Market Noodles, D = Comfort Minis, E = current Chicken &amp; Rice Bowl.</span>
+  </div>
+  <div class="card"><p class="ttl">Concept scorecard · top two box % <span class="src real">Measured</span></p>
+    <div class="scroll"><table class="sc" style="min-width:700px"><thead><tr><th>Measure</th><th class="c">A<br>Skillet</th><th class="c">B<br>Garden</th><th class="c hlh">C<br>Night Market</th><th class="c">D<br>Minis</th><th class="c">E<br>Current</th><th class="c">Norm band</th></tr></thead>
+      <tbody id="scBody"></tbody></table></div></div>
+  <div class="row k3" style="margin-top:13px">
+    <div class="card pad"><p class="mini" style="color:var(--good)">C has no weak spot</p><p class="small">Above the band on intent, uniqueness and frequency, inside it on everything else. It is the only concept that is both new and believed.</p></div>
+    <div class="card pad"><p class="mini" style="color:var(--warn)">A sells novelty nobody trusts</p><p class="small">Skillet Finish is the most unique idea in the test, but four measures fall below the band. The pan step reads as work, and $5.49 reads as expensive.</p></div>
+    <div class="card pad"><p class="mini" style="color:var(--crit)">D is cheap and familiar</p><p class="small">Comfort Minis wins on value, believability and frequency because buyers already know it. That is also why it scores 19% on uniqueness.</p></div>
+  </div>
+</div>
+
+<!-- OPEN ENDS -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">After rating the board, everyone was asked two open questions: <b>what, if anything, do you like</b> about this idea, and <b>what, if anything, do you dislike</b>? Answers were coded into themes. Percentages are the share of the cell mentioning a theme, so they do not add to 100. Pick a concept to see its themes.</p>
+  <div class="mkt" style="margin-bottom:13px" id="oeSel" role="group" aria-label="Choose a concept"><span class="mktlab">Concept</span></div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Liked · coded themes <span class="src real">Measured</span></p><div id="oeLike"></div></div>
+    <div class="card"><p class="ttl">Disliked · coded themes <span class="src real">Measured</span></p><div id="oeDis"></div></div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">In their words · liked <span class="src ill">Illustrative</span></p><div id="vLike"></div></div>
+    <div class="card pad"><p class="ttl">In their words · disliked <span class="src ill">Illustrative</span></p><div id="vDis"></div></div>
+  </div>
+  <p class="note" id="oeNote"></p>
+</div>
+
+<!-- SEGMENTS -->
+<div role="tabpanel" id="p5" aria-labelledby="t5b" hidden>
+  <p class="intro">A concept that wins overall can still lose a group that matters. This view breaks <b>top two box purchase intent</b> out by age and by household size. Shading compares each group with that concept's total: darker green is stronger than the concept's own average, darker red is weaker. The winner in each row is outlined.</p>
+  <div class="mkt" style="margin-bottom:13px" id="segSel" role="group" aria-label="Choose a breakout"><span class="mktlab">Break out by</span>
+    <button class="on" data-k="age">Age band</button><button data-k="hh">Household size</button></div>
+  <div class="row w21">
+    <div class="card"><p class="ttl">Purchase intent by segment · top two box % <span class="src real">Measured</span></p>
+      <div class="scroll"><table class="hm" style="min-width:600px"><thead><tr><th>Segment</th><th class="c">A<br>Skillet</th><th class="c">B<br>Garden</th><th class="c">C<br>Night Market</th><th class="c">D<br>Minis</th><th class="c">E<br>Current</th></tr></thead>
+        <tbody id="segBody"></tbody></table></div>
+      <p class="note" id="segFoot"></p></div>
+    <div class="card pad"><p class="ttl">What the breakout says</p><div id="segRead"></div></div>
+  </div>
+</div>
+
+<!-- SOURCE OF VOLUME -->
+<div role="tabpanel" id="p6" aria-labelledby="t6b" hidden>
+  <p class="intro">A new item that only steals from your own range adds a shelf facing and little else. People who said they would buy were asked <b>what the new meal would replace</b>. The answer separates ideas that grow the brand from ideas that move Greywater's own buyers from one box to another.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">C · from outside Greywater</p><p class="val">86<small>%</small></p><p class="sub">Of 175 people likely to buy C.</p></div>
+    <div class="card kpi"><p class="lab">C · from takeout</p><p class="val">27<small>%</small></p><p class="sub">The highest share of any concept except A.</p></div>
+    <div class="card kpi"><p class="lab">D · from Greywater</p><p class="val" style="color:var(--crit)">41<small>%</small></p><p class="sub">Comfort Minis mostly replaces the current bowls.</p></div>
+    <div class="card kpi"><p class="lab">Purely new occasions</p><p class="val">6<small>% to </small>11<small>%</small></p><p class="sub">Most new meals replace something.</p></div>
+  </div>
+  <div class="row w21">
+    <div class="card"><p class="ttl">What it would replace · among likely buyers <span class="src real">Measured</span></p>
+      <div id="sovChart"></div><div class="legend" id="sovLg"></div>
+      <div class="scroll" style="margin-top:12px"><table style="min-width:560px"><thead><tr><th>Concept</th><th class="n">Base</th><th class="n">Greywater</th><th class="n">Other frozen</th><th class="n">Takeout</th><th class="n">Scratch</th><th class="n">Deli</th><th class="n">New</th></tr></thead><tbody id="sovBody"></tbody></table></div></div>
+    <div class="card"><p class="ttl">Incremental intent index <span class="src ill">Modeled</span></p><div id="incChart"></div>
+      <p class="note">Top two box intent multiplied by the share of volume from outside Greywater. A simple way to rank ideas on <b>growth, not just appeal</b>. Not a volume forecast.</p>
+      <p class="note">C leads by twelve points. D loses the most: 41% of its intent is Greywater buyers switching boxes.</p></div>
+  </div>
+</div>
+
+<!-- NEXT STEPS -->
+<div role="tabpanel" id="p7" aria-labelledby="t7b" hidden>
+  <p class="intro">A concept test picks the idea. It does not prove the product. These are the steps between this readout and a launch decision, in the order we would run them.</p>
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Recommended next steps</p>
+      <div class="step"><span class="sn">1</span><div><b>Fix the heat message on Night Market Noodles</b><p class="small">Add a mild, medium, hot marker to each of the six styles and retest the board with a quick claims check among buyers 45 and over. Target: cut "too spicy" worry from 17% to under 10%.</p></div><span class="when">2 weeks</span></div>
+      <div class="step"><span class="sn">2</span><div><b>Confirm the price</b><p class="small">Three matched cells at $4.29, $4.79 and $5.29. Value for money sits inside the norm at $4.79, but 11% named price as a dislike.</p></div><span class="when">3 weeks</span></div>
+      <div class="step"><span class="sn">3</span><div><b>In-home use test of two recipes</b><p class="small">About 150 category buyers cook and rate the product at home. The board promises firm noodles and bright sauce. The product has to deliver that, or repeat purchase will not follow trial.</p></div><span class="when">5 weeks</span></div>
+      <div class="step"><span class="sn">4</span><div><b>Rework Garden Forward Bowls for wave two</b><p class="small">It leads with buyers 55+ and scores highest on relevance. Find a sharper point of difference and retest alongside a refreshed current bowl.</p></div><span class="when">Next wave</span></div>
+      <div class="step"><span class="sn">5</span><div><b>Retire Comfort Minis and park Skillet Finish</b><p class="small">Minis would mostly cannibalize. Skillet only returns if the pan step can be removed.</p></div><span class="when">Now</span></div>
+    </div>
+    <div class="card pad"><p class="ttl">Decision needed</p>
+      <p class="small" style="margin-bottom:10px"><b>Approve development of Night Market Noodles</b> into recipe work and the first three next steps, with a go or no-go on launch after the in-home test.</p>
+      <p class="mini" style="color:var(--ink-3);margin-top:14px">What this test cannot tell you</p>
+      <ul class="lst"><li>Whether the product tastes as good as the board reads<span>use test</span></li>
+      <li>Year-one volume<span>forecast model</span></li>
+      <li>How it sells against shelf neighbors<span>shelf test</span></li>
+      <li>Packaging and name appeal<span>design test</span></li></ul></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. Verbatims are invented to show the format. A live readout is built on your concepts, your category buyers and your own norms.</footer>
+</div>
+
+<script>
+(function(){
+const D={"pi": {"pct": {"A": 46, "B": 49, "C": 58, "D": 43, "E": 41}, "cnt": {"A": 140, "B": 146, "C": 175, "D": 128, "E": 123}, "sig": {"A": "", "B": "E", "C": "ABDE", "D": "", "E": ""}}, "uniq": {"pct": {"A": 61, "B": 38, "C": 57, "D": 19, "E": 22}, "cnt": {"A": 185, "B": 113, "C": 172, "D": 56, "E": 66}, "sig": {"A": "BDE", "B": "DE", "C": "BDE", "D": "", "E": ""}}, "bel": {"pct": {"A": 52, "B": 71, "C": 66, "D": 77, "E": 74}, "cnt": {"A": 158, "B": 212, "C": 199, "D": 229, "E": 222}, "sig": {"A": "", "B": "A", "C": "A", "D": "AC", "E": "AC"}}, "rel": {"pct": {"A": 44, "B": 62, "C": 60, "D": 53, "E": 55}, "cnt": {"A": 134, "B": 185, "C": 181, "D": 157, "E": 165}, "sig": {"A": "", "B": "AD", "C": "A", "D": "A", "E": "A"}}, "val": {"pct": {"A": 34, "B": 51, "C": 49, "D": 68, "E": 52}, "cnt": {"A": 103, "B": 152, "C": 147, "D": 202, "E": 156}, "sig": {"A": "", "B": "A", "C": "A", "D": "ABCE", "E": "A"}}, "freq": {"pct": {"A": 24, "B": 34, "C": 37, "D": 39, "E": 31}, "cnt": {"A": 73, "B": 101, "C": 111, "D": 116, "E": 93}, "sig": {"A": "", "B": "A", "C": "A", "D": "AE", "E": ""}}, "dist": {"A": [17, 29, 28, 15, 11], "B": [16, 33, 30, 13, 8], "C": [24, 34, 25, 10, 7], "D": [12, 31, 33, 15, 9], "E": [13, 28, 34, 15, 10]}, "segs": {"age": {"A": {"base": [91, 73, 67, 73], "v": [52, 47, 43, 40]}, "B": {"base": [89, 71, 66, 72], "v": [44, 46, 52, 56]}, "C": {"base": [90, 73, 66, 72], "v": [71, 62, 53, 44]}, "D": {"base": [89, 72, 65, 71], "v": [38, 40, 45, 51]}, "E": {"base": [90, 72, 66, 72], "v": [33, 38, 44, 49]}}, "hh": {"A": {"base": [88, 107, 85, 24], "v": [52, 48, 42, 33]}, "B": {"base": [86, 105, 83, 24], "v": [51, 52, 46, 38]}, "C": {"base": [87, 106, 84, 24], "v": [64, 61, 52, 42]}, "D": {"base": [86, 104, 83, 24], "v": [38, 40, 48, 58]}, "E": {"base": [87, 105, 84, 24], "v": [36, 40, 44, 50]}}}, "n": {"A": 304, "B": 298, "C": 301, "D": 297, "E": 300}};
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const svgBox=(id,w,h,label)=>{const d=document.getElementById(id);const s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":label||""});d.appendChild(s);return s};
+const C=[
+ {k:"A",n:"Skillet Finish",s:"Skillet",c:"var(--s2)",idea:"A frozen meal you finish in a hot pan for five minutes, so it comes out browned and crisp instead of steamed.",b:["Crisp, seared edges a microwave cannot make","24 grams of protein per serving","Ready in 12 minutes with one pan"],p:"$5.49"},
+ {k:"B",n:"Garden Forward Bowls",s:"Garden",c:"var(--s3)",idea:"Vegetable-first bowls built on two full servings of vegetables, with grains and protein in a supporting role.",b:["Two servings of vegetables in every bowl","450 calories or less","No artificial colors, flavors or preservatives"],p:"$4.29"},
+ {k:"C",n:"Night Market Noodles",s:"Night Market",c:"var(--s1)",rec:1,idea:"Street-food style noodle bowls with the sauce packed separately and added after heating, so it tastes freshly made.",b:["Sauce goes on after heating, so flavors stay bright","Noodles made to stay firm, not soggy","Six regional styles, from sesame garlic to chili lime"],p:"$4.79"},
+ {k:"D",n:"Comfort Minis",s:"Minis",c:"var(--s7)",idea:"Smaller portions of familiar comfort recipes at a lower price, sized for a light lunch or an afternoon meal.",b:["Classic recipes like mac and cheese and pot roast","A right-sized 7 oz portion","Stack two for a full dinner"],p:"$2.99"},
+ {k:"E",n:"Classic Chicken & Rice Bowl",s:"Current",c:"var(--ink-3)",bm:1,idea:"Greywater Kitchen's current best seller, written up in the same format as the new ideas to serve as the benchmark.",b:["Roasted chicken over seasoned rice","18 grams of protein per serving","Ready in 4 minutes in the microwave"],p:"$3.99"}];
+const byK=Object.fromEntries(C.map(c=>[c.k,c]));
+
+/* boards */
+document.getElementById("boards").innerHTML=C.map(c=>`<div class="board${c.bm?" bm":""}" style="--bc:${c.c}"><div class="accent" style="background:${c.c}"></div>
+ <div class="bh"><span class="cell">Cell ${c.k} · n=${D.n[c.k]}${c.bm?" · benchmark":""}</span>${c.rec?'<span class="rec">Recommended</span>':""}</div>
+ <p class="bn">${c.n.replace("&","&amp;")}</p><p class="idea">${c.idea}</p>
+ <ul>${c.b.map(x=>`<li>${x}</li>`).join("")}</ul>
+ <div class="price"><b>${c.p}</b><span>per meal</span></div></div>`).join("");
+
+/* T2B bar chart with norm band and sig letters */
+function t2b(id,tipId,compact){
+  const w=compact?380:560,h=compact?230:270,L=34,R=8,T=26,Bm=40,s=svgBox(id,w,h,"Top two box purchase intent by cell");
+  const max=70,Y=v=>T+(1-v/max)*(h-T-Bm),bw=(w-L-R)/5;
+  el("rect",{x:L,y:Y(52),width:w-L-R,height:Y(40)-Y(52),fill:"var(--band)"},s);
+  for(let v=0;v<=70;v+=10){const y=Y(v);el("line",{x1:L,x2:w-R,y1:y,y2:y,class:"gl",opacity:v?1:0},s);
+    el("text",{x:L-6,y:y+3,"text-anchor":"end",class:"ax"},s).textContent=v+"%"}
+  const tip=document.getElementById(tipId),wrap=tip.parentNode;
+  C.forEach((c,i)=>{const v=D.pi.pct[c.k],x=L+i*bw+bw*.2,bwi=bw*.6,y=Y(v),y0=Y(0);
+    const g=el("g",{},s);
+    el("path",{d:`M${x},${y0}V${y+4}Q${x},${y} ${x+4},${y}H${x+bwi-4}Q${x+bwi},${y} ${x+bwi},${y+4}V${y0}Z`,fill:c.c,class:"bar-mark"},g);
+    el("text",{x:x+bwi/2,y:y-13,"text-anchor":"middle",class:"dl",fill:"var(--ink)",style:"font-size:12px;font-family:'JetBrains Mono',monospace"},g).textContent=v+"%";
+    const sg=D.pi.sig[c.k];if(sg)el("text",{x:x+bwi/2,y:y-3,"text-anchor":"middle",fill:"var(--real-fg)",style:"font-size:9.5px;font-weight:700;font-family:'JetBrains Mono',monospace"},g).textContent=sg.split("").join(" ");
+    el("text",{x:x+bwi/2,y:h-Bm+15,"text-anchor":"middle",class:"ax",style:"font-weight:700;fill:var(--ink-2)"},g).textContent=c.k;
+    el("text",{x:x+bwi/2,y:h-Bm+28,"text-anchor":"middle",class:"ax",style:"font-size:9px"},g).textContent=compact?c.s:c.s+" · n="+D.n[c.k];
+    const hit=el("rect",{x:L+i*bw,y:T-20,width:bw,height:h-T-Bm+20,fill:"transparent",class:"bar-hit"},g);
+    hit.addEventListener("mousemove",e=>{const r=wrap.getBoundingClientRect();tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";
+      tip.innerHTML=`${c.k} · ${c.n.replace("&","&amp;")}<br>${v}% top two box (${D.pi.cnt[c.k]} of ${D.n[c.k]})<br>${sg?"Beats "+sg.split("").join(", "):"No significant lead"}`;tip.style.opacity=1});
+    hit.addEventListener("mouseleave",()=>tip.style.opacity=0)});
+}
+t2b("sumChart","tipSum",true);t2b("piChart","tipPi",false);
+
+document.getElementById("cellKey").innerHTML=C.map(c=>`<tr${c.rec?' class="hl"':""}><td><span class="dot" style="background:${c.c}"></span> <b>${c.k}</b></td><td>${c.n.replace("&","&amp;")}</td><td class="n">${D.n[c.k]}</td></tr>`).join("");
+
+/* five point distribution */
+const dl=["Definitely would","Probably would","Might or might not","Probably not","Definitely not"];
+const dc=["var(--dw)","var(--s1)","var(--rule-2)","var(--warn)","var(--crit)"];
+document.getElementById("distChart").innerHTML=C.map(c=>`<div class="stk"><span class="sl"><b>${c.k}</b> · ${c.n.replace("&","&amp;")}<small>n=${D.n[c.k]} · T2B ${D.pi.pct[c.k]}%</small></span>
+ <span class="stkbar">${D.dist[c.k].map((v,i)=>`<i style="flex:${v};background:${dc[i]};${i===2?"color:var(--ink)":""}" title="${dl[i]}: ${v}%">${v>=7?v:""}</i>`).join("")}</span></div>`).join("");
+document.getElementById("distLg").innerHTML=dl.map((x,i)=>`<span><i class="sw" style="background:${dc[i]};height:10px"></i>${x}</span>`).join("");
+
+/* scorecard */
+const M=[["pi","Purchase intent","Definitely or probably would buy",[40,52]],["uniq","Uniqueness","Very or somewhat different from what is available",[30,48]],
+ ["bel","Believability","Completely or somewhat believable",[60,74]],["rel","Relevance","Meets a need I have",[48,60]],
+ ["val","Value for money","Excellent or very good value at the price shown",[42,56]],["freq","Likely frequency","Would buy twice a month or more",[26,36]]];
+document.getElementById("scBody").innerHTML=M.map(m=>{const d=D[m[0]],[lo,hi]=m[3];
+  return `<tr><td><span class="mname">${m[1]}</span><span class="mq">${m[2]}</span></td>${C.map(c=>{const v=d.pct[c.k],cl=v>hi?"ab":v<lo?"be":"wi",ar=v>hi?"▲":v<lo?"▼":"";
+   return `<td class="c${c.rec?" hlc":""}"><span class="${cl}"><span class="ar">${ar}</span>${v}</span>${d.sig[c.k]?`<sup class="sg">${d.sig[c.k]}</sup>`:""}</td>`}).join("")}<td class="c nb">${lo} to ${hi}</td></tr>`}).join("")
+ +`<tr><td><span class="mname">Base</span><span class="mq">Respondents per cell</span></td>${C.map(c=>`<td class="c nb${c.rec?" hlc":""}">${D.n[c.k]}</td>`).join("")}<td></td></tr>`;
+
+/* open ends */
+const OE={
+ A:{like:[["Crisp texture, like freshly cooked",31],["Higher protein",24],["Feels like real cooking",16],["Good for a proper dinner",12],["Nothing liked",22]],
+    dis:[["Needs a pan, defeats the point of frozen",33],["Price too high",28],["Doubt it really gets crisp",19],["More cleanup",14],["Nothing disliked",21]],
+    vl:[["Finally a frozen dinner that isn't steamed into one texture. I'd do five minutes in a pan for that.","Man, 38, 2-person household"],["The protein is the selling point for me. Most of these leave me hungry.","Woman, 27, 1-person household"]],
+    vd:[["If I'm getting out a pan I may as well cook. I buy frozen so I don't have to.","Woman, 46, 4-person household"],["Five fifty for one frozen meal is restaurant money.","Man, 61, 2-person household"]],
+    note:"Skillet Finish splits buyers. The texture promise is liked, but the pan step is the single biggest dislike in the test."},
+ B:{like:[["Two servings of vegetables",37],["Helps control calories",26],["Clean ingredient list",21],["Good for a work lunch",14],["Nothing liked",17]],
+    dis:[["Sounds like other diet bowls",22],["Will not keep me full",19],["Reheated vegetables go soggy",12],["Price a bit high",8],["Nothing disliked",41]],
+    vl:[["Two servings of vegetables in one bowl is more than I manage most days.","Woman, 58, 2-person household"],["I'd keep a stack of these at work. Light, and I know what's in it.","Woman, 33, 1-person household"]],
+    vd:[["This sounds like every other healthy bowl in the case. What's different?","Man, 42, 3-person household"],["450 calories won't get me to dinner.","Man, 24, 1-person household"]],
+    note:"Garden Forward is liked for what it delivers and doubted for being familiar. Relevance is high. Newness is the gap."},
+ C:{like:[["Separate sauce keeps it fresh",34],["Bold, different flavors",29],["Noodles that are not soggy",22],["Like takeout at home",18],["Choice of six styles",11],["Nothing liked",9]],
+    dis:[["Worried it will be too spicy",17],["Sauce pouch is one more step",12],["Price higher than usual frozen",11],["Unsure noodles stay firm",9],["Nothing disliked",43]],
+    vl:[["The sauce going on after is what sold me. Every frozen noodle I've had turns to mush.","Woman, 29, 2-person household"],["This is what I'd order on a Friday, for less than the delivery fee.","Man, 34, 1-person household"]],
+    vd:[["I like flavor, but street food makes me think it will burn my mouth. Tell me how hot it is.","Woman, 58, 2-person household"],["Another packet to open and squeeze. I eat these at my desk.","Man, 41, 4-person household"]],
+    note:"Night Market Noodles has the fewest people who liked nothing (9%) and the most who disliked nothing (43%). The main dislike, heat level, is fixable on pack."},
+ D:{like:[["Low price",41],["Right portion for a lighter meal",22],["Familiar recipes",19],["Can stack two",9],["Nothing liked",15]],
+    dis:[["Too small, I would need two",31],["Same as what is already in the case",24],["Nothing new here",18],["Two of them costs more than one regular",10],["Nothing disliked",29]],
+    vl:[["Three dollars for mac and cheese at lunch, easy yes.","Man, 52, 5-person household"],["Good size for the kids after school.","Woman, 39, 5-person household"]],
+    vd:[["I'd need two, and then it's six dollars for the same thing I already buy.","Man, 31, 2-person household"],["My grandmother bought this exact meal.","Woman, 26, 1-person household"]],
+    note:"Comfort Minis is liked for price and doubted for size. A third of dislikes point out that two Minis cost more than one regular bowl."}};
+const oeSel=document.getElementById("oeSel");
+["A","B","C","D"].forEach(k=>{const b=document.createElement("button");b.textContent=k+" · "+byK[k].s;b.dataset.k=k;oeSel.appendChild(b)});
+function hb(rows,color){const max=45;return rows.map(r=>`<div class="hb"><span class="hbl" title="${r[0]}">${r[0]}</span><span class="hbt"><i style="width:${r[1]/max*100}%;background:${r[0].startsWith("Nothing")?"var(--ink-3)":color}"></i></span><span class="hbv mono">${r[1]}%</span></div>`).join("")}
+function showOE(k){const o=OE[k];[...oeSel.querySelectorAll("button")].forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  document.getElementById("oeLike").innerHTML=hb(o.like,"var(--good)")+`<p class="note">Base: cell ${k}, n=${D.n[k]}. Multiple mentions allowed.</p>`;
+  document.getElementById("oeDis").innerHTML=hb(o.dis,"var(--crit)")+`<p class="note">Base: cell ${k}, n=${D.n[k]}. Multiple mentions allowed.</p>`;
+  const q=a=>a.map(v=>`<p class="vq">"${v[0]}"<cite>${v[1]}</cite></p>`).join("");
+  document.getElementById("vLike").innerHTML=q(o.vl);document.getElementById("vDis").innerHTML=q(o.vd);
+  document.getElementById("oeNote").innerHTML="<b>The read.</b> "+o.note}
+oeSel.addEventListener("click",e=>{if(e.target.dataset.k)showOE(e.target.dataset.k)});showOE("C");
+
+/* segments */
+const SL={age:["18 to 34","35 to 44","45 to 54","55 and over"],hh:["1 person","2 people","3 to 4 people","5 or more"]};
+const SR={age:[["Under 55, C leads every band.","It reaches 71% among 18 to 34, the highest score anywhere in the test, though the lead at 45 to 54 is only one point."],["C fades with age.","From 71% at 18 to 34 to 44% at 55 and over, the steepest slope of any concept. The spice worry is concentrated here."],["Garden Forward leads at 55+.","56% against 44% for C. The case for keeping B alive as a second launch."],["The current bowl skews older too.","Minis and the current bowl both rise with age, so they compete for the same buyer."]],
+ hh:[["C wins in small households.","64% among 1-person and 61% among 2-person homes, together about two thirds of the category sample."],["Comfort Minis leads in 5+ households.","58% against 42% for C, but on 24 people per cell. Directional only."],["Household size matters less than age for C.","The spread is 22 points from smallest to largest home, against 27 points across age bands."]]};
+function showSeg(k){[...document.querySelectorAll("#segSel button")].forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+  const rows=SL[k].map((lab,i)=>{const vals=C.map(c=>D.segs[k][c.k].v[i]),mx=Math.max(...vals),base=D.segs[k].C.base[i],low=base<50;
+    return `<tr><td><b>${lab}</b><span class="sb">n≈${base} per cell${low?' · <span class="lowb">low base</span>':""}</span></td>${C.map((c,j)=>{const v=vals[j],d=v-D.pi.pct[c.k],a=Math.min(Math.abs(d)/16,1)*.55;
+      const bg=d>=0?`color-mix(in srgb, var(--hm-up) ${Math.round(a*100)}%, transparent)`:`color-mix(in srgb, var(--hm-dn) ${Math.round(a*100)}%, transparent)`;
+      return `<td class="c"><span class="v${v===mx?" win":""}" style="background:${bg}" title="${c.n.replace("&","&amp;")}, ${lab}: ${v}% (${d>=0?"+":""}${d} vs concept total)">${v}%</span><small>${d>=0?"+":"−"}${Math.abs(d)}</small></td>`}).join("")}</tr>`}).join("");
+  document.getElementById("segBody").innerHTML=rows+`<tr class="tot"><td>Total</td>${C.map(c=>`<td class="c">${D.pi.pct[c.k]}%<small>n=${D.n[c.k]}</small></td>`).join("")}</tr>`;
+  document.getElementById("segFoot").innerHTML=`Small figures are points above or below that concept's own total. Outlined cell: highest concept in the row.${k==="hh"?" <b>5 or more:</b> base under 50 per cell, read as directional.":""}`;
+  document.getElementById("segRead").innerHTML=SR[k].map(r=>`<div class="read"><b>${r[0]}</b> ${r[1]}</div>`).join("")}
+document.getElementById("segSel").addEventListener("click",e=>{if(e.target.dataset.k)showSeg(e.target.dataset.k)});showSeg("age");
+
+/* source of volume */
+const SV=["Greywater meal","Other frozen brand","Takeout or delivery","Cooking from scratch","Deli or prepared","New occasion"];
+const SVc=["var(--s1)","var(--s2)","var(--s3)","var(--s7)","var(--s4)","var(--s5)"];
+const SVd={A:[18,22,30,16,8,6],B:[22,38,9,13,12,6],C:[14,31,27,9,8,11],D:[41,33,6,7,5,8]};
+document.getElementById("sovChart").innerHTML=["C","B","A","D"].map(k=>`<div class="stk"><span class="sl"><b>${k}</b> · ${byK[k].n}<small>base ${D.pi.cnt[k]} likely buyers</small></span>
+ <span class="stkbar">${SVd[k].map((v,i)=>`<i style="flex:${v};background:${SVc[i]}" title="${SV[i]}: ${v}%">${v>=8?v:""}</i>`).join("")}</span></div>`).join("");
+document.getElementById("sovLg").innerHTML=SV.map((x,i)=>`<span><i class="sw" style="background:${SVc[i]};height:10px"></i>${x}</span>`).join("");
+document.getElementById("sovBody").innerHTML=["C","B","A","D"].map(k=>`<tr${k==="C"?' class="hl"':""}><td class="mdl">${k} · ${byK[k].s}</td><td class="n">${D.pi.cnt[k]}</td>${SVd[k].map((v,i)=>`<td class="n${i===0&&v>30?" dn":""}">${v}%</td>`).join("")}</tr>`).join("");
+const inc=["C","B","A","D"].map(k=>({k,v:Math.round(D.pi.pct[k]*(100-SVd[k][0])/10)/10}));
+document.getElementById("incChart").innerHTML=inc.map(r=>`<div class="hb"><span class="hbl">${r.k} · ${byK[r.k].s}</span><span class="hbt"><i style="width:${r.v/60*100}%;background:${byK[r.k].c}"></i></span><span class="hbv mono">${r.v.toFixed(1)} <small>of ${D.pi.pct[r.k]}</small></span></div>`).join("");
+
+/* tabs */
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

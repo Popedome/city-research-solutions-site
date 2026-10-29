@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Packaging Test Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* packaging test additions */
+.dhead{display:flex;align-items:center;gap:14px}
+.dhead .thumb{width:46px;flex:none}
+.dhead .dn2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin:0}
+.dhead .dsub{font-size:11px;color:var(--ink-3);margin:1px 0 0}
+.dstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:11px;border-top:1px solid var(--rule)}
+.dstats .lab{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 2px}
+.dstats .v{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700;letter-spacing:-.02em;margin:0}
+.dstats .v small{font-size:11px;color:var(--ink-3);font-weight:500}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.shelfmsg{font-size:12.5px;color:var(--ink-2);min-height:20px;margin:10px 0 0}
+.shelfmsg b{color:var(--ink)}
+.shelfmsg .ok{color:var(--good);font-weight:700}
+.shelfmsg .miss{color:var(--crit);font-weight:700}
+.shelf g.can.live{cursor:pointer}
+.shelf g.can.live:hover{opacity:.85}
+.canbox{max-width:200px;margin:4px auto 0}
+.heatoff .heat{display:none}
+.stack{display:flex;height:16px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stack i{display:block;height:100%}
+.sbrow{display:grid;grid-template-columns:minmax(90px,150px) 1fr;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.sbrow:last-child{border-bottom:none}
+.sbrow .sl{font-size:12px;font-weight:600}
+.sbrow .sl small{display:block;font-weight:500;color:var(--ink-3);font-size:10.5px}
+.heatkey{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.heatkey i{display:inline-block;width:90px;height:9px;border-radius:5px;background:linear-gradient(90deg,rgba(192,57,47,.15),#f2542d,#ffb020,#fff27a)}
+.cl{display:grid;grid-template-columns:22px minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.cl:last-child{border-bottom:none}
+.cl.h{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);border-bottom:1.5px solid var(--rule-2);padding-top:0}
+.cl .rk{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);text-align:right}
+.cl .cn{font-weight:600;line-height:1.35}
+.cl .cn small{display:block;font-weight:500;font-size:10px;color:var(--good);letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+.mb{display:grid;grid-template-columns:1fr 34px;gap:6px;align-items:center}
+.mb .hbt{height:11px}
+.mb span.mono{font-size:11px;color:var(--ink-2);text-align:right}
+.mb .ml{display:none}
+@media(max-width:560px){
+  .cl{grid-template-columns:22px 1fr;row-gap:4px}
+  .cl .rk{grid-row:1 / 4;align-self:start;padding-top:1px}
+  .cl .cn,.cl > .mb{grid-column:2}
+  .cl.h{display:none}
+  .lg{display:none}
+  .mb{grid-template-columns:auto 1fr 30px}
+  .mb .ml{display:inline;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+}
+.combo{padding:9px 0;border-bottom:1px solid var(--rule)}
+.combo:last-child{border-bottom:none}
+.combo .ct{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:5px}
+.combo .ct b{font-size:12.5px;font-weight:700}
+.combo .ct span{font-family:"JetBrains Mono",monospace;font-size:15px;font-weight:700}
+.combo .cc{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.45}
+.best{font-weight:700;color:var(--good)}
+.sig{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 5px;border-radius:3px;white-space:nowrap}
+.sig.y{background:var(--good-bg);color:var(--good)}
+.sig.n{background:var(--panel-2);color:var(--ink-3)}
+.sig.r{background:var(--crit-bg);color:var(--crit)}
+.chartcap{max-width:540px;margin:0 auto}
+.pick{display:flex;gap:16px;align-items:center}
+.pick .thumb{width:70px;flex:none}
+.claimpack{list-style:none;margin:0;padding:0;counter-reset:c}
+.claimpack li{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.claimpack li:last-child{border-bottom:none}
+.claimpack li::before{counter-increment:c;content:counter(c);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--s3)}
+.claimpack li em{font-style:normal;font-size:11.5px;color:var(--ink-2);display:block;margin-top:2px}
+.claimpack li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product and number on this page is made up to show what a packaging and claims test looks like. Nothing here describes a real company.</div>
+
+<svg width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="cShade" x1="0" x2="1" y1="0" y2="0">
+    <stop offset="0" stop-color="#000" stop-opacity=".30"/><stop offset=".16" stop-color="#fff" stop-opacity=".20"/>
+    <stop offset=".34" stop-color="#fff" stop-opacity="0"/><stop offset=".74" stop-color="#000" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+  <linearGradient id="cBodyC" x1="0" x2="0" y1="0" y2="1">
+    <stop offset="0" stop-color="#f6a46b"/><stop offset="1" stop-color="#f06a86"/></linearGradient>
+  <radialGradient id="heat">
+    <stop offset="0" stop-color="#fff27a" stop-opacity="1"/><stop offset=".3" stop-color="#ffb020" stop-opacity=".92"/>
+    <stop offset=".62" stop-color="#f2542d" stop-opacity=".68"/><stop offset="1" stop-color="#c0392f" stop-opacity="0"/></radialGradient>
+</defs></svg>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Packaging &amp; Claims Test</b><span>Sample · Canned sparkling water</span></div>
+    <div class="period">Sep 2026 · US · n=450, 150 per design<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> modeled</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#2a78d6">Shelf Find</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#eb6834">Heat Map</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1a8f66">Claims</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#3d5a80">Recommendation</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SHELF FIND -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Tidewell is weighing its <b>current can</b> against <b>two redesigns</b>. 450 sparkling water buyers each saw one design only, 150 per design. First task: find <b>Tidewell Pink Grapefruit</b> on a simulated shelf of 12 products, with a 20 second limit. We recorded whether they found it, how long it took, and what they clicked by mistake. The test can was rotated across four shelf positions.</p>
+
+  <div class="row k3" id="dcards"></div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">The shelf · 12 SKUs <span class="src ill">Illustrative</span></p>
+      <div class="ctrl">
+        <div class="mkt" id="shelfSel"><span class="mktlab">Design</span>
+          <button data-d="A" class="on">A · Current</button><button data-d="B">B · Shoreline</button><button data-d="C">C · Fruit Forward</button></div>
+        <div class="mkt"><button id="tryBtn" class="cmp">Try the task</button><button id="showBtn">Show target</button></div>
+      </div>
+      <div id="shelf" class="shelf"></div>
+      <p class="shelfmsg" id="shelfMsg">Press <b>Try the task</b> to shuffle the shelf and find Tidewell Pink Grapefruit yourself, against the clock.</p></div>
+    <div class="card"><p class="ttl">Share found, by second <span class="src real">Measured</span></p><div id="cum"></div>
+      <div class="legend" id="lgcum"></div>
+      <p class="note"><b>Shoreline is found faster at every point on the clock.</b> Half of those who found it did so within 4.1 seconds. The current can took 6.8.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Where the wrong first clicks went <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Clicked instead</th><th class="n">A<span class="lg"> · Current</span></th><th class="n">B<span class="lg"> · Shoreline</span></th><th class="n">C<span class="lg"> · Fruit</span></th></tr></thead><tbody>
+        <tr><td>Ostra Blackberry <span class="brd">navy can</span></td><td class="n dn">12</td><td class="n">0</td><td class="n">0</td></tr>
+        <tr><td>Fenley Grapefruit <span class="brd">pink can</span></td><td class="n">5</td><td class="n">3</td><td class="n dn">9</td></tr>
+        <tr><td>Marlo Spring Original <span class="brd">cream can</span></td><td class="n">0</td><td class="n">3</td><td class="n">0</td></tr>
+        <tr><td>Pellwick Raspberry</td><td class="n">0</td><td class="n">0</td><td class="n">3</td></tr>
+        <tr><td>Any other SKU</td><td class="n">4</td><td class="n">2</td><td class="n">2</td></tr>
+        <tr class="hl"><td><b>Total wrong first clicks</b></td><td class="n"><b>21</b> <small>(14%)</small></td><td class="n"><b>8</b> <small>(5%)</small></td><td class="n"><b>14</b> <small>(9%)</small></td></tr>
+      </tbody></table></div>
+      <p class="note">Counts out of 150 per design. The current navy can is mistaken for Ostra. Fruit Forward is mistaken for the other pink can on the shelf.</p></div>
+    <div class="card"><p class="ttl">Time to find · distribution <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Seconds</th><th class="n">A<span class="lg"> · Current</span></th><th class="n">B<span class="lg"> · Shoreline</span></th><th class="n">C<span class="lg"> · Fruit</span></th></tr></thead><tbody id="distBody"></tbody></table></div>
+      <p class="note">Respondents per time band, out of 150 per design. Not found means the 20 second limit ran out.</p></div>
+  </div>
+</div>
+
+<!-- HEAT MAP -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">Next, each respondent saw their design on its own, full size, and clicked <b>the first thing that caught their eye</b>. The heat maps below are smoothed from those click positions. Shares are grouped into four areas of the can: <b>logo</b>, <b>flavor name</b>, <b>claim</b> and <b>imagery</b>, plus clicks that landed anywhere else.</p>
+  <div class="ctrl" style="margin-bottom:12px">
+    <div class="mkt"><button id="heatBtn" class="on">Heat on</button></div>
+    <span class="heatkey">fewer <i></i> more first clicks</span>
+  </div>
+  <div class="row k3" id="heatCards"></div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">First click by area <span class="src real">Measured</span></p>
+      <div id="stacks"></div>
+      <div class="legend" id="lgaoi"></div>
+      <p class="note"><b>Shoreline splits first looks between the logo and the flavor name.</b> Fruit Forward wins attention with its imagery, but more than half of first clicks go to the fruit and only 15% reach the logo.</p></div>
+    <div class="card"><p class="ttl">Brand named unaided after the shelf task <span class="src real">Measured</span></p><div id="recall"></div>
+      <p class="note">Asked with no prompt: "Which brand was the pink grapefruit you found?" The design that pulls the eye to the fruit is the one whose brand people forget.</p></div>
+  </div>
+  <div class="row">
+    <div class="card"><p class="ttl">First click counts <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:440px"><thead><tr><th>Area</th><th class="n">A<span class="lg"> · Current</span></th><th class="n">B<span class="lg"> · Shoreline</span></th><th class="n">C<span class="lg"> · Fruit</span></th></tr></thead><tbody id="aoiBody"></tbody></table></div></div>
+  </div>
+</div>
+
+<!-- CLAIMS -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">All 450 respondents rated <b>ten candidate on-pack claims</b>, shown in random order, on two scales: how appealing each one is, and how believable. Scores are the share choosing the top two boxes of a five point scale. A <b>reach analysis</b> (often called TURF) then asks a different question: which small set of claims gives the most people at least one claim they find appealing?</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Claims tested</p><p class="val">10</p><p class="sub">rated by all 450</p></div>
+    <div class="card kpi"><p class="lab">Most appealing</p><p class="val">58<small>%</small></p><p class="sub">Zero sugar, zero sweeteners</p></div>
+    <div class="card kpi"><p class="lab">Most believed</p><p class="val">88<small>%</small></p><p class="sub">0 calories</p></div>
+    <div class="card kpi"><p class="lab">Best reach, 3 claims</p><p class="val" style="color:var(--good)">83<small>%</small></p><p class="sub">vs 71% for the top 3 by appeal</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Claims ranked by appeal <span class="src real">Measured</span></p>
+      <div class="cl h"><span></span><span>Claim</span><span>Appeal</span><span>Believable</span></div>
+      <div id="claimList"></div>
+      <p class="note">Top two box, n=450. Green labels mark the three claims in the best reach set.</p></div>
+    <div class="card"><p class="ttl">Appeal vs believability <span class="src real">Measured</span></p><div id="scatter" class="chartcap"></div>
+      <p class="note"><b>Upper right is where a front-panel claim belongs.</b> "Bold flavor you can actually taste" appeals to almost half of buyers, but fewer than half believe it. Dashed lines mark the average of the ten.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Reach as claims are added <span class="src ill">Modeled</span></p><div id="reach" class="chartcap"></div>
+      <div class="legend" id="lgreach"></div>
+      <p class="note">Reach is the share of respondents who find at least one claim in the set appealing. <b>The top three by appeal mostly reach the same people</b>: the clean-label buyer. The best set adds a flavor claim and a hydration claim that reach different buyers.</p></div>
+    <div class="card pad"><p class="ttl">Three ways to pick three claims <span class="src ill">Modeled</span></p><div id="combos"></div></div>
+  </div>
+</div>
+
+<!-- RECOMMENDATION -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">The recommendation brings the three tasks together. Every row in the scorecard is measured on 150 people per design, and the last two columns say whether a gap is large enough to trust. <b>Significant</b> means 95% confidence on a two-sample test of proportions or medians. <b>Directional</b> means it could be noise.</p>
+
+  <div class="row" style="grid-template-columns:1fr;margin-bottom:13px">
+    <div class="hero" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:15px 20px">
+      <div><p class="ttl" style="margin:0 0 3px">The recommendation</p>
+        <p class="hbig">Move to Shoreline.<br>Lead with zero sugar.</p></div>
+      <p style="flex:1;min-width:250px;margin:0;font-size:12.5px;color:rgba(243,244,240,.84);line-height:1.55">
+        Shoreline is found more often and faster than the current can, is mistaken for a competitor about a third as often, and is the design whose brand people remember <span style="color:rgba(243,244,240,.55)">[shelf and heat map, measured]</span>. Fruit Forward is liked slightly more, but the gap is within noise and it costs 22 points of brand recall. On pack, run zero sugar, electrolytes and extra-fine bubbles <span style="color:rgba(243,244,240,.55)">[claims, reach modeled]</span>.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Design scorecard <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:640px"><thead><tr><th>Measure</th><th class="n">A<span class="lg"> · Current</span></th><th class="n">B<span class="lg"> · Shoreline</span></th><th class="n">C · Fruit Forward</th><th class="c">B vs current</th><th class="c">B vs C</th></tr></thead><tbody>
+        <tr><td>Found within 20 seconds</td><td class="n">81%</td><td class="n best">93%</td><td class="n">89%</td><td class="c"><span class="sig y">Significant</span></td><td class="c"><span class="sig n">Directional</span></td></tr>
+        <tr><td>Median time to find</td><td class="n">6.8 s</td><td class="n best">4.1 s</td><td class="n">5.0 s</td><td class="c"><span class="sig y">Significant</span></td><td class="c"><span class="sig n">Directional</span></td></tr>
+        <tr><td>Wrong first click</td><td class="n">14%</td><td class="n best">5%</td><td class="n">9%</td><td class="c"><span class="sig y">Significant</span></td><td class="c"><span class="sig n">Directional</span></td></tr>
+        <tr><td>Brand named unaided</td><td class="n">58%</td><td class="n best">71%</td><td class="n">49%</td><td class="c"><span class="sig y">Significant</span></td><td class="c"><span class="sig y">Significant</span></td></tr>
+        <tr><td>First click on logo</td><td class="n">29%</td><td class="n best">34%</td><td class="n">15%</td><td class="c"><span class="sig n">Directional</span></td><td class="c"><span class="sig y">Significant</span></td></tr>
+        <tr><td>First click on flavor name</td><td class="n">21%</td><td class="n best">38%</td><td class="n">17%</td><td class="c"><span class="sig y">Significant</span></td><td class="c"><span class="sig y">Significant</span></td></tr>
+        <tr><td>Purchase intent, top two box</td><td class="n">38%</td><td class="n">46%</td><td class="n best">49%</td><td class="c"><span class="sig n">Directional</span></td><td class="c"><span class="sig r">C ahead, directional</span></td></tr>
+      </tbody></table></div>
+      <p class="note">Green marks the best score in each row. n=150 per design.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">The design</p>
+      <div class="pick"><div class="thumb" id="pickCan"></div>
+        <div><p class="mini" style="color:var(--s1)">B · Shoreline</p>
+          <p class="small">A navy band carries a larger wordmark, and a coral band carries the flavor name in capitals. It keeps the wave mark current buyers know, moved under the logo. Wins or ties on every shelf and attention measure.</p></div></div></div>
+    <div class="card pad"><p class="ttl">The claims, in panel order</p>
+      <ul class="claimpack">
+        <li><div>Zero sugar, zero sweeteners<em>Front panel headline. Most appealing and 81% believe it.</em></div><span>58 / 81</span></li>
+        <li><div>Electrolytes added for hydration<em>Reaches buyers the clean-label claims miss.</em></div><span>44 / 58</span></li>
+        <li><div>Extra-fine bubbles<em>Takes the third slot over "bold flavor": 4 points less reach, 25 points more belief.</em></div><span>37 / 72</span></li>
+      </ul>
+      <p class="note">Appeal / believable, top two box, n=450. Together: 79% reach.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Trade-offs we are accepting</p>
+      <div class="mv"><span class="sev w">Appeal</span><div><b>Fruit Forward is liked a little more</b><em>49% vs 46% purchase intent, within noise. Its fruit art is the most clicked element in the study.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Reach</span><div><b>Giving up 4 points of claim reach</b><em>"Bold flavor" would lift reach to 83%, but only 47% believe it.</em></div><span></span><span></span></div>
+      <div class="mv"><span class="sev w">Shelf</span><div><b>A cream can next to Marlo Spring</b><em>3 of Shoreline's 8 wrong clicks went to Marlo Original. Check sets where they sit side by side.</em></div><span></span><span></span></div></div>
+    <div class="card pad"><p class="ttl">Before the design goes to print</p>
+      <ul class="lst">
+        <li>Shoreline with a larger fruit slice<span>retest · 150 per cell</span></li>
+        <li>"Bold flavor" with a taste proof line<span>claims retest · 300</span></li>
+        <li>Lime and berry versions of Shoreline<span>shelf find · 150 each</span></li>
+        <li>Real planogram for the top two retailers<span>shelf build</span></li></ul>
+      <p class="note">The retest borrows the one thing Fruit Forward does best and checks it does not cost Shoreline its brand recall.</p></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. Online monadic test, US adults 21 to 65 who bought sparkling water in the past month, n=450 (150 per design), fielded September 2026. A live version is built on your category, your shelf and your own designs.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const svgBox=(id,w,h)=>{const d=document.getElementById(id);const s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img"});d.appendChild(s);return s};
+
+/* ---------- can art (200 x 360 frame) ---------- */
+const FF='Archivo,Helvetica,Arial,sans-serif';
+const T=(x,y,s,f,t,ex)=>`<text x="${x}" y="${y}" font-size="${s}" fill="${f}" text-anchor="middle" font-family="${FF}" ${ex||""}>${t}</text>`;
+const body=f=>`<rect x="14" y="24" width="172" height="316" rx="14" fill="${f}"/>`;
+const finish=`<rect x="14" y="24" width="172" height="316" rx="14" fill="url(#cShade)"/><rect x="22" y="8" width="156" height="22" rx="9" fill="#c4c9ce"/><rect x="32" y="12" width="136" height="6" rx="3" fill="#e4e7ea"/><rect x="22" y="332" width="156" height="20" rx="8" fill="#aeb4ba"/>`;
+const wave=(x,y,seg,amp,n,c,w,o)=>`<path d="M${x} ${y} q${seg/2} ${-amp} ${seg} 0${" t"+seg+" 0".repeat(1)}${(" t"+seg+" 0").repeat(n-2)}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" opacity="${o||1}"/>`;
+function slice(cx,cy,r,rind,flesh){let s=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${rind}"/><circle cx="${cx}" cy="${cy}" r="${r*.86}" fill="${flesh}"/>`;
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;s+=`<line x1="${cx}" y1="${cy}" x2="${(cx+Math.cos(a)*r*.84).toFixed(1)}" y2="${(cy+Math.sin(a)*r*.84).toFixed(1)}" stroke="${rind}" stroke-width="${Math.max(1.5,r/20)}"/>`}
+  return s+`<circle cx="${cx}" cy="${cy}" r="${r*.1}" fill="${rind}"/>`}
+const ART={
+ A:()=>body("#1f3a5f")+`<circle cx="100" cy="60" r="10" fill="#f2b84b"/>`+T(100,94,19,"#fff","TIDEWELL",'font-weight="700" letter-spacing="3"')
+   +wave(14,150,43,12,4,"#7fd1c7",5)+wave(14,172,43,12,4,"#7fd1c7",5,.75)+wave(14,194,43,12,4,"#7fd1c7",5,.5)
+   +T(100,236,8,"#9fb3c8","SPARKLING WATER",'letter-spacing="2.5" font-weight="600"')
+   +`<text x="100" y="258" font-size="17" fill="#f7b2a8" text-anchor="middle" font-family="Source Serif 4,Georgia,serif" font-style="italic">Pink Grapefruit</text>`
+   +T(100,300,11,"#cfd8e3","Zero sugar")+finish,
+ B:()=>body("#f5f0e6")+`<path d="M14 38 a14 14 0 0 1 14 -14 h144 a14 14 0 0 1 14 14 v82 h-172z" fill="#16324f"/>`
+   +T(100,84,29,"#fff","TIDEWELL",'font-weight="700" letter-spacing="1"')+wave(62,102,19,6,4,"#7fd1c7",3)
+   +T(100,147,9,"#16324f","SPARKLING WATER",'letter-spacing="3" font-weight="700"')
+   +`<rect x="14" y="160" width="172" height="64" fill="#e8604f"/>`+T(100,188,21,"#fff","PINK",'font-weight="700" letter-spacing="2"')+T(100,213,21,"#fff","GRAPEFRUIT",'font-weight="700" letter-spacing="1"')
+   +slice(100,264,19,"#f7c9a8","#ef6f5e")
+   +T(100,304,10,"#16324f","ZERO SUGAR",'font-weight="700" letter-spacing="1"')+T(100,318,10,"#16324f","ZERO SWEETENERS",'font-weight="700" letter-spacing="1"')+finish,
+ C:()=>body("url(#cBodyC)")+T(100,60,17,"#3a1f2b","tidewell",'font-weight="700"')
+   +`<ellipse cx="148" cy="106" rx="20" ry="9" fill="#4f9a5a" transform="rotate(-35 148 106)"/>`+slice(100,166,64,"#fde6d2","#e94b62")
+   +T(100,262,15,"#3a1f2b","Pink Grapefruit",'font-weight="600"')+T(100,280,8,"#3a1f2b","SPARKLING WATER",'letter-spacing="2.5"')
+   +T(100,306,10,"#3a1f2b","Zero sugar")+finish
+};
+const DN={A:"A · Current",B:"B · Shoreline",C:"C · Fruit Forward"};
+const DC={A:"var(--ink-3)",B:"var(--s1)",C:"var(--s2)"};
+function comp(c){let mark="";
+  if(c.m==="dot")mark=`<circle cx="100" cy="150" r="26" fill="${c.a}"/>`;
+  if(c.m==="tri")mark=`<path d="M100 120 L130 176 L70 176Z" fill="${c.a}"/>`;
+  if(c.m==="bar")mark=`<rect x="14" y="132" width="172" height="34" fill="${c.a}"/>`;
+  if(c.m==="ring")mark=`<circle cx="100" cy="150" r="26" fill="none" stroke="${c.a}" stroke-width="9"/>`;
+  return body(c.b)+mark+T(100,88,c.bs||24,c.t,c.n,'font-weight="700"')+T(100,240,16,c.t,c.f,'font-weight="600"')
+    +T(100,262,8,c.t,"SPARKLING WATER",'letter-spacing="2" opacity=".75"')+finish}
+const SKUS=[
+ {id:1,n:"CORROWAN",f:"Lime",b:"#2f7d4f",a:"#c8e66b",t:"#fff",m:"dot",bs:20},
+ {id:2,n:"Fenley",f:"Lemon",b:"#f5d547",a:"#fff",t:"#4a3b00",m:"ring",bs:28},
+ {id:3,n:"marlo",f:"Original",b:"#ebe6da",a:"#3b6e8f",t:"#23465e",m:"bar",bs:30},
+ {id:4,n:"QUILLET",f:"Peach",b:"#f4b183",a:"#7a3b1d",t:"#5a2a0a",m:"tri",bs:22},
+ {id:5,n:"OSTRA",f:"Coconut",b:"#f2efe9",a:"#22304a",t:"#22304a",m:"ring",bs:28},
+ {id:6,n:"CORROWAN",f:"Cherry",b:"#8e1f3a",a:"#f4a6b5",t:"#fff",m:"dot",bs:20},
+ {id:7,n:"marlo",f:"Cucumber",b:"#b9dcc2",a:"#3b6e8f",t:"#23465e",m:"bar",bs:30},
+ {id:8,n:"OSTRA",f:"Blackberry",b:"#22304a",a:"#9b7fd1",t:"#fff",m:"ring",bs:28},
+ {id:9,n:"Fenley",f:"Grapefruit",b:"#f28b82",a:"#fff",t:"#5a1a14",m:"ring",bs:28},
+ {id:0,target:1},
+ {id:10,n:"QUILLET",f:"Mango",b:"#f39c2b",a:"#5a2a0a",t:"#3f1d05",m:"tri",bs:22},
+ {id:11,n:"PELLWICK",f:"Raspberry",b:"#c2185b",a:"#f8bbd0",t:"#fff",m:"dot",bs:20}
+];
+const NAME=s=>s.target?"Tidewell Pink Grapefruit":(s.n.charAt(0)+s.n.slice(1).toLowerCase()).replace("Marlo","Marlo Spring")+" "+s.f;
+const canSVG=(d,cls)=>`<svg viewBox="0 0 200 360" role="img" aria-label="Tidewell ${DN[d]} can"${cls?` class="${cls}"`:""}>${ART[d]()}</svg>`;
+
+/* ---------- design cards ---------- */
+const FIND={A:{f:81,t:"6.8",w:14,n:122},B:{f:93,t:"4.1",w:5,n:140},C:{f:89,t:"5.0",w:9,n:133}};
+const DSUB={A:"Navy can, wave imagery, small wordmark",B:"Big wordmark, coral flavor band",C:"Large fruit art, gradient can"};
+document.getElementById("dcards").innerHTML=["A","B","C"].map(d=>`<div class="card"><div class="dhead"><div class="thumb">${canSVG(d)}</div>
+  <div><p class="dn2">${DN[d]}</p><p class="dsub">${DSUB[d]} · n=150</p></div></div>
+  <div class="dstats"><div><p class="lab">Found</p><p class="v"${d==="B"?' style="color:var(--good)"':""}>${FIND[d].f}<small>%</small></p></div>
+  <div><p class="lab">Median</p><p class="v">${FIND[d].t}<small> s</small></p></div>
+  <div><p class="lab">Wrong click</p><p class="v"${d==="A"?' style="color:var(--crit)"':""}>${FIND[d].w}<small>%</small></p></div></div></div>`).join("");
+document.getElementById("pickCan").innerHTML=canSVG("B");
+
+/* ---------- shelf ---------- */
+let cur="A",order=SKUS.slice(),live=false,showT=false,t0=0;
+const shelfEl=document.getElementById("shelf"),msg=document.getElementById("shelfMsg");
+function drawShelf(){const W=456,H=284;let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Simulated shelf of 12 sparkling water SKUs">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" rx="6" style="fill:var(--panel-2)"/>`;
+  [0,1].forEach(r=>{const by=r?256:120;s+=`<rect x="4" y="${by}" width="${W-8}" height="12" rx="2" style="fill:var(--rule-2)"/>`;
+    for(let i=0;i<6;i++)s+=`<rect x="${20+i*72}" y="${by+3}" width="24" height="6" rx="1" style="fill:var(--panel)"/>`});
+  order.forEach((k,i)=>{const r=Math.floor(i/6),c=i%6,x=12+c*72+6,y=r?148:12;
+    s+=`<g class="can${live?" live":""}" data-i="${i}" transform="translate(${x} ${y}) scale(0.3)">${k.target?ART[cur]():comp(k)}</g>`;
+    if(k.target&&showT&&!live)s+=`<rect x="${x-4}" y="${y-4}" width="68" height="116" rx="5" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-dasharray="6 4"/>`});
+  shelfEl.innerHTML=s+"</svg>";
+  shelfEl.querySelectorAll("g.can").forEach(g=>g.addEventListener("click",()=>{if(!live)return;const k=order[+g.dataset.i];
+    if(k.target){const sec=((performance.now()-t0)/1000).toFixed(1);live=false;drawShelf();
+      msg.innerHTML=`<span class="ok">Found in ${sec} s.</span> Median for ${DN[cur]}: <b>${FIND[cur].t} s</b>. ${FIND[cur].f}% of its 150 viewers found it within 20 seconds.`;tryBtn.textContent="Try again"}
+    else msg.innerHTML=`<span class="miss">That is ${NAME(k)}.</span> Keep looking for Tidewell Pink Grapefruit.`}))}
+const tryBtn=document.getElementById("tryBtn"),showBtn=document.getElementById("showBtn");
+document.querySelectorAll("#shelfSel button").forEach(b=>b.addEventListener("click",()=>{cur=b.dataset.d;
+  document.querySelectorAll("#shelfSel button").forEach(x=>x.classList.toggle("on",x===b));live=false;tryBtn.textContent="Try the task";
+  msg.innerHTML=`Showing <b>${DN[cur]}</b> in the test position. Press <b>Try the task</b> to shuffle the shelf and time yourself.`;drawShelf()}));
+tryBtn.addEventListener("click",()=>{order=SKUS.slice();for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+  live=true;showT=false;showBtn.classList.remove("on");drawShelf();t0=performance.now();
+  msg.innerHTML=`Clock running. Click <b>Tidewell Pink Grapefruit</b> (${DN[cur]}).`});
+showBtn.addEventListener("click",()=>{if(live)return;showT=!showT;showBtn.classList.toggle("on",showT);drawShelf()});
+drawShelf();
+
+/* ---------- cumulative find curve ---------- */
+const XS=[0,2,4,6,8,10,15,20];
+const BK={A:[6,18,26,27,19,17,9],B:[21,47,38,17,9,6,2],C:[12,36,39,22,12,8,4]};
+const cumu=d=>{let c=0;return [0].concat(BK[d].map(v=>(c+=v)/150*100))};
+(function(){const w=360,h=210,L=34,R=40,Tp=10,Bm=24,s=svgBox("cum",w,h);
+  const X=v=>L+v/20*(w-L-R),Y=v=>Tp+(1-v/100)*(h-Tp-Bm);
+  [0,25,50,75,100].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-5,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v+"%"});
+  [0,5,10,15,20].forEach(v=>{el("text",{x:X(v),y:h-7,"text-anchor":"middle",class:"ax"},s).textContent=v+"s"});
+  el("line",{x1:L,x2:w-R,y1:Y(50),y2:Y(50),stroke:"var(--rule-2)","stroke-dasharray":"3 3"},s);
+  ["A","C","B"].forEach(d=>{const v=cumu(d);el("polyline",{points:XS.map((x,i)=>`${X(x)},${Y(v[i])}`).join(" "),fill:"none",stroke:DC[d],"stroke-width":d==="B"?3:2,"stroke-linejoin":"round"},s);
+    const ly=Y(v[7])+(d==="C"?7:d==="B"?-3:3);el("text",{x:X(20)+5,y:ly,class:"dl",fill:DC[d]},s).textContent=Math.round(v[7])+"%"});
+  document.getElementById("lgcum").innerHTML=["A","B","C"].map(d=>`<span><i class="sw" style="background:${DC[d]}"></i>${DN[d]}</span>`).join("")})();
+const BL=["0 to 2","2 to 4","4 to 6","6 to 8","8 to 10","10 to 15","15 to 20","Not found"];
+document.getElementById("distBody").innerHTML=BL.map((b,i)=>{const g=d=>i<7?BK[d][i]:150-BK[d].reduce((a,c)=>a+c,0);
+  return `<tr${i===7?' class="hl"':""}><td>${b}</td>${["A","B","C"].map(d=>`<td class="n">${g(d)}</td>`).join("")}</tr>`}).join("");
+
+/* ---------- heat maps ---------- */
+const AOI=[{k:"logo",n:"Logo",c:"var(--s1)"},{k:"flavor",n:"Flavor name",c:"var(--s2)"},{k:"claim",n:"Claim",c:"var(--s3)"},{k:"img",n:"Imagery",c:"var(--s4)"},{k:"else",n:"Elsewhere",c:"var(--rule-2)"}];
+const CNT={A:{logo:44,flavor:31,claim:14,img:49,else:12},B:{logo:51,flavor:57,claim:18,img:17,else:7},C:{logo:23,flavor:25,claim:10,img:83,else:9}};
+const POS={A:{logo:[100,80],flavor:[100,250],claim:[100,297],img:[100,172]},B:{logo:[100,80],flavor:[100,198],claim:[100,310],img:[100,264]},C:{logo:[100,56],flavor:[100,262],claim:[100,303],img:[100,166]}};
+const ELSE=[[44,318],[160,128],[150,226]];
+const pct=n=>Math.round(n/150*100);
+function blobs(d){let s="";const c=CNT[d];
+  ["img","logo","flavor","claim"].forEach(k=>{const sh=c[k]/150,r=18+64*Math.sqrt(sh/.55),[x,y]=POS[d][k];
+    s+=`<circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="url(#heat)" opacity="${(.62+.38*Math.min(1,sh/.35)).toFixed(2)}"/>`});
+  ELSE.forEach(([x,y])=>{s+=`<circle cx="${x}" cy="${y}" r="16" fill="url(#heat)" opacity="${(.15+c.else/150*2).toFixed(2)}"/>`});
+  return `<g class="heat" style="mix-blend-mode:normal">${s}</g>`}
+const stackHTML=d=>`<div class="stack">${AOI.map(a=>`<i style="width:${CNT[d][a.k]/150*100}%;background:${a.c}" title="${a.n} ${pct(CNT[d][a.k])}%"></i>`).join("")}</div>`;
+const TOPA={A:"Attention splits between the waves and the logo. The flavor name is read by one in five.",B:"Flavor name and logo take 72% of first clicks between them. The claim gets more looks than on any other design.",C:"The fruit takes more than half of first clicks. Logo and flavor name share less than a third."};
+document.getElementById("heatCards").innerHTML=["A","B","C"].map(d=>{const c=CNT[d],top=Object.keys(c).filter(k=>k!=="else").sort((a,b)=>c[b]-c[a])[0];
+  return `<div class="card"><p class="ttl">${DN[d]} <span class="src real">Measured</span></p>
+  <div class="canbox"><svg viewBox="0 0 200 360" role="img" aria-label="Heat map of first clicks on ${DN[d]}">${ART[d]()}${blobs(d)}</svg></div>
+  <p class="note" style="margin-top:12px"><b>${AOI.find(a=>a.k===top).n} ${pct(c[top])}%.</b> ${TOPA[d]}</p></div>`}).join("");
+document.getElementById("heatBtn").addEventListener("click",e=>{const g=document.getElementById("heatCards"),off=g.classList.toggle("heatoff");
+  e.target.classList.toggle("on",!off);e.target.textContent=off?"Heat off":"Heat on"});
+document.getElementById("stacks").innerHTML=["A","B","C"].map(d=>`<div class="sbrow"><span class="sl">${DN[d]}<small>logo ${pct(CNT[d].logo)}% · flavor ${pct(CNT[d].flavor)}% · imagery ${pct(CNT[d].img)}%</small></span>${stackHTML(d)}</div>`).join("");
+document.getElementById("lgaoi").innerHTML=AOI.map(a=>`<span><i class="sw" style="background:${a.c};height:9px;width:9px"></i>${a.n}</span>`).join("");
+document.getElementById("aoiBody").innerHTML=AOI.map(a=>`<tr><td><span class="dot" style="background:${a.c}"></span> ${a.n}</td>${["A","B","C"].map(d=>`<td class="n">${CNT[d][a.k]} <small style="color:var(--ink-3)">(${pct(CNT[d][a.k])}%)</small></td>`).join("")}</tr>`).join("")
+  +`<tr class="hl"><td><b>Total</b></td><td class="n"><b>150</b> <small>(100%)</small></td><td class="n"><b>150</b> <small>(100%)</small></td><td class="n"><b>150</b> <small>(100%)</small></td></tr>`;
+const REC={A:87,B:107,C:74};
+document.getElementById("recall").innerHTML=["B","A","C"].map(d=>`<div class="hb"><span class="hbl">${DN[d]}</span><span class="hbt"><i style="width:${REC[d]/150*100}%;background:${DC[d]}"></i></span><span class="hbv mono">${pct(REC[d])}% <small>${REC[d]}/150</small></span></div>`).join("");
+
+/* ---------- claims ---------- */
+const CL=[["Zero sugar, zero sweeteners",58,81],["Naturally flavored, nothing artificial",55,66],["Made with real fruit essence",52,63],["0 calories",49,88],["Bold flavor you can actually taste",46,47],["Electrolytes added for hydration",44,58],["Crisp finish, no aftertaste",41,39],["Extra-fine bubbles",37,72],["Can made from 70% recycled aluminum",33,54],["Sourced from a coastal spring",29,41]];
+const BEST=[1,5,6];
+const mb=(lab,v,c)=>`<span class="mb"><span class="ml">${lab}</span><span class="hbt"><i style="width:${v}%;background:${c}"></i></span><span class="mono">${v}%</span></span>`;
+document.getElementById("claimList").innerHTML=CL.map((c,i)=>`<div class="cl"><span class="rk">${i+1}</span><span class="cn">${c[0]}${BEST.includes(i+1)?"<small>In best reach set</small>":""}</span>${mb("Appeal",c[1],"var(--s3)")}${mb("Believe",c[2],c[2]<50?"var(--warn)":"var(--s1)")}</div>`).join("");
+(function(){const w=360,h=260,L=34,R=12,Tp=10,Bm=30,s=svgBox("scatter",w,h);
+  const X=v=>L+(v-25)/40*(w-L-R),Y=v=>Tp+(1-(v-30)/65*1)*(h-Tp-Bm);
+  [30,50,70,90].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-5,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v+"%"});
+  [25,35,45,55,65].forEach(v=>{el("text",{x:X(v),y:h-14,"text-anchor":"middle",class:"ax"},s).textContent=v+"%"});
+  el("text",{x:(L+w-R)/2,y:h-1,"text-anchor":"middle",class:"ax"},s).textContent="Appeal, top two box";
+  el("text",{x:L+4,y:Tp+8,class:"ax"},s).textContent="Believable";
+  const ma=CL.reduce((a,c)=>a+c[1],0)/10,mbv=CL.reduce((a,c)=>a+c[2],0)/10;
+  el("line",{x1:X(ma),x2:X(ma),y1:Tp,y2:h-Bm,stroke:"var(--rule-2)","stroke-dasharray":"4 3"},s);
+  el("line",{x1:L,x2:w-R,y1:Y(mbv),y2:Y(mbv),stroke:"var(--rule-2)","stroke-dasharray":"4 3"},s);
+  el("text",{x:w-R-2,y:Tp+8,"text-anchor":"end",class:"ax",fill:"var(--good)"},s).textContent="liked and believed";
+  CL.forEach((c,i)=>{const b=BEST.includes(i+1),x=X(c[1]),y=Y(c[2]);
+    el("circle",{cx:x,cy:y,r:b?10:9,fill:b?"var(--s3)":"var(--panel)",stroke:c[2]<50?"var(--warn)":b?"var(--s3)":"var(--s1)","stroke-width":2},s);
+    el("text",{x:x,y:y+3.5,"text-anchor":"middle",class:"dl",fill:b?"#fff":"var(--ink)"},s).textContent=i+1});})();
+(function(){const w=360,h=210,L=34,R=44,Tp=14,Bm=26,s=svgBox("reach",w,h);
+  const X=v=>L+(v-1)/4*(w-L-R),Y=v=>Tp+(1-(v-50)/50)*(h-Tp-Bm);
+  [50,60,70,80,90,100].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-5,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v+"%"});
+  [1,2,3,4,5].forEach(v=>{el("text",{x:X(v),y:h-8,"text-anchor":"middle",class:"ax"},s).textContent=v+(v===1?" claim":"")});
+  el("rect",{x:X(3)-16,y:Tp-6,width:32,height:h-Tp-Bm+6,rx:4,style:"fill:var(--good-bg)"},s);
+  const best=[58,74,83,87,89],top=[58,66,71,72,79];
+  [[top,"var(--ink-3)","5 4"],[best,"var(--s3)",""]].forEach(([v,c,da])=>{el("polyline",{points:v.map((y,i)=>`${X(i+1)},${Y(y)}`).join(" "),fill:"none",stroke:c,"stroke-width":c==="var(--s3)"?3:2,"stroke-dasharray":da},s);
+    v.forEach((y,i)=>el("circle",{cx:X(i+1),cy:Y(y),r:i===2?5:3,fill:c},s))});
+  el("text",{x:X(3)+9,y:Y(83)-7,class:"dl",fill:"var(--s3)"},s).textContent="83%";
+  el("text",{x:X(3)+9,y:Y(71)+14,class:"dl",fill:"var(--ink-3)"},s).textContent="71%";
+  el("text",{x:X(5)+7,y:Y(89)+4,class:"dl",fill:"var(--s3)"},s).textContent="89%";
+  el("text",{x:X(5)+7,y:Y(79)+4,class:"dl",fill:"var(--ink-3)"},s).textContent="79%";
+  document.getElementById("lgreach").innerHTML=`<span><i class="sw" style="background:var(--s3)"></i>Best set at each size</span><span><i class="sw" style="background:var(--ink-3)"></i>Top claims by appeal, in order</span>`})();
+const COMBO=[
+ {t:"Top three by appeal",v:71,c:"var(--ink-3)",cl:"Zero sugar · Naturally flavored · Real fruit essence",x:"Each is strong on its own, but they appeal to the same clean-label buyer. Three claims reach only 13 points more people than one."},
+ {t:"Best reach",v:83,c:"var(--s3)",cl:"Zero sugar · Bold flavor · Electrolytes",x:"The highest reach of any three. The catch: only 47% find \"bold flavor\" believable, the third lowest of the ten."},
+ {t:"Best reach among believable claims",v:79,c:"var(--s1)",cl:"Zero sugar · Electrolytes · Extra-fine bubbles",x:"Every claim is believed by more than half. Four points less reach than the best set, and the one we recommend."}];
+document.getElementById("combos").innerHTML=COMBO.map(c=>`<div class="combo"><div class="ct"><b>${c.t}</b><span style="color:${c.c}">${c.v}%</span></div>
+  <div class="hbt" style="height:12px"><i style="width:${c.v}%;background:${c.c}"></i></div><p class="cc"><b style="color:var(--ink)">${c.cl}.</b> ${c.x}</p></div>`).join("");
+
+/* ---------- tabs ---------- */
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

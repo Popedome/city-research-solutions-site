@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>In-Home Use Test Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* brand badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(336px,1fr));gap:13px;margin-bottom:13px}
+.badge{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:0;overflow:hidden;
+  display:flex;flex-direction:column}
+.badge .accent{height:7px}
+.badge .bhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 14px 11px 16px;border-bottom:1px solid var(--rule)}
+.badge .bname{font-size:17px;font-weight:700;letter-spacing:-.015em;display:block}
+.badge .bstat{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);
+  white-space:nowrap;display:block;margin-top:2px}
+.grade{font-family:Archivo,sans-serif;font-size:20px;font-weight:700;letter-spacing:-.02em;
+  min-width:46px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:5px;color:#fff;flex:none}
+.mom{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;
+  border-radius:3px;margin-left:6px;vertical-align:1px}
+.mom.up{background:var(--good-bg);color:var(--good)}
+.mom.dn{background:var(--crit-bg);color:var(--crit)}
+.mom.fl{background:var(--panel-2);color:var(--ink-3)}
+.badge .btop{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;line-height:1.45;
+  color:var(--ink);padding:11px 16px 12px;border-bottom:1px solid var(--rule)}
+.gkey{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;background:var(--panel);
+  border:1px solid var(--rule);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:11.5px}
+.gkey .gk{display:flex;align-items:center;gap:7px;color:var(--ink-2)}
+.gkey .gk b{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;
+  border-radius:3px;color:#fff;font-size:11px;font-weight:700;font-family:Archivo,sans-serif}
+.gkey .gnote{color:var(--ink-3);font-size:11px;flex-basis:100%;margin-top:2px}
+.badge .brows{padding:2px 16px 12px;flex:1}
+.brow{display:grid;grid-template-columns:74px 9px 1fr;gap:7px;align-items:start;padding:7px 0;
+  border-bottom:1px solid var(--rule)}
+.brow:last-child{border-bottom:none}
+.brow .bl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:2px}
+.brow .bd{width:7px;height:7px;border-radius:50%;margin-top:5px}
+.brow .bt{font-size:12px;line-height:1.45;color:var(--ink-2)}
+.brow .bt b{color:var(--ink);font-weight:600}
+
+/* movers */
+.mv{display:grid;grid-template-columns:auto 1fr auto auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule)}
+.mv:last-child{border-bottom:none}
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+.mv b{font-size:13.5px;font-weight:600;display:block}
+.mv em{font-style:normal;font-size:12px;color:var(--ink-2);display:block;margin-top:1px}
+.mv .from{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);white-space:nowrap}
+.mv .when{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+
+
+/* in-home use test additions */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.code{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:11px;padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
+.code.c0{background:var(--p0)}.code.c1{background:var(--p1)}.code.c2{background:var(--p2)}
+.prodrow{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px}
+@media(max-width:1000px){.prodrow{grid-template-columns:1fr}}
+.prod{border-top:4px solid var(--pc)}
+.prod h3{font-size:15px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
+.funnel{display:grid;gap:6px}
+.fn{display:grid;grid-template-columns:minmax(96px,34%) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.fn .hbt{height:18px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* ballot */
+.ballot{background:var(--panel);border:1px solid var(--rule-2);border-radius:6px;overflow:hidden}
+.bhd{background:var(--hero);color:#f3f4f0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bhd b{font-size:14px}
+.bhd span{font-family:"JetBrains Mono",monospace;font-size:11px;opacity:.85}
+.bq{padding:13px 16px;border-bottom:1px solid var(--rule)}
+.bq:last-child{border-bottom:none}
+.bq p{margin:0 0 9px;font-size:13px;font-weight:600}
+.bq p small{font-weight:500;color:var(--ink-3);font-size:11px;margin-left:4px}
+.sc{display:grid;gap:4px}
+.sc9{grid-template-columns:repeat(9,minmax(0,1fr))}
+.sc5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sc label{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:10.5px;color:var(--ink-3);text-align:center;line-height:1.2}
+.sc input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule-2);background:var(--panel);margin:0;cursor:pointer}
+.sc input:checked{border-color:var(--s1);background:radial-gradient(circle,var(--s1) 0 45%,var(--panel) 50%)}
+.sc input:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.sc5 input{border-radius:4px}
+.sc5 input:checked{background:var(--s1)}
+.sc label.mid{color:var(--ink-2);font-weight:600}
+.ends{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-3);margin-top:5px;gap:10px}
+.oe{border:1px dashed var(--rule-2);border-radius:4px;height:42px;font-size:11px;color:var(--ink-3);padding:6px 8px;font-family:"Source Serif 4",serif;font-style:italic}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.flag{background:var(--crit-bg)!important}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+#pen svg{max-width:560px;margin:0 auto}
+#whyw .hb{grid-template-columns:minmax(150px,58%) 1fr auto}
+#whyw .hbl{white-space:normal}
+@media(max-width:560px){#pen .ax,#wl .ax,#wu .ax{font-size:13px}#pen .ptlab{font-size:12.5px}#pen .zone{font-size:13px}#wl .dl,#wu .dl{font-size:12.5px}}
+.ptlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+.zone{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+/* week by week */
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.mult{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.mult{grid-template-columns:1fr}}
+.mult h4{font-size:12px;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+/* readout */
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+</style>
+</head><body><div class="banner">Illustrative sample. Every brand, product, household and number on this page is made up to show what an in-home use test readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Fernway In-Home Use Test</b><span>Sample · Plant-based yogurt</span></div>
+    <div class="period">Vanilla oat yogurt · 3 products · 120 households · 4 weeks<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Design</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Flavor ballot</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Week by week</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#8a63d2">Readout</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DESIGN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Fernway wants to replace its vanilla oat yogurt and has two candidate formulas. An <b>in-home use test</b> puts all three products in real kitchens, blind and coded, so people eat them the way they normally would. Every household first tastes all three, one per day in a rotated order (<b>sequential monadic</b>), then lives with one of them for <b>four weeks</b>. The first taste tells you what wins a spoonful. The four weeks tell you what still gets eaten.</p>
+
+  <div class="prodrow">
+    <div class="card pad prod" style="--pc:var(--p0)"><p class="ttl">Control <span class="code c0">482</span></p><h3>Current Fernway vanilla</h3><p class="small">The product on shelf today. Included so both new formulas are judged against what buyers already know, not against each other alone.</p></div>
+    <div class="card pad prod" style="--pc:var(--p1)"><p class="ttl">Formula A <span class="code c1">317</span></p><h3>Thicker set, same sugar</h3><p class="small">New culture blend and added pea protein for a thicker, spoonable texture. Sugar unchanged at 9 g per cup.</p></div>
+    <div class="card pad prod" style="--pc:var(--p2)"><p class="ttl">Formula B <span class="code c2">956</span></p><h3>Smoother, sweeter</h3><p class="small">Smoother texture and a rounder vanilla, with sugar raised from 9 g to 12 g per cup.</p></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+      <div class="funnel" id="funnel"></div>
+      <p class="note">116 of 120 households finished all four weeks (97%). Two moved, one lost fridge space, one stopped answering.</p></div>
+    <div class="card pad"><p class="ttl">Screener criteria</p>
+      <ul class="chk">
+        <li><b>Primary grocery shopper</b>, age 21 or older</li>
+        <li><b>Eats plant-based yogurt</b> at least twice a week, past month</li>
+        <li><b>Quota:</b> 60 current Fernway buyers, 60 buyers of other plant-based brands</li>
+        <li><b>Quota:</b> 48 households with children under 12</li>
+        <li><b>Four regions</b>, 30 households each, cold-chain delivery area</li>
+        <li><b>Smartphone</b> with our study app installed (we help set it up), and room in the fridge for 8 cups</li>
+        <li class="x">Out: oat, pea or coconut allergy</li>
+        <li class="x">Out: works in food, advertising or market research</li>
+        <li class="x">Out: any food product test in the past six months</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Placement and rotation</p>
+      <p class="small" style="margin-bottom:10px">Six tasting orders, 20 households each, so every product appears first, second and third equally often. After tasting, households are split into three cells of 40, balanced on Fernway buyers and children.</p>
+      <div class="scroll"><table><thead><tr><th>Order</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th class="n">HH</th></tr></thead><tbody id="rot"></tbody></table></div></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Schedule, week by week</p>
+      <div class="tl">
+        <div class="tli"><span class="wk">Week −1<small>recruit</small></span><div><b>Screen and confirm</b><span>Online screener, then a short phone call to confirm usage and fridge space. 1,480 screened, 212 qualified, 120 placed.</span></div></div>
+        <div class="tli"><span class="wk">Days 1 to 3<small>taste</small></span><div><b>Blind tasting, one cup a day</b><span>A cold box arrives with three cups marked only with a three-digit code. One cup per day in the assigned order, chilled, eaten plain. The ballot opens on the phone right after each cup. Day 3 ends with a preference question.</span><div class="tbar"><i>3 ballots</i><i>1 preference</i></div></div></div>
+        <div class="tli"><span class="wk">Week 1<small>live with it</small></span><div><b>Extended use begins</b><span>Each household receives 8 cups of its assigned product. Eat it any way you normally would: plain, with fruit, in smoothies. Weekly check-in on day 7.</span><div class="tbar"><i>8 cups</i><i>check-in</i><i>videos</i></div></div></div>
+        <div class="tli"><span class="wk">Week 2<small>live with it</small></span><div><b>Second delivery</b><span>Another 8 cups. Uneaten cups from week 1 are photographed at check-in and counted, then left in the fridge.</span><div class="tbar"><i>8 cups</i><i>check-in</i><i>videos</i></div></div></div>
+        <div class="tli"><span class="wk">Week 3<small>live with it</small></span><div><b>The week novelty wears off</b><span>Same routine. This is the week most products settle to their real level, which is why the test runs past it.</span><div class="tbar"><i>8 cups</i><i>check-in</i><i>videos</i></div></div></div>
+        <div class="tli"><span class="wk">Week 4<small>close out</small></span><div><b>Final check-in</b><span>Liking, servings, purchase intent, and the sweetness and thickness questions asked again, so first-taste and fourth-week answers can be compared.</span><div class="tbar"><i>8 cups</i><i>final check-in</i><i>videos</i></div></div></div>
+        <div class="tli"><span class="wk">Week 5<small>read out</small></span><div><b>Follow-up calls and readout</b><span>Twelve 20-minute video calls, four per cell, chosen from households whose answers changed most. Readout the following week.</span></div></div>
+      </div></div>
+    <div class="card pad"><p class="ttl">What each household does</p>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M6 6h4M6 9h4"/></svg></span><div><b>Three tasting ballots</b><span>Two minutes each, right after the cup. Shown on the Flavor ballot tab.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h10v8H3z"/><path d="M5 5V3h6v2"/></svg></span><div><b>Eat as normal for four weeks</b><span>No rules about how much. How much they actually eat is one of the results.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="8" rx="1.5"/><path d="M11 7l3-2v6l-3-2"/></svg></span><div><b>A short phone video when something goes right or wrong</b><span>Under a minute. A child asks for more, a cup gets skipped, the texture looks off. The prompt is "show us what just happened."</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg></span><div><b>Weekly check-in</b><span>Five minutes on the phone: overall liking, cups eaten, how they ate it, a photo of what is left.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l4-4 3 3 3-6"/></svg></span><div><b>Final check-in, week 4</b><span>Purchase intent and the just-about-right questions repeated.</span></div></div>
+      <p class="note"><b>Why video and not a longer diary:</b> people do not write down the morning they skipped breakfast yogurt. They will show you the cup they pushed to the back of the fridge.</p></div>
+  </div>
+</div>
+
+<!-- BALLOT -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">This is the <b>ballot each household answered after each tasting cup</b>, three times over three days. Overall, flavor and texture liking use the standard <b>9-point scale</b>. Sweetness, thickness and vanilla flavor use <b>just-about-right scales</b>: the middle box is the target, and the two sides say which way a product misses. The <b>penalty analysis</b> at the bottom asks how much liking each miss actually costs.</p>
+
+  <div class="row k2">
+    <div class="ballot" aria-label="Sample ballot">
+      <div class="bhd"><b>Tasting ballot</b><span>Cup code 317 · Day 2 of 3</span></div>
+      <div class="bq"><p>1. Overall, how much do you like or dislike this yogurt?</p><div class="sc sc9" data-n="q1" data-k="9"></div><div class="ends"><span>1 Dislike extremely</span><span>5 Neither</span><span>9 Like extremely</span></div></div>
+      <div class="bq"><p>2. How much do you like or dislike the flavor?</p><div class="sc sc9" data-n="q2" data-k="9"></div><div class="ends"><span>Dislike extremely</span><span>Like extremely</span></div></div>
+      <div class="bq"><p>3. How much do you like or dislike the texture?</p><div class="sc sc9" data-n="q3" data-k="9"></div><div class="ends"><span>Dislike extremely</span><span>Like extremely</span></div></div>
+      <div class="bq"><p>4. How would you describe the sweetness? <small>just about right</small></p><div class="sc sc5" data-n="q4" data-l="Not nearly sweet enough|Not sweet enough|Just about right|Too sweet|Much too sweet"></div></div>
+      <div class="bq"><p>5. How would you describe the thickness? <small>just about right</small></p><div class="sc sc5" data-n="q5" data-l="Much too thin|Too thin|Just about right|Too thick|Much too thick"></div></div>
+      <div class="bq"><p>6. How would you describe the vanilla flavor? <small>just about right</small></p><div class="sc sc5" data-n="q6" data-l="Much too weak|Too weak|Just about right|Too strong|Much too strong"></div></div>
+      <div class="bq"><p>7. What, if anything, did you like or dislike about this yogurt?</p><div class="oe">Open answer, typed or spoken</div></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:13px"><p class="ttl">Liking means · first taste, n=120 each <span class="src real">Measured</span></p>
+        <div class="scroll"><table><thead><tr><th>9-point scale</th><th class="n"><span class="code c0">482</span></th><th class="n"><span class="code c1">317</span></th><th class="n"><span class="code c2">956</span></th></tr></thead><tbody>
+          <tr><td>Overall liking</td><td class="n">6.4</td><td class="n">6.9<span class="sig">a</span></td><td class="n">7.2<span class="sig">ab</span></td></tr>
+          <tr><td>Flavor liking</td><td class="n">6.5</td><td class="n">6.7</td><td class="n">7.4<span class="sig">ab</span></td></tr>
+          <tr><td>Texture liking</td><td class="n">6.1</td><td class="n">7.3<span class="sig">ac</span></td><td class="n">6.9<span class="sig">a</span></td></tr>
+          <tr><td>Top two box, overall (8 or 9)</td><td class="n">28%</td><td class="n">40%</td><td class="n">48%</td></tr>
+          <tr><td>Preferred after all three</td><td class="n">20%</td><td class="n">35%</td><td class="n">45%</td></tr>
+        </tbody></table></div>
+        <p class="note">Letters mark a mean significantly higher than that product at 95% confidence: a = 482, b = 317, c = 956. Preference: 24, 42 and 54 of 120 households.</p></div>
+      <div class="card"><p class="ttl">Overall liking, full scale <span class="src real">Measured</span></p>
+        <div id="olk"></div>
+        <div class="legend"><span><i class="sw" style="background:var(--crit);height:9px"></i>Dislike (1 to 4)</span><span><i class="sw" style="background:var(--ink-3);height:9px"></i>Neither (5)</span><span><i class="sw" style="background:var(--lk1);height:9px"></i>Like (6, 7)</span><span><i class="sw" style="background:var(--lk2);height:9px"></i>Like very much or more (8, 9)</span></div>
+        <p class="note"><b>At first taste, 956 wins on every liking measure but texture.</b> If the test stopped here, it would be the launch.</p></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">Just-about-right results · first taste, n=120 each <span class="src real">Measured</span></p>
+      <div class="row k3" style="margin:0" id="jars"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s1);height:9px"></i>Too little (not sweet enough, too thin, too weak)</span><span><i class="sw" style="background:var(--jar);height:9px"></i>Just about right</span><span><i class="sw" style="background:var(--s2);height:9px"></i>Too much (too sweet, too thick, too strong)</span></div>
+      <p class="note">The two "too little" boxes and the two "too much" boxes are combined. A product is in good shape on an attribute when about 70% or more say just about right.</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Penalty analysis · what each miss costs <span class="src real">Measured</span></p>
+      <div class="seg" id="penseg"><button class="on" data-p="all">All three</button><button data-p="482">482</button><button data-p="317">317</button><button data-p="956">956</button></div>
+      <div class="chartwrap" id="pen"></div>
+      <p class="note">Each dot is one way a product misses: for example, "317 not sweet enough." Across: the share of households who said so. Up: how much lower their overall liking was than the households who said just about right. <b>Dots in the shaded corner are worth fixing</b>: at least 20% of people, and at least half a point of liking lost.</p></div>
+    <div class="card"><p class="ttl">Flagged misses <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Product, miss</th><th class="n">Share</th><th class="n">Liking</th><th class="n">Drop</th></tr></thead><tbody id="pentab"></tbody></table></div>
+      <p class="note">Liking is the overall mean among households in that group; the drop is against the just-about-right group for the same product and attribute. <b>482 too thin</b> is the largest single penalty in the study, and both new formulas fix it.</p>
+      <p class="note"><b>956 too sweet</b> is flagged even at first taste. One cup, 30% already say too sweet. Week by week shows what happens next.</p></div>
+  </div>
+</div>
+
+<!-- WEEK BY WEEK -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">After tasting, each household lived with <b>one product for four weeks</b>, 40 households per product. Every week they rated it and reported how many of their 8 cups they ate. <b>956 held for two weeks, then fell in week three</b>, on liking and on cups eaten at the same time. 317 went the other way. The videos say why.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">956 liking, week 2 to 3</p><p class="val" style="color:var(--crit)">−0.8</p><p class="sub">7.0 to 6.2, then 6.0 in week 4</p></div>
+    <div class="card kpi"><p class="lab">956 cups eaten, week 4</p><p class="val">2.9<small> of 8</small></p><p class="sub">down from 4.8 in week 1</p></div>
+    <div class="card kpi"><p class="lab">317 cups eaten, week 4</p><p class="val" style="color:var(--good)">4.7<small> of 8</small></p><p class="sub">up from 4.2 in week 1</p></div>
+    <div class="card kpi"><p class="lab">Videos recorded</p><p class="val">201</p><p class="sub">from 104 of 116 households</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Overall liking by week, 9-point <span class="src real">Measured</span></p><div class="chartwrap" id="wl"></div><div class="legend" id="lgw"></div></div>
+    <div class="card"><p class="ttl">Cups eaten per week, of 8 delivered <span class="src real">Measured</span></p><div class="chartwrap" id="wu"></div>
+      <p class="note">Counted from the leftover-cup photo at each check-in, not from memory.</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Videos by week · went right vs went wrong <span class="src real">Measured</span></p>
+      <div class="mult" id="vids"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--good);height:9px"></i>Went right</span><span><i class="sw" style="background:var(--crit);height:9px"></i>Went wrong</span></div>
+      <p class="note">956 "went wrong" videos jump from 7 in week 2 to 17 in week 3. Households were never asked about sweetness in the video prompt. They brought it up on their own.</p></div>
+    <div class="card pad"><p class="ttl">956 · what went wrong, weeks 3 and 4 <span class="src real">Measured</span></p>
+      <div id="whyw"></div>
+      <p class="note">31 videos, each coded to its main point.</p>
+      <p class="ttl" style="margin-top:16px">Sweetness, asked again at week 4 <span class="src real">Measured</span></p>
+      <div class="sr"><span class="sl"><span class="code c1">317</span></span><div><div class="stk" id="sw317a"></div><div class="stk" id="sw317b" style="margin-top:3px"></div></div></div>
+      <div class="sr"><span class="sl"><span class="code c2">956</span></span><div><div class="stk" id="sw956a"></div><div class="stk" id="sw956b" style="margin-top:3px"></div></div></div>
+      <p class="note">Top bar: day of tasting, same cell (n=40). Bottom bar: week 4 (n=39 and 38). <b>"Not sweet enough" for 317 halved on its own. "Too sweet" for 956 nearly doubled.</b></p></div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">Video diary clips <span class="src ill">Illustrative</span></p>
+      <div class="seg" id="vseg"><button class="on" data-p="all">All</button><button data-p="482">482</button><button data-p="317">317</button><button data-p="956">956</button></div>
+      <div class="vgrid" id="vq"></div>
+      <p class="note">Transcribed from phone videos, lightly trimmed. Household numbers are study IDs.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Weekly check-in table <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:560px"><thead><tr><th>Product</th><th class="n">Week 1</th><th class="n">Week 2</th><th class="n">Week 3</th><th class="n">Week 4</th><th class="n">Change</th></tr></thead><tbody id="wtab"></tbody></table></div>
+      <p class="note">Top line: overall liking. Second line: cups eaten of 8. Third line: households answering that week.</p></div>
+  </div>
+</div>
+
+<!-- READOUT -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">The readout answers the question Fernway asked: <b>which formula to launch, and what to fix first</b>. It puts the first-taste result next to the fourth-week result, because they point in different directions.</p>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p><p class="hbig">Launch 317,<br>after a vanilla lift</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">317 was second at first taste and first by week four: liking rose from 6.9 to 7.3, households ate more of it each week, and 59% would probably or definitely buy it. 956 won the first spoonful, then lost 40% of its servings by week four once the sweetness wore thin. Do not launch the first-taste winner. Fix 317's light vanilla, keep the sugar where it is, and confirm in a short follow-up test.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Scorecard <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:600px"><thead><tr><th>Measure</th><th class="n"><span class="code c0">482</span> current</th><th class="n"><span class="code c1">317</span> thicker</th><th class="n"><span class="code c2">956</span> sweeter</th></tr></thead><tbody>
+        <tr><td>Overall liking, first taste (n=120)</td><td class="n">6.4</td><td class="n">6.9</td><td class="n best">7.2</td></tr>
+        <tr><td>Preferred after tasting all three</td><td class="n">20%</td><td class="n">35%</td><td class="n best">45%</td></tr>
+        <tr><td>Overall liking, week 4</td><td class="n">6.2</td><td class="n best">7.3</td><td class="n worst">6.0</td></tr>
+        <tr><td>Cups eaten of 8, week 4</td><td class="n">3.6</td><td class="n best">4.7</td><td class="n worst">2.9</td></tr>
+        <tr><td>Would probably or definitely buy, week 4</td><td class="n">38%</td><td class="n best">59%</td><td class="n worst">34%</td></tr>
+        <tr><td>Households finishing (of 40)</td><td class="n">39</td><td class="n">39</td><td class="n">38</td></tr>
+        <tr><td>Flagged just-about-right misses</td><td>Too thin, vanilla weak</td><td>Not sweet enough, vanilla weak</td><td>Too sweet</td></tr>
+      </tbody></table></div>
+      <p class="note">Purchase intent: 15 of 39, 23 of 39 and 13 of 38 households. The week-4 gap between 317 and 956 on liking and cups eaten is significant at 95% confidence.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What to fix, in order</p>
+      <div class="fix"><span class="num">1</span><div><b>Raise the vanilla in 317</b><span>23% said the vanilla was too weak, and they liked it 0.8 points less. Videos say the same: "plain on its own." This is the cheapest fix with the clearest payoff.</span></div><span class="sev c">Fix</span></div>
+      <div class="fix"><span class="num">2</span><div><b>Do not answer "not sweet enough" with sugar</b><span>25% said 317 was not sweet enough at first taste, but that fell to 13% by week four as people got used to it. 956 shows where added sugar leads. A stronger vanilla usually reads as sweeter without the wear-out.</span></div><span class="sev w">Hold</span></div>
+      <div class="fix"><span class="num">3</span><div><b>Keep the 317 thickness</b><span>77% just about right. The current product's thinness was the largest penalty in the study, so this is the main reason 317 beats what is on shelf today.</span></div><span class="sev g">Keep</span></div>
+      <div class="fix"><span class="num">4</span><div><b>Look at the lid</b><span>4 of 317's 20 "went wrong" videos were a foil lid that tore while peeling. Small, but it is the first thing a buyer touches.</span></div><span class="sev q">Check</span></div></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">What 956 is still good for</p>
+        <p class="small">956 had the best flavor liking at first taste and the most "went right" videos in week 1, many from children. Households called it dessert. That points to an occasion, not a replacement: a smaller cup positioned after dinner may be worth a separate concept test.</p></div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Next step</p>
+        <ul class="lst"><li>317 vs 317 with vanilla lift<span>sequential monadic</span></li><li>80 households, two weeks each<span>same screener</span></li><li>Pass mark: vanilla too weak under 15%<span>no loss in liking</span></li></ul></div>
+      <div class="card pad"><p class="ttl">Where this test could mislead</p>
+        <ul class="chk">
+          <li><b>40 households per product</b> is enough to see a drop this size, not enough to split by region or by children in the home.</li>
+          <li><b>Four weeks is not a year.</b> 317 was still rising at week 4; we do not know where it levels off.</li>
+          <li><b>People knew they were in a test.</b> Cups eaten is a better guide than stated intent, and both point the same way here.</li>
+        </ul></div>
+    </div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. A live version is built on your products, your buyers and your own decision.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const P={"482":{c:"var(--p0)",k:"c0"},"317":{c:"var(--p1)",k:"c1"},"956":{c:"var(--p2)",k:"c2"}};
+const ORD=["482","317","956"];
+const code=p=>`<span class="code ${P[p].k}">${p}</span>`;
+
+/* design */
+document.getElementById("funnel").innerHTML=[["Screened",1480],["Qualified",212],["Placed",120],["Finished tasting",120],["Finished 4 weeks",116]].map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/1480*100,3)}%;background:${i<2?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1].toLocaleString()}</span></div>`).join("");
+const orders=[["482","317","956"],["482","956","317"],["317","482","956"],["317","956","482"],["956","482","317"],["956","317","482"]];
+document.getElementById("rot").innerHTML=orders.map((o,i)=>`<tr><td class="mono">${i+1}</td>${o.map(p=>`<td>${code(p)}</td>`).join("")}<td class="n">20</td></tr>`).join("");
+
+/* ballot scales */
+const pre={q1:7,q2:6,q3:8,q4:2,q5:3,q6:2};
+document.querySelectorAll(".sc").forEach(d=>{const n=d.dataset.n;
+  if(d.dataset.k){d.innerHTML=Array.from({length:9},(_,i)=>`<label><input type="radio" name="${n}" value="${i+1}"${pre[n]===i+1?" checked":""} aria-label="${i+1}">${i+1}</label>`).join("")}
+  else{d.innerHTML=d.dataset.l.split("|").map((t,i)=>`<label class="${i===2?"mid":""}"><input type="radio" name="${n}" value="${i+1}"${pre[n]===i+1?" checked":""}>${t}</label>`).join("")}});
+
+/* stacked helper */
+function stk(segs){return segs.map(s=>`<i class="${s.lt?"lt":""}" style="width:${s.v}%;background:${s.c}" title="${s.t||""}${s.v}%">${s.v>=9?s.v+"%":""}</i>`).join("")}
+const olk={"482":[13,13,46,28],"317":[8,9,43,40],"956":[6,7,39,48]};
+document.getElementById("olk").innerHTML=ORD.map(p=>{const v=olk[p];return `<div class="sr"><span class="sl">${code(p)}</span><div class="stk">${stk([{v:v[0],c:"var(--crit)"},{v:v[1],c:"var(--ink-3)"},{v:v[2],c:"var(--lk1)",lt:1},{v:v[3],c:"var(--lk2)"}])}</div></div>`}).join("");
+
+/* JAR data: counts of 120 [low, jar, high], liking means [low, jar, high] */
+const J={
+ "Sweetness":{lo:"not sweet enough",hi:"too sweet",d:{"482":[[18,84,18],[6.2,6.6,6.1]],"317":[[30,84,6],[6.1,7.2,6.8]],"956":[[4,80,36],[7.2,7.5,6.6]]}},
+ "Thickness":{lo:"too thin",hi:"too thick",d:{"482":[[42,66,12],[5.6,6.9,6.5]],"317":[[10,92,18],[6.4,7.0,6.7]],"956":[[22,90,8],[6.7,7.4,7.2]]}},
+ "Vanilla flavor":{lo:"vanilla too weak",hi:"vanilla too strong",d:{"482":[[30,80,10],[5.9,6.6,6.3]],"317":[[28,86,6],[6.3,7.1,6.9]],"956":[[8,94,18],[6.9,7.3,6.8]]}}};
+const pct=c=>{const r=c.map(x=>Math.round(x/1.2));return r};
+document.getElementById("jars").innerHTML=Object.keys(J).map(a=>`<div class="jgrp"><h4>${a}</h4>${ORD.map(p=>{const r=pct(J[a].d[p][0]);return `<div class="sr"><span class="sl">${code(p)}</span><div class="stk">${stk([{v:r[0],c:"var(--s1)"},{v:r[1],c:"var(--jar)",lt:1},{v:r[2],c:"var(--s2)"}])}</div></div>`}).join("")}</div>`).join("");
+
+/* penalty points */
+const pts=[];
+for(const a in J)for(const p in J[a].d){const [c,m]=J[a].d[p];
+  pts.push({p,a,side:J[a].lo,share:c[0]/1.2,n:c[0],mean:m[0],drop:+(m[1]-m[0]).toFixed(1)});
+  pts.push({p,a,side:J[a].hi,share:c[2]/1.2,n:c[2],mean:m[2],drop:+(m[1]-m[2]).toFixed(1)});}
+const flagged=pts.filter(x=>x.share>=20&&x.drop>=0.5).sort((x,y)=>y.drop*y.share-x.drop*x.share);
+document.getElementById("pentab").innerHTML=flagged.map(x=>`<tr><td>${code(x.p)} ${x.side}</td><td class="n">${Math.round(x.share)}%</td><td class="n">${x.mean.toFixed(1)}</td><td class="n dn">−${x.drop.toFixed(1)}</td></tr>`).join("")+
+  `<tr><td style="color:var(--ink-3)">${code("956")} too thin <small>near miss</small></td><td class="n" style="color:var(--ink-3)">18%</td><td class="n" style="color:var(--ink-3)">6.7</td><td class="n" style="color:var(--ink-3)">−0.7</td></tr>`;
+function pen(sel){const d=document.getElementById("pen");d.innerHTML="";
+  const w=420,h=300,L=50,R=12,T=14,B=36,s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":"Penalty analysis scatter"},d);
+  const X=v=>L+v/40*(w-L-R),Y=v=>T+(1-v/1.5)*(h-T-B);
+  el("rect",{x:X(20),y:Y(1.5),width:X(40)-X(20),height:Y(0.5)-Y(1.5),fill:"var(--crit-bg)"},s);
+  el("text",{x:X(39),y:Y(1.5)+14,"text-anchor":"end",class:"zone",fill:"var(--crit)"},s).textContent="Fix first";
+  [0,0.5,1,1.5].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-6,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v.toFixed(1)});
+  [0,10,20,30,40].forEach(v=>{el("text",{x:X(v),y:h-B+15,"text-anchor":"middle",class:"ax"},s).textContent=v+"%"});
+  el("line",{x1:X(20),x2:X(20),y1:T,y2:h-B,stroke:"var(--crit)","stroke-dasharray":"3 3","stroke-width":1},s);
+  el("line",{x1:L,x2:w-R,y1:Y(0.5),y2:Y(0.5),stroke:"var(--crit)","stroke-dasharray":"3 3","stroke-width":1},s);
+  el("text",{x:(L+w-R)/2,y:h-4,"text-anchor":"middle",class:"ax"},s).textContent="share of households off target";
+  const yl=el("text",{x:12,y:(T+h-B)/2,"text-anchor":"middle",class:"ax",transform:`rotate(-90 12 ${(T+h-B)/2})`},s);yl.textContent="liking points lost";
+  pts.forEach(x=>{const on=sel==="all"||sel===x.p;const g=el("g",{opacity:on?1:.12},s);
+    const c=el("circle",{cx:X(x.share),cy:Y(x.drop),r:on&&sel!=="all"?7:6,fill:P[x.p].c,stroke:"var(--panel)","stroke-width":1.5},g);
+    el("title",{},c).textContent=`${x.p} ${x.side}: ${Math.round(x.share)}% of households, ${x.drop.toFixed(1)} points lower`;
+    const fl=x.share>=20&&x.drop>=0.5;
+    if(on&&(fl||sel!=="all")){const lab=el("text",{x:X(x.share)+(x.share>31?-9:9),y:Y(x.drop)+4,"text-anchor":x.share>31?"end":"start",class:"ptlab"},g);lab.textContent=`${x.p} ${x.side}`;}
+  });}
+pen("all");
+document.querySelectorAll("#penseg button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#penseg button").forEach(x=>x.classList.toggle("on",x===b));pen(b.dataset.p)}));
+
+/* week by week */
+const W={"482":{l:[6.4,6.3,6.3,6.2],u:[3.9,3.8,3.7,3.6],n:[40,40,39,39]},"317":{l:[6.9,7.0,7.2,7.3],u:[4.2,4.4,4.6,4.7],n:[40,40,40,39]},"956":{l:[7.2,7.0,6.2,6.0],u:[4.8,4.5,3.2,2.9],n:[40,39,39,38]}};
+function wline(id,key,mn,mx,step,ann){const d=document.getElementById(id);const w=380,h=220,L=32,R=44,T=16,B=26,s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img"},d);
+  const X=i=>L+14+i*(w-L-R-28)/3,Y=v=>T+(1-(v-mn)/(mx-mn))*(h-T-B);
+  el("rect",{x:X(1.5),y:T,width:X(3)-X(1.5)+14,height:h-T-B,fill:"var(--band)"},s);
+  for(let v=mn;v<=mx+1e-9;v+=step){el("line",{x1:L,x2:w-R+10,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-5,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v.toFixed(1)}
+  ["Wk 1","Wk 2","Wk 3","Wk 4"].forEach((t,i)=>el("text",{x:X(i),y:h-8,"text-anchor":"middle",class:"ax"},s).textContent=t);
+  ["482","317","956"].forEach(p=>{const v=W[p][key],c=P[p].c;
+    el("polyline",{points:v.map((x,i)=>`${X(i)},${Y(x)}`).join(" "),fill:"none",stroke:c,"stroke-width":p==="482"?1.8:2.6},s);
+    v.forEach((x,i)=>{const ci=el("circle",{cx:X(i),cy:Y(x),r:3.5,fill:c,stroke:"var(--panel)","stroke-width":1.2},s);el("title",{},ci).textContent=`${p} week ${i+1}: ${x.toFixed(1)}`});
+    el("text",{x:X(3)+8,y:Y(v[3])+4,class:"dl",fill:c},s).textContent=v[3].toFixed(1)+" "+p;});
+  if(ann){el("text",{x:X(2)-6,y:T+10,"text-anchor":"end",class:"dl",fill:"var(--p2)"},s).textContent=ann;}}
+wline("wl","l",5.5,7.5,0.5,"956 drops in week 3");
+wline("wu","u",2.5,5.0,0.5,"956: 4.5 to 3.2 cups");
+document.getElementById("lgw").innerHTML=["482","317","956"].map(p=>`<span><i class="sw" style="background:${P[p].c}"></i>${p}${p==="482"?" current":p==="317"?" thicker":" sweeter"}</span>`).join("")+`<span><i class="sw" style="background:var(--band);height:10px;border:1px solid var(--rule-2)"></i>weeks 3 and 4</span>`;
+document.getElementById("wtab").innerHTML=["482","317","956"].map(p=>{const x=W[p];const dl=(x.l[3]-x.l[0]).toFixed(1),du=(x.u[3]-x.u[0]).toFixed(1);const f=v=>v>0?"+"+v:v.replace("-","−");
+  return `<tr><td rowspan="3">${code(p)}</td>${x.l.map((v,i)=>`<td class="n${p==="956"&&i>=2?" dn":""}">${v.toFixed(1)}</td>`).join("")}<td class="n ${dl<0?"dn":"up"}">${f(dl)}</td></tr>
+  <tr>${x.u.map((v,i)=>`<td class="n${p==="956"&&i>=2?" dn":""}" style="color:var(--ink-2)">${v.toFixed(1)}</td>`).join("")}<td class="n ${du<0?"dn":"up"}">${f(du)}</td></tr>
+  <tr>${x.n.map(v=>`<td class="n" style="color:var(--ink-3);font-size:11px">n=${v}</td>`).join("")}<td></td></tr>`}).join("");
+
+const V={"482":[[9,7],[6,6],[5,6],[4,5]],"317":[[12,8],[13,5],[14,4],[12,3]],"956":[[18,4],[12,7],[6,17],[4,14]]};
+document.getElementById("vids").innerHTML=ORD.map(p=>{const tot=V[p].reduce((a,b)=>a+b[0]+b[1],0);
+  return `<div><h4>${code(p)} <span style="font-weight:500;color:var(--ink-3);font-size:11px">${tot} videos</span></h4>${V[p].map((v,i)=>`<div class="hb" style="grid-template-columns:38px 1fr 44px"><span class="hbl mono" style="font-size:10.5px">Wk ${i+1}</span><span class="hbt" style="display:flex;background:transparent;gap:2px"><i style="position:static;width:${v[0]/24*100}%;background:var(--good)"></i><i style="position:static;width:${v[1]/24*100}%;background:var(--crit)"></i></span><span class="hbv mono">${v[0]} / ${v[1]}</span></div>`).join("")}</div>`}).join("");
+document.getElementById("whyw").innerHTML=[["Too sweet for every day",14],["Tastes like dessert, not breakfast",8],["Sweet aftertaste lingers",5],["Liquid separating on top",4]].map(r=>`<div class="hb"><span class="hbl" title="${r[0]}">${r[0]}</span><span class="hbt"><i style="width:${r[1]/16*100}%;background:var(--p2)"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+const sw=(id,a)=>document.getElementById(id).innerHTML=stk([{v:a[0],c:"var(--s1)"},{v:a[1],c:"var(--jar)",lt:1},{v:a[2],c:"var(--s2)"}]);
+sw("sw317a",[25,70,5]);sw("sw317b",[13,82,5]);sw("sw956a",[0,70,30]);sw("sw956b",[3,42,55]);
+
+const Q=[
+ ["956",1,"r","073","0:22","Okay, this one is really good. My daughter asked if there was more."],
+ ["317",1,"w","019","0:35","Thicker than what we usually buy. Took me a few spoonfuls to decide I liked it."],
+ ["482",2,"w","102","0:21","Runny again. It slides right off the spoon."],
+ ["956",2,"r","029","0:31","Still liking it. I have been eating it straight out of the cup, no toppings."],
+ ["317",2,"w","064","0:24","Wish it had a little more vanilla. Kind of plain on its own, great with berries."],
+ ["956",3,"w","041","0:38","Third week and it is just too sweet for seven in the morning. I skipped it twice and had toast."],
+ ["956",3,"w","088","0:19","It tastes like dessert. I would eat it after dinner, not with my granola."],
+ ["317",3,"r","057","0:16","Finished all eight before the next box came. That has never happened."],
+ ["482",3,"r","110","0:18","Good with the granola. It is what we are used to."],
+ ["956",4,"w","112","0:44","I started mixing in plain yogurt to cut the sweetness. Kind of defeats the point."],
+ ["956",4,"w","095","0:27","Opened one and there was liquid sitting on top. Stirred it back in, but still."],
+ ["317",4,"r","033","0:29","It holds up in the smoothie. The one we usually buy goes watery."]];
+function vq(sel){document.getElementById("vq").innerHTML=Q.filter(q=>sel==="all"||q[0]===sel).map(q=>`<div class="vq"><div class="vh"><span class="play" aria-hidden="true"></span>${code(q[0])}<span>HH ${q[3]} · Week ${q[1]}</span><span class="vr ${q[2]}">${q[2]==="r"?"Went right":"Went wrong"}</span><span class="dur">${q[4]}</span></div><q>${q[5]}</q></div>`).join("")}
+vq("all");
+document.querySelectorAll("#vseg button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#vseg button").forEach(x=>x.classList.toggle("on",x===b));vq(b.dataset.p)}));
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>
