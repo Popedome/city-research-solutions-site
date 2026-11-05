@@ -1,0 +1,10 @@
+# This repo is the record of a byte-for-byte direct-upload deploy to Cloudflare
+# Pages. Git must never translate line endings: a checkout has to reproduce the
+# bytes that were uploaded, on any platform.
+#
+# Before this file existed, core.autocrlf=true meant a fresh clone differed from
+# the deployed tree on 46 of 88 files (line endings only, no content change),
+# which makes the repo useless as a byte-level deploy source.
+#
+# -text disables all end-of-line conversion and overrides core.autocrlf.
+* -text
