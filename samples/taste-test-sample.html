@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Taste and Sensory Test Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* movers */
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* shared sample components */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.code{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:11px;padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
+.code.c0{background:var(--p0)}.code.c1{background:var(--p1)}.code.c2{background:var(--p2)}
+.prodrow{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px}
+@media(max-width:1000px){.prodrow{grid-template-columns:1fr}}
+.prod{border-top:4px solid var(--pc)}
+.prod h3{font-size:15px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
+.funnel{display:grid;gap:6px}
+.fn{display:grid;grid-template-columns:minmax(96px,34%) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.fn .hbt{height:18px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* ballot */
+.ballot{background:var(--panel);border:1px solid var(--rule-2);border-radius:6px;overflow:hidden}
+.bhd{background:var(--hero);color:#f3f4f0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bhd b{font-size:14px}
+.bhd span{font-family:"JetBrains Mono",monospace;font-size:11px;opacity:.85}
+.bq{padding:13px 16px;border-bottom:1px solid var(--rule)}
+.bq:last-child{border-bottom:none}
+.bq p{margin:0 0 9px;font-size:13px;font-weight:600}
+.bq p small{font-weight:500;color:var(--ink-3);font-size:11px;margin-left:4px}
+.sc{display:grid;gap:4px}
+.sc9{grid-template-columns:repeat(9,minmax(0,1fr))}
+.sc5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sc label{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:10.5px;color:var(--ink-3);text-align:center;line-height:1.2}
+.sc input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule-2);background:var(--panel);margin:0;cursor:pointer}
+.sc input:checked{border-color:var(--s1);background:radial-gradient(circle,var(--s1) 0 45%,var(--panel) 50%)}
+.sc input:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.sc5 input{border-radius:4px}
+.sc5 input:checked{background:var(--s1)}
+.sc label.mid{color:var(--ink-2);font-weight:600}
+.ends{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-3);margin-top:5px;gap:10px}
+.oe{border:1px dashed var(--rule-2);border-radius:4px;height:42px;font-size:11px;color:var(--ink-3);padding:6px 8px;font-family:"Source Serif 4",serif;font-style:italic}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.flag{background:var(--crit-bg)!important}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.ptlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+.zone{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+/* week by week */
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.mult{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.mult{grid-template-columns:1fr}}
+.mult h4{font-size:12px;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+/* readout */
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+.sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:3px;white-space:nowrap}
+
+/* taste test */
+#pen svg{max-width:560px;margin:0 auto}
+#radar svg{max-width:520px;margin:0 auto}
+.rlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+@media(max-width:560px){#pen .ax,#radar .ax{font-size:13px}#pen .ptlab,.rlab{font-size:13px}#pen .zone{font-size:13px}}
+.ptlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+.zone{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.oec{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:800px){.oec{grid-template-columns:1fr}}
+.oec h4{font-size:12px;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+.oec .hb{grid-template-columns:minmax(120px,56%) 1fr auto}
+.oec .hbl{white-space:normal}
+.prefrow{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:10px;align-items:center;margin:8px 0}
+.prefrow .pl{font-size:12px;color:var(--ink-2);line-height:1.3}
+.prefrow .pl small{display:block;color:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.prefrow .stk{height:24px}
+td.sd{color:var(--good);font-weight:700}
+td.sdn{color:var(--crit);font-weight:700}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, product, taster and number on this page is made up to show what a taste and sensory test readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Northvale Taste Test</b><span>Sample · Kettle chips</span></div>
+    <div class="period">Sea salt kettle chips · 3 recipes · 150 tasters · central location<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Design</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Ballot and liking</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1a8f65">Attribute profile</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#d0602b">Penalty and preference</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">Readout</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DESIGN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Northvale wants to cut the sodium in its best-selling sea salt kettle chip by about 30% without losing the people who buy it. The developers made two lower-sodium recipes. A <b>central location taste test</b> brings 150 kettle chip buyers to a focus facility, where each person tastes all three chips <b>blind</b>, one at a time, in a <b>rotated order</b> (sequential monadic). The question: can a lower-sodium chip hold its own against the one on shelf today?</p>
+
+  <div class="prodrow">
+    <div class="card pad prod" style="--pc:var(--p0)"><p class="ttl">Control <span class="code c0">241</span></p><h3>Current sea salt</h3><p class="small">170 mg sodium per 1 oz serving. Coarse sea salt tumbled on after frying. Included so both new recipes are judged against the chip buyers already know.</p></div>
+    <div class="card pad prod" style="--pc:var(--p2)"><p class="ttl">Recipe A <span class="code c2">638</span></p><h3>Less salt, same process</h3><p class="small">120 mg sodium. Same potatoes, slice and cook as today, with about 30% less of the same salt.</p></div>
+    <div class="card pad prod" style="--pc:var(--p1)"><p class="ttl">Recipe B <span class="code c1">815</span></p><h3>Less salt, finer flake</h3><p class="small">120 mg sodium. A finer salt flake applied while the chips are still hot, so more of it sits on the surface, plus a slightly longer cook.</p></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+      <div class="funnel" id="funnel"></div>
+      <p class="note">150 of 152 people who arrived completed all three ballots. One left early and one failed the attention check.</p></div>
+    <div class="card pad"><p class="ttl">Screener criteria</p>
+      <ul class="chk">
+        <li><b>Ages 18 to 64</b>, buys snacks for the household</li>
+        <li><b>Bought kettle chips</b> in the past two weeks, eats them at least weekly</li>
+        <li><b>Quota:</b> 75 current Northvale buyers, 75 buyers of other kettle brands</li>
+        <li><b>Quota:</b> half under 40, half 40 and older</li>
+        <li><b>Asked not to eat, smoke or drink coffee</b> for 30 minutes before arriving</li>
+        <li class="x">Out: food allergies or a sodium-restricted diet</li>
+        <li class="x">Out: works in food, advertising or market research</li>
+        <li class="x">Out: any taste test in the past three months</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Serving order</p>
+      <p class="small" style="margin-bottom:10px">Six orders, 25 tasters each, so every chip is tasted first, second and third equally often. Orders are assigned by booth and session.</p>
+      <div class="scroll"><table><thead><tr><th>Order</th><th>1st</th><th>2nd</th><th>3rd</th><th class="n">Tasters</th></tr></thead><tbody id="rot"></tbody></table></div></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">One 40-minute session</p>
+      <div class="tl">
+        <div class="tli"><span class="wk">0:00<small>arrive</small></span><div><b>Check-in</b><span>ID check, two screener questions asked again, consent. Each person sits in a private booth with a tablet.</span></div></div>
+        <div class="tli"><span class="wk">0:05<small>practice</small></span><div><b>Warm-up</b><span>A practice question and the routine: taste, rate, rinse, wait.</span></div></div>
+        <div class="tli"><span class="wk">0:08<small>taste</small></span><div><b>First chip</b><span>Eight chips in a cup marked only with a three-digit code. Ballot on the tablet before the next cup arrives.</span><div class="tbar"><i>ballot</i><i>about 4 min</i></div></div></div>
+        <div class="tli"><span class="wk">0:13<small>reset</small></span><div><b>Rinse and wait</b><span>Water and an unsalted cracker, then two minutes, so salt from one chip does not carry into the next.</span></div></div>
+        <div class="tli"><span class="wk">0:15<small>taste</small></span><div><b>Second and third chips</b><span>Same routine for each, with a rinse and wait between them.</span><div class="tbar"><i>2 ballots</i><i>rinse</i></div></div></div>
+        <div class="tli"><span class="wk">0:29<small>choose</small></span><div><b>Preference and appearance</b><span>Pick a favorite. Then all three chips are shown side by side under white light and rated on appearance.</span></div></div>
+        <div class="tli"><span class="wk">0:35<small>close</small></span><div><b>Wrap-up</b><span>A few background questions, thank-you and incentive.</span></div></div>
+      </div></div>
+    <div class="card pad"><p class="ttl">Kitchen and booth controls</p>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="10" height="10" rx="2"/><path d="M6 8h4"/></svg></span><div><b>Same portion every time</b><span>Eight whole chips per cup. Broken and folded chips are removed in the kitchen.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg></span><div><b>Bag to booth in 20 minutes</b><span>Bags are opened in small batches and logged, because an open bag loses crunch.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v3M8 11v3M2 8h3M11 8h3"/><circle cx="8" cy="8" r="2.5"/></svg></span><div><b>Amber booth lighting</b><span>Recipe B cooks slightly darker. Under amber light, color cannot cue anyone during tasting. Appearance is rated separately at the end, in white light.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="12" height="8" rx="1.5"/><path d="M5 8h1M8 8h1M11 8h1"/></svg></span><div><b>Random three-digit codes</b><span>Letters like A, B, C suggest a ranking. Random codes do not.</span></div></div>
+      <p class="note"><b>A separate trained panel:</b> ten tasters trained on reference samples rated the intensity of eight attributes in each chip, three times each. Their profile is on the Attribute profile tab.</p></div>
+  </div>
+</div>
+
+<!-- BALLOT -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">This is the <b>ballot each taster answered after each chip</b>, on a tablet in the booth. Liking uses the standard <b>9-point scale</b>. Saltiness, crunch and toasted flavor use <b>just-about-right scales</b>: the middle box is the target, and the two sides show which way a recipe misses.</p>
+
+  <div class="row k2">
+    <div class="ballot" aria-label="Sample ballot">
+      <div class="bhd"><b>Tasting ballot</b><span>Cup code 815 · Chip 2 of 3</span></div>
+      <div class="bq"><p>1. Overall, how much do you like or dislike this chip?</p><div class="sc sc9" data-n="q1" data-k="9"></div><div class="ends"><span>1 Dislike extremely</span><span>5 Neither</span><span>9 Like extremely</span></div></div>
+      <div class="bq"><p>2. How much do you like or dislike the flavor?</p><div class="sc sc9" data-n="q2" data-k="9"></div><div class="ends"><span>Dislike extremely</span><span>Like extremely</span></div></div>
+      <div class="bq"><p>3. How much do you like or dislike the saltiness?</p><div class="sc sc9" data-n="q3" data-k="9"></div><div class="ends"><span>Dislike extremely</span><span>Like extremely</span></div></div>
+      <div class="bq"><p>4. How much do you like or dislike the texture?</p><div class="sc sc9" data-n="q4" data-k="9"></div><div class="ends"><span>Dislike extremely</span><span>Like extremely</span></div></div>
+      <div class="bq"><p>5. How would you describe the saltiness? <small>just about right</small></p><div class="sc sc5" data-n="q5" data-l="Not nearly salty enough|Not salty enough|Just about right|Too salty|Much too salty"></div></div>
+      <div class="bq"><p>6. How would you describe the crunch? <small>just about right</small></p><div class="sc sc5" data-n="q6" data-l="Not nearly crunchy enough|Not crunchy enough|Just about right|Too hard|Much too hard"></div></div>
+      <div class="bq"><p>7. How would you describe the toasted, browned flavor? <small>just about right</small></p><div class="sc sc5" data-n="q7" data-l="Much too mild|Too mild|Just about right|Too toasted|Much too toasted"></div></div>
+      <div class="bq"><p>8. What, if anything, did you like or dislike about this chip?</p><div class="oe">Open answer, typed</div></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:13px"><p class="ttl">Liking means · n=150 each <span class="src real">Measured</span></p>
+        <div class="scroll"><table><thead><tr><th>9-point scale</th><th class="n"><span class="code c0">241</span></th><th class="n"><span class="code c2">638</span></th><th class="n"><span class="code c1">815</span></th></tr></thead><tbody>
+          <tr><td>Overall liking</td><td class="n">7.1<span class="sig">b</span></td><td class="n">6.4</td><td class="n">7.0<span class="sig">b</span></td></tr>
+          <tr><td>Flavor liking</td><td class="n">7.0<span class="sig">b</span></td><td class="n">6.2</td><td class="n">6.9<span class="sig">b</span></td></tr>
+          <tr><td>Saltiness liking</td><td class="n">7.2<span class="sig">bc</span></td><td class="n">5.9</td><td class="n">6.8<span class="sig">b</span></td></tr>
+          <tr><td>Texture liking</td><td class="n">7.0</td><td class="n">7.0</td><td class="n">7.4<span class="sig">ab</span></td></tr>
+          <tr><td>Appearance, white light</td><td class="n">7.3<span class="sig">c</span></td><td class="n">7.2<span class="sig">c</span></td><td class="n">6.7</td></tr>
+          <tr><td>Top two box, overall (8 or 9)</td><td class="n">42%</td><td class="n">25%</td><td class="n">40%</td></tr>
+          <tr><td>Preferred after all three</td><td class="n">44%</td><td class="n">16%</td><td class="n">40%</td></tr>
+        </tbody></table></div>
+        <p class="note">Letters mark a mean significantly higher than that chip at 95% confidence: a = 241, b = 638, c = 815. Preference: 66, 24 and 60 of 150 tasters.</p></div>
+      <div class="card"><p class="ttl">Overall liking, full scale <span class="src real">Measured</span></p>
+        <div id="olk"></div>
+        <div class="legend"><span><i class="sw" style="background:var(--crit);height:9px"></i>Dislike (1 to 4)</span><span><i class="sw" style="background:var(--ink-3);height:9px"></i>Neither (5)</span><span><i class="sw" style="background:var(--lk1);height:9px"></i>Like (6, 7)</span><span><i class="sw" style="background:var(--lk2);height:9px"></i>Like very much or more (8, 9)</span></div>
+        <p class="note"><b>241 and 815 are at parity on overall liking.</b> The 0.1 gap is not significant. 638 trails both on everything tied to salt.</p></div>
+    </div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Just-about-right results · n=150 each <span class="src real">Measured</span></p>
+      <div class="row k3" style="margin:0" id="jars"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s1);height:9px"></i>Too little (not salty, not crunchy, too mild)</span><span><i class="sw" style="background:var(--jar);height:9px"></i>Just about right</span><span><i class="sw" style="background:var(--s2);height:9px"></i>Too much (too salty, too hard, too toasted)</span></div>
+      <p class="note">The two boxes on each side are combined. A chip is in good shape on an attribute when about 70% or more say just about right.</p></div>
+    <div class="card"><p class="ttl">Overall liking by serving position <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Chip</th><th class="n">Tasted 1st</th><th class="n">2nd</th><th class="n">3rd</th></tr></thead><tbody id="pos"></tbody></table></div>
+      <p class="note">n=50 per cell. <b>Every chip scored about 0.3 higher when tasted first.</b> Rotation spreads that lift evenly across the three recipes, which is why each one has to appear in every position.</p></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">Alongside the consumer test, <b>ten tasters trained on reference samples</b> rated how strong each attribute is in each chip, on a 0 to 15 scale, three times each. Consumers say what they like. The profile tells the developer <b>what is physically different</b>, so a fix can be aimed at the right attribute.</p>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Attribute profile, mean intensity 0 to 15 <span class="src real">Measured</span></p>
+      <div class="seg" id="rseg"><button class="on" data-p="all">All three</button><button data-p="241">241</button><button data-p="638">638</button><button data-p="815">815</button></div>
+      <div class="chartwrap" id="radar"></div>
+      <div class="legend" id="rleg"></div></div>
+    <div class="card pad"><p class="ttl">Tying the panel to the consumers</p>
+      <div class="fix"><span class="num">1</span><div><b>815 kept the first-bite salt</b><span>8.6 against 9.2 for the current chip, a gap smaller than the 0.8 the panel can reliably detect, with 29% less sodium. The hot-applied flake puts salt where the tongue meets it first.</span></div><span class="sev g">Win</span></div>
+      <div class="fix"><span class="num">2</span><div><b>638 lost a third of its salt impact</b><span>6.1 against 9.2. That is the 42% of consumers who said "not salty enough."</span></div><span class="sev c">Miss</span></div>
+      <div class="fix"><span class="num">3</span><div><b>815's longer cook shows up</b><span>Toasted flavor rose from 5.0 to 6.9. That is the 24% who said "too toasted."</span></div><span class="sev w">Fix</span></div>
+      <div class="fix"><span class="num">4</span><div><b>815 is crunchier</b><span>11.6 against 10.4. Consumers noticed: texture liking 7.4 and the fewest "not crunchy enough" answers.</span></div><span class="sev g">Win</span></div></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Intensity table <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:560px"><thead><tr><th>Attribute</th><th class="n"><span class="code c0">241</span></th><th class="n"><span class="code c2">638</span></th><th class="n">vs 241</th><th class="n"><span class="code c1">815</span></th><th class="n">vs 241</th></tr></thead><tbody id="ptab"></tbody></table></div>
+      <p class="note">Differences of 0.8 or more are significant at 95% confidence and shown in color. Ten panelists, three replicates, samples served blind in rotated order.</p></div>
+  </div>
+</div>
+
+<!-- PENALTY AND PREFERENCE -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro"><b>Penalty analysis</b> asks how much each just-about-right miss costs in overall liking. <b>Preference</b> shows which chip people picked after tasting all three, in total and by the brand they buy today.</p>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Penalty analysis · what each miss costs <span class="src real">Measured</span></p>
+      <div class="seg" id="penseg"><button class="on" data-p="all">All three</button><button data-p="241">241</button><button data-p="638">638</button><button data-p="815">815</button></div>
+      <div class="chartwrap" id="pen"></div>
+      <p class="note">Each dot is one way a chip misses, such as "638 not salty enough." Across: the share of tasters who said so. Up: how much lower their overall liking was than tasters who said just about right. <b>Dots in the shaded corner are worth fixing</b>: at least 20% of people and at least half a point of liking lost.</p></div>
+    <div class="card"><p class="ttl">Flagged misses <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th>Chip, miss</th><th class="n">Share</th><th class="n">Liking</th><th class="n">Drop</th></tr></thead><tbody id="pentab"></tbody></table></div>
+      <p class="note"><b>638 not salty enough</b> is the largest penalty in the study by far: 42% of tasters, 1.7 points.</p>
+      <p class="note"><b>241 not crunchy enough</b> is a miss in the current chip that nobody asked about. 815 fixes it.</p>
+      <p class="note">Gray rows are near misses, just under the 20% line. Watch them in the next round.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Preferred after tasting all three <span class="src real">Measured</span></p>
+      <div id="pref"></div>
+      <div class="legend" id="pleg"></div>
+      <p class="note"><b>Current Northvale buyers still lean to 241</b>, 51% to 36%. <b>Buyers of other kettle brands lean to 815</b>, 44% to 37%. Neither 241 nor 815 leads significantly in total.</p></div>
+    <div class="card pad"><p class="ttl">What tasters wrote, coded <span class="src real">Measured</span></p>
+      <div class="oec" id="oec"></div>
+      <p class="note">Top three unprompted themes per chip, share of all 150 tasters. People could mention more than one.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">In their words <span class="src ill">Illustrative</span></p>
+      <div class="seg" id="qseg"><button class="on" data-p="all">All</button><button data-p="241">241</button><button data-p="638">638</button><button data-p="815">815</button></div>
+      <div class="vgrid" id="qs"></div>
+      <p class="note">Typed answers to question 8, lightly trimmed. Taster numbers are study IDs.</p></div>
+  </div>
+</div>
+
+<!-- READOUT -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">The readout answers Northvale's question: <b>can a lower-sodium chip replace the current one</b>, and if so, which recipe and what should change first.</p>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p><p class="hbig">Advance 815,<br>with a lighter cook</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">815 matched the current chip on overall liking (7.0 against 7.1, a gap that is not significant) with 29% less sodium, and buyers of other kettle brands preferred it. The hot-applied fine flake kept most of the salt impact that 638 lost. Its one flagged miss is a toasted flavor that 24% found too strong. Shorten the cook, keep the salt system, and confirm against the current chip before switching.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Scorecard <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:600px"><thead><tr><th>Measure</th><th class="n"><span class="code c0">241</span> current</th><th class="n"><span class="code c2">638</span> less salt</th><th class="n"><span class="code c1">815</span> finer flake</th></tr></thead><tbody>
+        <tr><td>Sodium per 1 oz serving</td><td class="n">170 mg</td><td class="n best">120 mg</td><td class="n best">120 mg</td></tr>
+        <tr><td>Overall liking (n=150)</td><td class="n best">7.1</td><td class="n worst">6.4</td><td class="n">7.0</td></tr>
+        <tr><td>Preferred after tasting all three</td><td class="n best">44%</td><td class="n worst">16%</td><td class="n">40%</td></tr>
+        <tr><td>Preferred, other kettle buyers (n=75)</td><td class="n">37%</td><td class="n worst">19%</td><td class="n best">44%</td></tr>
+        <tr><td>Saltiness just about right</td><td class="n best">78%</td><td class="n worst">56%</td><td class="n">76%</td></tr>
+        <tr><td>Crunch just about right</td><td class="n">72%</td><td class="n">76%</td><td class="n best">82%</td></tr>
+        <tr><td>Toasted flavor just about right</td><td class="n">84%</td><td class="n">84%</td><td class="n worst">74%</td></tr>
+        <tr><td>Flagged misses</td><td>Not crunchy enough</td><td>Not salty enough</td><td>Too toasted</td></tr>
+      </tbody></table></div>
+      <p class="note">Overall liking for 638 is significantly lower than both other chips. The preference split between 241 and 815 (66 against 60 of 150) is not significant.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What to do, in order</p>
+      <div class="fix"><span class="num">1</span><div><b>Shorten the cook on 815</b><span>24% found it too toasted, and they liked it 0.7 points less. The panel puts toasted flavor at 6.9 against 5.0 today. Aim for about 5.5. A lighter cook should also lift appearance, which fell to 6.7 because the chips look darker.</span></div><span class="sev c">Fix</span></div>
+      <div class="fix"><span class="num">2</span><div><b>Keep the hot-applied fine flake</b><span>It held first-bite salt at 8.6 of 9.2 and saltiness just about right at 76%. This is the reason 815 works and 638 does not.</span></div><span class="sev g">Keep</span></div>
+      <div class="fix"><span class="num">3</span><div><b>Do not add salt back yet</b><span>18% said 815 was not salty enough, a near miss under the 20% line. Recheck it in the confirmation round before touching sodium.</span></div><span class="sev w">Hold</span></div>
+      <div class="fix"><span class="num">4</span><div><b>Drop 638</b><span>42% said not salty enough, the largest penalty in the study at 1.7 points. Cutting salt without changing how it is applied does not work for this chip.</span></div><span class="sev q">Drop</span></div></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Next step</p>
+        <ul class="lst"><li>815 lighter cook against 241<span>sequential monadic</span></li><li>120 kettle buyers, same screener<span>one session each</span></li><li>Pass mark: overall liking within 0.2 of 241<span>toasted under 15%</span></li><li>Then an in-home use test, three weeks<span>a full bag at home</span></li></ul></div>
+      <div class="card pad"><p class="ttl">Where this test could mislead</p>
+        <ul class="chk">
+          <li><b>Eight chips in a booth is a small dose.</b> Salt and toasted flavor can build over a full bag on the couch. The in-home test checks that.</li>
+          <li><b>Amber light hid color during tasting.</b> In the bag and the bowl, the darker color shows, which is why appearance was rated on its own.</li>
+          <li><b>150 tasters</b> is enough to compare the three recipes in total and by brand bought, and too few to split further by age within each buyer group.</li>
+        </ul></div>
+    </div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. A live version is built on your products, your buyers and your own decision.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const P={"241":{c:"var(--p0)",k:"c0",n:"current"},"638":{c:"var(--p2)",k:"c2",n:"less salt"},"815":{c:"var(--p1)",k:"c1",n:"finer flake"}};
+const ORD=["241","638","815"];
+const code=p=>`<span class="code ${P[p].k}">${p}</span>`;
+const seg=(id,fn)=>document.querySelectorAll("#"+id+" button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.toggle("on",x===b));fn(b.dataset.p)}));
+
+/* design */
+const fun=[["Screened online",1260],["Qualified",214],["Scheduled",168],["Arrived",152],["Completed",150]];
+document.getElementById("funnel").innerHTML=fun.map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/1260*100,3)}%;background:${i<2?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1].toLocaleString()}</span></div>`).join("");
+const orders=[["241","638","815"],["241","815","638"],["638","241","815"],["638","815","241"],["815","241","638"],["815","638","241"]];
+document.getElementById("rot").innerHTML=orders.map((o,i)=>`<tr><td class="mono">${i+1}</td>${o.map(p=>`<td>${code(p)}</td>`).join("")}<td class="n">25</td></tr>`).join("");
+
+/* ballot scales */
+const pre={q1:7,q2:7,q3:7,q4:8,q5:3,q6:3,q7:4};
+document.querySelectorAll(".sc").forEach(d=>{const n=d.dataset.n;
+  if(d.dataset.k){d.innerHTML=Array.from({length:9},(_,i)=>`<label><input type="radio" name="${n}" value="${i+1}"${pre[n]===i+1?" checked":""} aria-label="${i+1}">${i+1}</label>`).join("")}
+  else{d.innerHTML=d.dataset.l.split("|").map((t,i)=>`<label class="${i===2?"mid":""}"><input type="radio" name="${n}" value="${i+1}"${pre[n]===i+1?" checked":""}>${t}</label>`).join("")}});
+
+function stk(segs){return segs.map(s=>`<i class="${s.lt?"lt":""}" style="width:${s.v}%;background:${s.c}" title="${s.t||""}${s.v}%">${s.v>=9?s.v+"%":""}</i>`).join("")}
+const olk={"241":[5,6,47,42],"638":[12,10,53,25],"815":[6,7,47,40]};
+document.getElementById("olk").innerHTML=ORD.map(p=>{const v=olk[p];return `<div class="sr"><span class="sl">${code(p)}</span><div class="stk">${stk([{v:v[0],c:"var(--crit)"},{v:v[1],c:"var(--ink-3)"},{v:v[2],c:"var(--lk1)",lt:1},{v:v[3],c:"var(--lk2)"}])}</div></div>`}).join("");
+
+/* JAR: counts of 150 [low, jar, high], overall liking means [low, jar, high] */
+const J={
+ "Saltiness":{lo:"not salty enough",hi:"too salty",d:{"241":[[18,117,15],[6.5,7.3,6.4]],"638":[[63,84,3],[5.4,7.1,6.0]],"815":[[27,114,9],[6.4,7.2,6.3]]}},
+ "Crunch":{lo:"not crunchy enough",hi:"too hard",d:{"241":[[33,108,9],[6.4,7.3,6.6]],"638":[[27,114,9],[5.9,6.6,6.2]],"815":[[15,123,12],[6.3,7.1,6.5]]}},
+ "Toasted flavor":{lo:"too mild",hi:"too toasted",d:{"241":[[12,126,12],[6.8,7.2,6.6]],"638":[[12,126,12],[6.0,6.4,6.3]],"815":[[3,111,36],[6.5,7.2,6.5]]}}};
+const pc=c=>c.map(x=>Math.round(x/1.5));
+document.getElementById("jars").innerHTML=Object.keys(J).map(a=>`<div class="jgrp"><h4>${a}</h4>${ORD.map(p=>{const r=pc(J[a].d[p][0]);return `<div class="sr"><span class="sl">${code(p)}</span><div class="stk">${stk([{v:r[0],c:"var(--s1)"},{v:r[1],c:"var(--jar)",lt:1},{v:r[2],c:"var(--s2)"}])}</div></div>`}).join("")}</div>`).join("");
+
+const POS={"241":[7.3,7.0,7.0],"638":[6.7,6.3,6.2],"815":[7.2,6.9,6.9]};
+document.getElementById("pos").innerHTML=ORD.map(p=>`<tr><td>${code(p)}</td>${POS[p].map((v,i)=>`<td class="n"${i===0?' style="font-weight:700"':""}>${v.toFixed(1)}</td>`).join("")}</tr>`).join("");
+
+/* profile */
+const AT=["Salt impact, first bite","Salt, lingering","Potato flavor","Toasted, browned","Fried oil flavor","Crunch, first bite","Hardness","Oily mouthfeel"];
+const SH=["First-bite salt","Lingering salt","Potato","Toasted","Fried oil","Crunch","Hardness","Oily feel"];
+const PR={"241":[9.2,5.4,7.5,5.0,6.1,10.4,8.8,5.6],"638":[6.1,3.4,7.8,5.1,6.3,10.2,8.9,5.7],"815":[8.6,3.9,7.4,6.9,6.0,11.6,9.4,5.2]};
+function radar(sel){const d=document.getElementById("radar");d.innerHTML="";
+  const w=480,h=400,cx=240,cy=200,R=140,s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":"Attribute profile radar chart"},d);
+  const n=AT.length,ang=i=>-Math.PI/2+i*2*Math.PI/n,pt=(i,v)=>[cx+Math.cos(ang(i))*R*v/15,cy+Math.sin(ang(i))*R*v/15];
+  [3,6,9,12,15].forEach(v=>{el("polygon",{points:AT.map((_,i)=>pt(i,v).join(",")).join(" "),fill:"none",class:"gl"},s);
+    el("text",{x:cx+3,y:cy-R*v/15+3,class:"ax"},s).textContent=v});
+  AT.forEach((_,i)=>{const [x,y]=pt(i,15);el("line",{x1:cx,y1:cy,x2:x,y2:y,class:"gl"},s);
+    const [lx,ly]=pt(i,17.2);const t=el("text",{x:lx,y:ly+4,"text-anchor":Math.abs(lx-cx)<8?"middle":lx>cx?"start":"end",class:"rlab"},s);t.textContent=SH[i]});
+  ORD.forEach(p=>{const on=sel==="all"||sel===p;const v=PR[p];
+    const g=el("g",{opacity:on?1:.1},s);
+    el("polygon",{points:v.map((x,i)=>pt(i,x).join(",")).join(" "),fill:P[p].c,"fill-opacity":sel===p?.18:.06,stroke:P[p].c,"stroke-width":p==="241"?1.8:2.4},g);
+    v.forEach((x,i)=>{const [a,b]=pt(i,x);const c=el("circle",{cx:a,cy:b,r:3.2,fill:P[p].c,stroke:"var(--panel)","stroke-width":1},g);el("title",{},c).textContent=`${p} ${AT[i]}: ${x.toFixed(1)}`});});}
+radar("all");seg("rseg",radar);
+document.getElementById("rleg").innerHTML=ORD.map(p=>`<span><i class="sw" style="background:${P[p].c}"></i>${p} ${P[p].n}</span>`).join("");
+const df=(a,b)=>{const x=+(a-b).toFixed(1);const cls=Math.abs(x)>=0.8?(x>0?"sd":"sdn"):"";return `<td class="n ${cls}">${x>0?"+":x<0?"−":""}${Math.abs(x).toFixed(1)}</td>`};
+document.getElementById("ptab").innerHTML=AT.map((a,i)=>`<tr><td>${a}</td><td class="n">${PR["241"][i].toFixed(1)}</td><td class="n">${PR["638"][i].toFixed(1)}</td>${df(PR["638"][i],PR["241"][i])}<td class="n">${PR["815"][i].toFixed(1)}</td>${df(PR["815"][i],PR["241"][i])}</tr>`).join("");
+
+/* penalty */
+const pts=[];
+for(const a in J)for(const p in J[a].d){const [c,m]=J[a].d[p];
+  pts.push({p,side:J[a].lo,share:c[0]/1.5,mean:m[0],drop:+(m[1]-m[0]).toFixed(1)});
+  pts.push({p,side:J[a].hi,share:c[2]/1.5,mean:m[2],drop:+(m[1]-m[2]).toFixed(1)});}
+const flagged=pts.filter(x=>x.share>=20&&x.drop>=0.5).sort((x,y)=>y.drop*y.share-x.drop*x.share);
+const near=pts.filter(x=>x.share>=15&&x.share<20&&x.drop>=0.5);
+document.getElementById("pentab").innerHTML=flagged.map(x=>`<tr><td>${code(x.p)} ${x.side}</td><td class="n">${Math.round(x.share)}%</td><td class="n">${x.mean.toFixed(1)}</td><td class="n dn">−${x.drop.toFixed(1)}</td></tr>`).join("")+
+  near.map(x=>`<tr><td style="color:var(--ink-3)">${code(x.p)} ${x.side} <small>near miss</small></td><td class="n" style="color:var(--ink-3)">${Math.round(x.share)}%</td><td class="n" style="color:var(--ink-3)">${x.mean.toFixed(1)}</td><td class="n" style="color:var(--ink-3)">−${x.drop.toFixed(1)}</td></tr>`).join("");
+function pen(sel){const d=document.getElementById("pen");d.innerHTML="";
+  const w=420,h=300,L=50,R=12,T=14,B=36,s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":"Penalty analysis scatter"},d);
+  const X=v=>L+v/50*(w-L-R),Y=v=>T+(1-v/2)*(h-T-B);
+  el("rect",{x:X(20),y:Y(2),width:X(50)-X(20),height:Y(0.5)-Y(2),fill:"var(--crit-bg)"},s);
+  el("text",{x:X(49),y:Y(2)+14,"text-anchor":"end",class:"zone",fill:"var(--crit)"},s).textContent="Fix first";
+  [0,0.5,1,1.5,2].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-6,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v.toFixed(1)});
+  [0,10,20,30,40,50].forEach(v=>{el("text",{x:X(v),y:h-B+15,"text-anchor":"middle",class:"ax"},s).textContent=v+"%"});
+  el("line",{x1:X(20),x2:X(20),y1:T,y2:h-B,stroke:"var(--crit)","stroke-dasharray":"3 3","stroke-width":1},s);
+  el("line",{x1:L,x2:w-R,y1:Y(0.5),y2:Y(0.5),stroke:"var(--crit)","stroke-dasharray":"3 3","stroke-width":1},s);
+  el("text",{x:(L+w-R)/2,y:h-4,"text-anchor":"middle",class:"ax"},s).textContent="share of tasters off target";
+  el("text",{x:12,y:(T+h-B)/2,"text-anchor":"middle",class:"ax",transform:`rotate(-90 12 ${(T+h-B)/2})`},s).textContent="liking points lost";
+  pts.forEach(x=>{const on=sel==="all"||sel===x.p;const g=el("g",{opacity:on?1:.12},s);
+    const c=el("circle",{cx:X(x.share),cy:Y(x.drop),r:on&&sel!=="all"?7:6,fill:P[x.p].c,stroke:"var(--panel)","stroke-width":1.5},g);
+    el("title",{},c).textContent=`${x.p} ${x.side}: ${Math.round(x.share)}% of tasters, ${x.drop.toFixed(1)} points lower`;
+    const fl=x.share>=20&&x.drop>=0.5;
+    if(on&&(fl||sel!=="all")){const r=x.share>34;el("text",{x:X(x.share)+(r?-9:9),y:Y(x.drop)+4,"text-anchor":r?"end":"start",class:"ptlab"},g).textContent=`${x.p} ${x.side}`;}
+  });}
+pen("all");seg("penseg",pen);
+
+/* preference: counts [241,638,815] */
+const PF=[["All tasters",150,[66,24,60]],["Northvale buyers",75,[38,10,27]],["Other kettle buyers",75,[28,14,33]]];
+const r100=(c,n)=>{const raw=c.map(x=>x/n*100),fl=raw.map(Math.floor);let left=100-fl.reduce((a,b)=>a+b,0);raw.map((x,i)=>[x-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([_,i])=>{if(left>0){fl[i]++;left--}});return fl};
+document.getElementById("pref").innerHTML=PF.map(r=>{const v=r100(r[2],r[1]);return `<div class="prefrow"><span class="pl">${r[0]}<small>n=${r[1]}</small></span><div class="stk">${ORD.map((p,i)=>`<i style="width:${v[i]}%;background:${P[p].c}" title="${p}: ${r[2][i]} of ${r[1]}">${v[i]}%</i>`).join("")}</div></div>`}).join("");
+document.getElementById("pleg").innerHTML=ORD.map(p=>`<span><i class="sw" style="background:${P[p].c};height:9px"></i>${p} ${P[p].n}</span>`).join("");
+
+const OE={"241":[["Familiar, classic taste",48],["Salty, good salt",41],["Softer, bends before it breaks",21]],"638":[["Bland, needs salt",58],["Good crunch",30],["Plain potato taste",24]],"815":[["Crunchier, sturdier",41],["Good salt right away",33],["Dark, overdone taste",29]]};
+document.getElementById("oec").innerHTML=ORD.map(p=>`<div><h4>${code(p)}</h4>${OE[p].map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/60*100}%;background:${P[p].c}"></i></span><span class="hbv mono">${Math.round(r[1]/1.5)}%</span></div>`).join("")}</div>`).join("");
+
+const Q=[["815","028","Crunchier than I expected. It has a real snap to it."],["815","114","Good salt right away. A little dark tasting, almost like the end of the bag."],["638","007","Needs salt. It tastes like a plain potato."],["241","045","This is the one I know. Salty, good crunch."],["815","063","Tastes a bit overdone. I like it, I just noticed it."],["638","092","Fine texture but flat. I kept waiting for the flavor."],["241","131","Softer than the others. Bends a little before it breaks."],["638","120","Same chip as usual, just quieter."],["241","019","Salt stays on my lips. In a good way."]];
+function qs(sel){document.getElementById("qs").innerHTML=Q.filter(q=>sel==="all"||q[0]===sel).map(q=>`<div class="vq"><div class="vh">${code(q[0])}<span>Taster ${q[1]}</span></div><q>${q[2]}</q></div>`).join("")}
+qs("all");seg("qseg",qs);
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

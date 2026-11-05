@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop-Along Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+
+/* severity tags */
+.sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.hb{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb{grid-template-columns:minmax(80px,40%) 1fr auto}}
+
+/* shop-along additions */
+:root{--hero:#1e2b3a;--b-v:#2a78d6;--b-k:#eb6834;--b-b:#1baf7a;--b-n:#8a63d2;--b-s:#7d868d;--floor:#f3f4f1;--gond:#cfd3cc;--hot:rgba(42,120,214,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--b-v:#3987e5;--b-k:#d95926;--b-b:#199e70;--b-n:#8a63d2;--b-s:#9aa3ab;--floor:#1f201d;--gond:#3a3d37;--hot:rgba(57,135,229,.2)}}
+:root[data-theme="dark"]{--hero:#24344a;--b-v:#3987e5;--b-k:#d95926;--b-b:#199e70;--b-n:#8a63d2;--b-s:#9aa3ab;--floor:#1f201d;--gond:#3a3d37;--hot:rgba(57,135,229,.2)}
+.hero{background:var(--hero)}
+.bd{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.bd i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.stop{display:grid;grid-template-columns:26px 1fr auto;gap:9px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:start}
+.stop:last-child{border-bottom:none}
+.stop .no{width:22px;height:22px;border-radius:50%;background:var(--slate);color:var(--bg);font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.stop.e .no{background:var(--s1);color:#fff}
+.stop b{font-size:13px;display:block}
+.stop span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.stop .sec{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);white-space:nowrap}
+.zl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;fill:var(--ink-3)}
+.pn{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;fill:#fff}
+.fn3{display:grid;grid-template-columns:minmax(92px,26%) 1fr;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule)}
+.fn3:last-child{border-bottom:none}
+.fn3 .bars{display:grid;gap:3px}
+.fn3 .br{display:grid;grid-template-columns:1fr 66px;gap:6px;align-items:center;font-size:11px}
+.fn3 .tr{height:11px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.fn3 .tr i{display:block;height:100%;border-radius:3px}
+.fn3 .v{font-family:"JetBrains Mono",monospace;color:var(--ink-2);white-space:nowrap;text-align:right}
+.mom{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.mom:last-child{border-bottom:none}
+.mom .n{width:30px;height:30px;border-radius:6px;background:var(--panel-2);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;color:var(--ink-2)}
+.mom b{font-size:13.5px;display:block}
+.mom span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+.mom .st{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--s1);font-weight:700;margin-top:4px}
+.sd{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:620px){.sd{grid-template-columns:1fr}}
+.sd .said,.sd .did{border-radius:6px;padding:11px 13px;font-size:13px;line-height:1.5}
+.sd .said{background:var(--panel-2);font-family:"Source Serif 4",serif}
+.sd .did{background:var(--real-bg);color:var(--ink)}
+.sd .mini{color:var(--ink-3)}
+.gap{display:grid;grid-template-columns:minmax(150px,1.3fr) 1fr 1fr;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.gap:last-child{border-bottom:none}
+.gap .tr{height:12px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.gap .tr i{display:block;height:100%}
+.gap small{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);margin-top:3px}
+@media(max-width:560px){.gap{grid-template-columns:1fr 1fr}.gap>div:first-child{grid-column:1/-1}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+.fix .ev{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);margin-top:4px}
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.shelf{display:grid;gap:3px}
+.shelf .sh{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;font-size:11px;color:var(--ink-3)}
+.shelf .row2{display:flex;gap:2px;height:22px}
+.shelf .row2 i{flex:1;border-radius:2px;font-style:normal;font-size:9.5px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap}
+tr.pick td{background:var(--hot)}
+tbody tr{cursor:default}
+#map svg{max-width:700px;margin:0 auto}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, store, shopper and number on this page is made up to show what a shop-along readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Voltline Shop-Along Study</b><span>Sample · Sparkling energy drinks</span></div>
+    <div class="period">24 shop-alongs · 120 shelf intercepts · 3 stores and 1 delivery app<br>
+      <span style="color:var(--real-fg)">●</span> observed &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Study and roster</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Aisle path</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Pick-up to purchase</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#eb6834">Said vs did</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">Shelf fixes</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- STUDY -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Voltline, a fictional sparkling energy drink, sells well in its home stores but loses shoppers at the shelf. Its scan data shows the loss without the reason. So a researcher went shopping with <b>24 category buyers</b>: 18 on real trips in three grocery stores and 6 on a delivery app over screen share. We watched the path, timed every stop and noted each can picked up and put back. A short interview followed at the shelf, while the choice was still fresh. To size what we saw, we added <b>120 quick intercepts</b> at the energy drink set.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Shop-alongs</p><p class="val">24</p><p class="sub">18 in store, 6 online by screen share</p></div>
+    <div class="card kpi"><p class="lab">Shelf intercepts</p><p class="val">120</p><p class="sub">40 per store, 3 minutes each</p></div>
+    <div class="card kpi"><p class="lab">Median time at the set</p><p class="val" id="kmed">0<small> sec</small></p><p class="sub">shop-alongs, in store and online</p></div>
+    <div class="card kpi"><p class="lab">Bought their usual brand</p><p class="val" id="kusual">0</p><p class="sub" id="kusual2"></p></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Who we went shopping with</p>
+      <ul class="chk">
+        <li><b>Bought a sparkling energy drink</b> in the past two weeks, age 21 to 54</li>
+        <li><b>Already planned a trip</b> to one of the three stores this week</li>
+        <li><b>Quota:</b> 7 Voltline regulars, 13 competitor regulars, 4 who rotate</li>
+        <li><b>Mix of trips:</b> weekly stock-ups and quick top-up trips</li>
+        <li><b>Online:</b> 6 who order groceries on a delivery app at least twice a month</li>
+        <li class="x">Out: works in retail, beverage, advertising or research</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">How a shop-along runs</p>
+      <ul class="chk">
+        <li><b>Meet at the door.</b> Two warm-up questions, then the shopper leads.</li>
+        <li><b>Follow, do not steer.</b> The researcher stays a step behind and logs each stop and its seconds.</li>
+        <li><b>Note every touch.</b> Picked up, turned over, put back, swapped.</li>
+        <li><b>Online:</b> the shopper shares a phone screen and thinks aloud, and we record searches and taps.</li>
+        <li><b>Shelf interview, 6 to 8 minutes,</b> right after the choice.</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Questions at the shelf</p>
+      <ul class="lst">
+        <li>What did you come in for today?<span>mission</span></li>
+        <li>Walk me through what just happened here.<span>replay</span></li>
+        <li>You picked that one up. What were you checking?<span>touch</span></li>
+        <li>What made you put it back?<span>reject</span></li>
+        <li>Do you usually buy the same one?<span>habit</span></li>
+        <li>How much does price matter in this aisle?<span>price</span></li>
+      </ul>
+      <p class="note">The last two questions are asked on purpose. The answers are compared with what we watched on the Said vs did tab.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Shopper roster <span class="src real">Observed</span></p>
+      <div class="seg" id="rseg"><button class="on" data-f="all">All 24</button><button data-f="store">In store</button><button data-f="online">Online</button><button data-f="volt">Voltline regulars</button><button data-f="sw">Switched brands</button></div>
+      <div class="scroll"><table style="min-width:640px"><thead><tr><th>#</th><th>Shopper</th><th>Where</th><th>Trip</th><th>Usually buys</th><th>Bought</th><th class="n">Sec at set</th></tr></thead><tbody id="roster"></tbody></table></div>
+      <p class="note">First names are invented. Store A is a large grocery store, Store B a supercenter, Store C a neighborhood grocery. "Sec at set" is the time spent in front of any energy drink display, from the researcher's log.</p></div>
+  </div>
+</div>
+
+<!-- AISLE PATH -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">Pick a shopper to see the trip. Each number is a stop, in order, with the seconds spent there. <b>Energy drinks sit in three places</b>: aisle 7 for multipacks, a front cooler for single cans, and an endcap that changes with the promotion. Most decisions about Voltline happened in under a minute, and two of them happened away from aisle 7.</p>
+
+  <div class="seg" id="pseg"></div>
+  <div class="row w21">
+    <div class="card"><p class="ttl"><span id="ptitle">Path</span> <span class="src real">Observed</span></p>
+      <div class="chartwrap" id="map"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s1);height:9px"></i>Energy drink display</span><span><i class="sw" style="background:var(--gond);height:9px"></i>Shelving</span><span><i class="sw" style="background:var(--slate);height:3px"></i>Shopper path</span></div>
+      <p class="note">Simplified floor plan. The three stores have similar layouts, so all paths are drawn on one plan.</p></div>
+    <div class="card pad"><p class="ttl">Stop by stop</p><div id="stops"></div><div class="quote" id="pq" style="margin-top:12px"></div></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card"><p class="ttl">Seconds at the set, by trip <span class="src real">Observed</span></p><div id="dwell"></div>
+      <p class="note">Median seconds in front of any energy drink display. Quick trips decide in about 13 seconds, which leaves no time to find a brand on the bottom shelf.</p></div>
+    <div class="card"><p class="ttl">Where the can was taken from <span class="src real">Observed</span></p><div id="where"></div>
+      <p class="note">In-store shop-alongs who bought (17 of 18). Voltline singles were missing from the front cooler in two of the three stores.</p></div>
+    <div class="card pad"><p class="ttl">Online, by screen share <span class="src real">Observed</span></p>
+      <ul class="lst">
+        <li>Typed a search<span>4 of 6</span></li>
+        <li>Used "buy again"<span>2 of 6</span></li>
+        <li>Scrolled past the first screen<span>1 of 4</span></li>
+        <li>Voltline position, "energy drink" search<span>14th</span></li>
+        <li>Products on the first screen<span>8</span></li>
+      </ul>
+      <p class="note">Online the shelf is the search results page. Voltline only reaches shoppers who already know its name.</p></div>
+  </div>
+</div>
+
+<!-- FUNNEL -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">The 120 shelf intercepts size what the shop-alongs showed. A researcher watched each shopper at the energy drink set, then asked a few questions after the choice. <b>Voltline gets picked up almost as often as the leader and bought half as often.</b> More than half of the Voltline cans picked up went back on the shelf.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Voltline picked up</p><p class="val">41<small> of 120</small></p><p class="sub">34%, second to Kestrel at 43%</p></div>
+    <div class="card kpi"><p class="lab">Voltline bought</p><p class="val">18<small> of 120</small></p><p class="sub">15%, third of five brands</p></div>
+    <div class="card kpi"><p class="lab">Pick-up to purchase</p><p class="val" style="color:var(--crit)">44%</p><p class="sub">lowest of the five, others 55% to 74%</p></div>
+    <div class="card kpi"><p class="lab">Voltline put back</p><p class="val">23</p><p class="sub">of 65 put-backs in the set</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Looked, picked up, bought · n=120 <span class="src real">Observed</span></p>
+      <div id="fun"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--ink-3);height:9px;opacity:.45"></i>Stopped and looked</span><span><i class="sw" style="background:var(--ink-3);height:9px;opacity:.75"></i>Picked up</span><span><i class="sw" style="background:var(--ink-3);height:9px"></i>Bought</span></div>
+      <p class="note">Shoppers can look at and pick up more than one brand, so those rows do not add to 120. Each shopper bought at most one: 99 bought one of these five brands, 9 bought another brand and 12 left without an energy drink.</p></div>
+    <div class="card"><p class="ttl">Why Voltline went back · 23 put-backs <span class="src real">Observed</span></p>
+      <div id="why"></div>
+      <p class="note">From the intercept question "What made you put it back?" and the researcher's notes on what the shopper did next, one main reason per put-back.</p>
+      <p class="ttl" style="margin-top:16px">Purchase share at the set</p>
+      <div class="stk" id="pshare" style="height:22px"></div>
+      <div class="legend" id="pleg"></div></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">The decision moments <span class="src real">Observed</span></p>
+      <div class="mom"><span class="n">1</span><div><b>From the end of the aisle</b><span>Most shoppers walk straight to a brand they named before they reached the set. The rest scan from the middle shelves outward.</span><p class="st">77 of 120 (64%) went straight to a named brand</p></div></div>
+      <div class="mom"><span class="n">2</span><div><b>Eye level</b><span>The hand goes to the two middle shelves. Voltline sat on the bottom two shelves in Stores A and B.</span><p class="st">117 of 164 pick-ups (71%) from the middle shelves</p></div></div>
+      <div class="mom"><span class="n">3</span><div><b>The turn of the can</b><span>Shoppers turn the can over to read the back. Caffeine is the first thing they look for, then sugar.</span><p class="st">46 of 120 (38%) turned a can over</p></div></div>
+      <div class="mom"><span class="n">4</span><div><b>Price per can</b><span>On multipacks, shoppers do the math on the tag. A 12-pack that looks cheaper per box can be dearer per can.</span><p class="st">35 of 120 (29%) checked the shelf tag</p></div></div>
+      <div class="mom"><span class="n">5</span><div><b>Basket or shelf</b><span>The moment Voltline loses. A can in the hand is a sale half won.</span><p class="st">65 of 164 pick-ups (40%) put back</p></div></div></div>
+    <div class="card pad"><p class="ttl">Aisle 7 shelf, Store A <span class="src ill">Illustrative</span></p>
+      <div class="shelf" id="shelf"></div>
+      <p class="note">Each block is one facing. Voltline has seven facings, all on the bottom two shelves. Kestrel holds the two middle shelves, where 71% of pick-ups happened.</p>
+      <div class="quote" style="margin-top:12px">I didn't even see they had the black cherry one down there. I just grabbed what was in front of me.<cite>Intercept, Store A, Kestrel buyer</cite></div>
+      <div class="quote">Two hundred milligrams? That's a lot for the afternoon. The front just says "clean energy".<cite>Intercept, Store B, put Voltline back</cite></div></div>
+  </div>
+</div>
+
+<!-- SAID VS DID -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">People are honest about what they believe they do. A shop-along lets you set that next to what they did a minute earlier. <b>Most shoppers called themselves loyal, and more than a third of those switched on this trip.</b> Many who said price does not matter were seen checking the tag.</p>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">What they said vs what we saw · 24 shop-alongs <span class="src real">Observed</span></p>
+      <div id="gaps"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--ink-3);height:9px"></i>Said so in the interview</span><span><i class="sw" style="background:var(--s2);height:9px"></i>Did not do what they said</span></div></div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">Shopper by shopper <span class="src real">Observed</span></p>
+      <div class="seg" id="sseg"></div>
+      <div class="sd"><div class="said"><p class="mini">Said at the shelf</p><div id="ssaid"></div></div><div class="did"><p class="mini">What we saw</p><div id="sdid"></div></div></div>
+      <p class="note" id="snote"></p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Voltline regulars on this trip <span class="src real">Observed</span></p>
+      <div id="vreg"></div>
+      <p class="note">Each of the four losses has a different cause, and each cause has a different fix. None of them show up in scan data as anything but a lost sale.</p></div>
+    <div class="card pad"><p class="ttl">Reading the gap</p>
+      <ul class="chk">
+        <li><b>Loyalty is a belief about habit.</b> Shoppers are loyal until the shelf gives them a reason to switch: a gap, a promotion, a can in the wrong place.</li>
+        <li><b>"Price does not matter" means "I do not compare prices on purpose."</b> The tag still gets read, mostly on multipacks.</li>
+        <li><b>Nobody mentioned shelf position.</b> Yet 71% of pick-ups came from the two middle shelves, where Voltline had no facings in Stores A and B.</li>
+      </ul></div>
+  </div>
+</div>
+
+<!-- FIXES -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">The readout turns each loss into a fix that a sales team can take to a store. Every fix is tied to what we saw, and ranked by how many sales it touches.</p>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p><p class="hbig">Win the turn<br>of the can</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">Voltline does not have an awareness problem at the shelf. Shoppers find it and pick it up. It loses at the turn of the can and at the tag, and it is missing where quick trips happen. Put the caffeine on the front, move to eye level, get singles into the front cooler and show price per can. Then test the new set in six stores before a wider rollout.</p>
+    </div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Shelf fixes, in order</p>
+      <div class="fix"><span class="num">1</span><div><b>Put the caffeine on the front of the can</b><span>The most common reason for a put-back. Shoppers turned the can to find it and some did not like a surprise of 200 mg. A clear "200 mg" or a lighter 120 mg option on the front answers the question before the can is turned.</span><p class="ev">9 of 23 Voltline put-backs</p></div><span class="sev c">Pack</span></div>
+      <div class="fix"><span class="num">2</span><div><b>Move to the middle shelves</b><span>71% of pick-ups came from the two middle shelves. Voltline was on the bottom two in Stores A and B. Ask for at least one eye-level shelf, next to Kestrel.</span><p class="ev">117 of 164 pick-ups at eye level</p></div><span class="sev c">Shelf</span></div>
+      <div class="fix"><span class="num">3</span><div><b>Get singles into the front cooler</b><span>Quick-trip shoppers spent a median of 13 seconds at the set, and half of them bought from the cooler. A Voltline regular bought Kestrel because Voltline was not in it.</span><p class="ev">missing from 2 of 3 front coolers</p></div><span class="sev w">Cooler</span></div>
+      <div class="fix"><span class="num">4</span><div><b>Show price per can on the multipack</b><span>The 12-pack box price looked fine. The per-can math, done on the shelf tag, sent shoppers to the competitor's promotion.</span><p class="ev">6 of 23 put-backs</p></div><span class="sev w">Tag</span></div>
+      <div class="fix"><span class="num">5</span><div><b>Make flavors easy to tell apart</b><span>The cans share one silver design with small flavor type. A bold color band per flavor would end the "which one is this" put-back.</span><p class="ev">5 of 23 put-backs</p></div><span class="sev q">Pack</span></div>
+      <div class="fix"><span class="num">6</span><div><b>Reach the first screen online</b><span>Voltline shows up 14th for "energy drink" and the first screen holds 8. A sponsored slot or better product titles would put it in view.</span><p class="ev">3 of 4 online searchers never scrolled</p></div><span class="sev q">Online</span></div></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">What is already working</p>
+        <ul class="chk">
+          <li><b>Voltline gets noticed.</b> 74 of 120 stopped and looked at it, and 41 picked it up.</li>
+          <li><b>New flavors pull switchers.</b> Both shoppers who switched to Voltline did so for a flavor marked "New".</li>
+          <li><b>Regulars who find it, buy it.</b> All three regulars who found their flavor in its usual place bought it.</li>
+        </ul></div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Test it next</p>
+        <ul class="lst"><li>New set in 6 stores, 6 matched controls<span>4 weeks</span></li><li>Fixes 2, 3 and 4 at shelf<span>no new cans needed</span></li><li>Repeat 60 intercepts in test stores<span>put-backs, pick-ups</span></li><li>Pass mark: pick-up to purchase over 55%<span>from 44%</span></li></ul></div>
+      <div class="card pad"><p class="ttl">Where this study could mislead</p>
+        <ul class="chk">
+          <li><b>24 shop-alongs show why.</b> The 120 intercepts size the pattern; they do not project to all stores.</li>
+          <li><b>Three stores in one region.</b> Shelf sets differ by retailer, so we would check each key account before rolling out.</li>
+          <li><b>Being watched changes shopping a little.</b> Shoppers took longer with a researcher beside them, so we lean on the unaccompanied intercepts for time and counts.</li>
+        </ul></div>
+    </div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, stores, shoppers and figures are fictional. A live study is run with your buyers, in your retailers, on your own shelf question.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const B={V:["Voltline","var(--b-v)"],K:["Kestrel","var(--b-k)"],R:["Brightwave","var(--b-b)"],N:["Northpeak","var(--b-n)"],S:["Store brand","var(--b-s)"],X:["Rotates","var(--rule-2)"],O:["Nothing","var(--rule-2)"]};
+const bd=k=>`<span class="bd"><i style="background:${B[k][1]}"></i>${B[k][0]}</span>`;
+/* roster: id,name,age,where,trip,usual,bought,sec,saidLoyal,saidNoPrice,checkedPrice,turnedCan,quoteSaid,did */
+const R=[
+[1,"Dana",34,"A","Stock-up","K","K",22,1,1,0,0,"I always get the Kestrel twelve-pack. I don't even look.","Walked straight to the middle shelf, took the Kestrel 12-pack. 22 seconds."],
+[2,"Marcus",27,"A","Quick trip","V","V",9,1,1,0,0,"Voltline, the blue one. Same every time.","Took a Voltline single from the front cooler in 9 seconds."],
+[3,"Priya",31,"B","Stock-up","R","K",64,1,0,1,0,"I'm a Brightwave person. Always have been.","Picked up Brightwave, saw the Kestrel promotion on the endcap, checked both tags, swapped."],
+[4,"Tom",45,"B","Stock-up","K","K",18,1,1,1,0,"Price doesn't really matter for this. I get what I like.","Bought Kestrel, but read the shelf tag first and took the 12-pack over two 4-packs."],
+[5,"Jess",23,"C","Quick trip","X","R",41,0,0,0,1,"I switch around. Whatever sounds good.","Picked up Voltline, turned it over, put it back, took a Brightwave single."],
+[6,"Luis",38,"A","Stock-up","V","R",57,1,1,1,1,"I'm loyal to Voltline. I don't shop around on price.","Searched the bottom shelf for Voltline black cherry, found a gap, compared two backs and tags, took Brightwave."],
+[7,"Kayla",29,"C","Quick trip","N","N",12,1,1,0,0,"Northpeak. It's the only one that doesn't crash me.","Took Northpeak from the cooler. 12 seconds."],
+[8,"Ben",52,"B","Stock-up","S","S",26,0,0,1,0,"I buy whatever is cheapest that day.","Compared store brand and Kestrel tags and took the store brand."],
+[9,"Aisha",26,"A","Quick trip","K","V",48,1,1,0,1,"Kestrel, always.","Reached for Kestrel, noticed the Voltline tag marked New, turned the can and bought Voltline mango lime."],
+[10,"Ryan",33,"B","Stock-up","V","K",71,1,1,1,1,"I'm a Voltline guy. Price isn't a thing for me.","Picked up the Voltline 12-pack, read the tag, did the per-can math aloud and put it back for the Kestrel promotion."],
+[11,"Mei",41,"C","Quick trip","X","O",35,0,0,1,1,"I'll try something new if it looks good.","Turned over Voltline and Brightwave, checked both prices, left with neither."],
+[12,"Andre",30,"A","Stock-up","K","K",15,1,1,0,0,"Same brand every week.","Took the Kestrel 12-pack. 15 seconds."],
+[13,"Hannah",36,"B","Stock-up","R","R",20,1,1,1,0,"I don't pay attention to price on these.","Bought Brightwave after checking the tag on two pack sizes."],
+[14,"Chris",24,"C","Quick trip","V","V",8,1,1,0,0,"Voltline. Grab and go.","Took a Voltline single from the eye-level shelf in Store C. 8 seconds."],
+[15,"Nora",47,"A","Stock-up","X","S",52,0,0,1,1,"I read labels. Too much caffeine and I'm up all night.","Turned the Voltline can, put it back at 200 mg, took the store brand."],
+[16,"Devin",28,"B","Quick trip","K","K",14,1,1,0,0,"Kestrel. I don't think about it.","Took a Kestrel single. 14 seconds."],
+[17,"Grace",35,"A","Stock-up","N","V",46,1,0,1,1,"Northpeak is my brand.","Picked up Northpeak, then tried the new Voltline mango lime after reading the back."],
+[18,"Sam",31,"C","Quick trip","V","K",11,1,1,0,0,"Always Voltline.","Scanned the front cooler, found no Voltline and grabbed a Kestrel single. 11 seconds."],
+[19,"Tasha",33,"O","Delivery app","V","V",30,1,1,0,0,"Voltline, every order.","Opened buy again and added Voltline. No search."],
+[20,"Owen",40,"O","Delivery app","K","K",25,1,1,0,0,"Same order every week.","Used buy again for Kestrel."],
+[21,"Lena",27,"O","Delivery app","X","R",95,0,0,1,1,"I like to browse new flavors.","Searched energy drink, opened three product pages, compared price per can, chose Brightwave."],
+[22,"Jamal",36,"O","Delivery app","V","K",40,1,1,1,0,"I buy Voltline. Price doesn't matter.","Searched energy drink, never scrolled past the first screen, sorted by price, added Kestrel."],
+[23,"Erin",44,"O","Delivery app","R","R",18,1,1,0,0,"Brightwave, always.","Searched Brightwave by name and added it."],
+[24,"Victor",29,"O","Delivery app","N","N",22,1,1,0,1,"Northpeak.","Searched Northpeak, opened the details page, added it."]];
+const W={A:"Store A",B:"Store B",C:"Store C",O:"Online"};
+const med=a=>{const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:Math.round((s[m-1]+s[m])/2)};
+const loyal=R.filter(r=>r[8]),kept=loyal.filter(r=>r[5]===r[6]);
+document.getElementById("kmed").innerHTML=med(R.map(r=>r[7]))+"<small> sec</small>";
+document.getElementById("kusual").innerHTML=kept.length+"<small> of "+loyal.length+"</small>";
+document.getElementById("kusual2").textContent=`of the ${loyal.length} who said they always buy the same brand`;
+function roster(f){const rows=R.filter(r=>f==="all"||(f==="store"&&r[3]!=="O")||(f==="online"&&r[3]==="O")||(f==="volt"&&r[5]==="V")||(f==="sw"&&r[5]!==r[6]&&r[5]!=="X"));
+  document.getElementById("roster").innerHTML=rows.map(r=>`<tr${r[5]!==r[6]&&r[5]!=="X"?' class="pick"':''}><td class="mono">${String(r[0]).padStart(2,"0")}</td><td class="mdl">${r[1]}, ${r[2]}</td><td>${W[r[3]]}</td><td>${r[4]}</td><td>${bd(r[5])}</td><td>${bd(r[6])}</td><td class="n">${r[7]}</td></tr>`).join("");}
+roster("all");
+document.querySelectorAll("#rseg button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#rseg button").forEach(x=>x.classList.toggle("on",x===b));roster(b.dataset.f)}));
+
+/* map */
+const Z={E:[62,352,"Entrance"],P:[70,170,"Produce"],SN:[210,180,"Aisle 5 snacks"],A6:[290,180,"Aisle 6 soda"],A7:[370,170,"Aisle 7 energy"],A8:[450,180,"Aisle 8 coffee"],D:[330,40,"Dairy"],EC:[410,306,"Endcap"],FC:[185,340,"Front cooler"],CK:[470,345,"Checkout"]};
+const PATHS={
+ 3:{t:"Priya, Store B, stock-up",s:[["E",0,"Enters with a list on her phone"],["P",180,"Produce, long stop"],["D",95,"Dairy, back wall"],["SN",60,"Snacks"],["A7",49,"Picks up Brightwave 12-pack, sees Kestrel promotion at the end of the aisle",1],["EC",15,"Compares tags, puts Brightwave back, takes Kestrel",1],["CK",0,"Checkout"]],q:"I'm a Brightwave person. But that was a lot cheaper for the same twelve cans."},
+ 6:{t:"Luis, Store A, stock-up",s:[["E",0,"Enters"],["P",120,"Produce"],["SN",45,"Snacks"],["A7",57,"Looks for Voltline black cherry on the bottom shelf, finds a gap, reads two cans, takes Brightwave",1],["D",70,"Dairy"],["CK",0,"Checkout"]],q:"They never have the black cherry. I'm not driving to another store for it."},
+ 10:{t:"Ryan, Store B, stock-up",s:[["E",0,"Enters"],["A6",35,"Soda for the kids"],["A7",56,"Picks up the Voltline 12-pack, reads the tag, does the per-can math, puts it back",1],["EC",15,"Takes the Kestrel 12-pack on promotion at the endcap",1],["A8",40,"Coffee"],["CK",0,"Checkout"]],q:"Wait, that's more per can than the other one. Huh. Okay, this week it's Kestrel."},
+ 17:{t:"Grace, Store A, stock-up",s:[["E",0,"Enters"],["P",95,"Produce"],["A7",46,"Picks up Northpeak, notices the New tag on Voltline mango lime, turns it over, buys Voltline",1],["D",60,"Dairy"],["CK",0,"Checkout"]],q:"Mango lime sounded good, and it was the same caffeine as mine, so why not."},
+ 18:{t:"Sam, Store C, quick trip",s:[["E",0,"Enters for lunch and a drink"],["FC",11,"Scans the front cooler, no Voltline, takes a Kestrel single",1],["CK",0,"Checkout"]],q:"If it's not in the cooler I'm not walking to the back for it."}};
+function drawMap(id){const d=document.getElementById("map");d.innerHTML="";
+  const s=el("svg",{viewBox:"0 0 600 380",role:"img","aria-label":"Store floor plan with shopper path"},d);
+  el("rect",{x:8,y:8,width:584,height:364,rx:6,fill:"var(--floor)",stroke:"var(--rule-2)"},s);
+  el("rect",{x:20,y:20,width:100,height:290,rx:3,fill:"var(--gond)",opacity:.55},s);
+  el("rect",{x:150,y:18,width:420,height:24,rx:3,fill:"var(--gond)",opacity:.55},s);
+  [242,322,402,482].forEach(x=>el("rect",{x:x,y:70,width:16,height:205,rx:2,fill:"var(--gond)"},s));
+  el("rect",{x:162,y:70,width:16,height:205,rx:2,fill:"var(--gond)"},s);
+  el("rect",{x:550,y:70,width:24,height:205,rx:2,fill:"var(--gond)"},s);
+  el("rect",{x:402,y:115,width:16,height:110,rx:2,fill:"var(--s1)"},s);
+  el("rect",{x:396,y:282,width:28,height:14,rx:2,fill:"var(--s1)",opacity:.8},s);
+  el("rect",{x:150,y:318,width:70,height:12,rx:2,fill:"var(--s1)",opacity:.8},s);
+  [380,430,480,530].forEach(x=>el("rect",{x:x,y:328,width:26,height:30,rx:2,fill:"var(--gond)"},s));
+  [["Produce",70,330],["Dairy",360,58],["Aisle 7",370,292],["Front cooler",185,312],["Checkout",455,322],["Entrance",62,372]].forEach(t=>el("text",{x:t[1],y:t[2],"text-anchor":"middle",class:"zl"},s).textContent=t[0]);
+  ["5","6","8","9"].forEach((n,i)=>el("text",{x:[210,290,450,525][i],y:292,"text-anchor":"middle",class:"zl"},s).textContent="Aisle "+n);
+  const p=PATHS[id];
+  el("polyline",{points:p.s.map(x=>Z[x[0]].slice(0,2).join(",")).join(" "),fill:"none",stroke:"var(--slate)","stroke-width":2.4,"stroke-linejoin":"round","stroke-dasharray":"6 4"},s);
+  p.s.forEach((x,i)=>{const [cx,cy]=Z[x[0]];const g=el("g",{},s);
+    el("circle",{cx,cy,r:x[3]?12:10,fill:x[3]?"var(--s1)":"var(--slate)",stroke:"var(--panel)","stroke-width":2},g);
+    el("text",{x:cx,y:cy+3.5,"text-anchor":"middle",class:"pn",fill:x[3]?"#fff":"var(--bg)"},g).textContent=i+1;
+    el("title",{},g).textContent=`${i+1}. ${Z[x[0]][2]}${x[1]?", "+x[1]+" sec":""}`;});
+  document.getElementById("ptitle").textContent=p.t;
+  document.getElementById("stops").innerHTML=p.s.map((x,i)=>`<div class="stop${x[3]?" e":""}"><span class="no">${i+1}</span><div><b>${Z[x[0]][2]}</b><span>${x[2]}</span></div><span class="sec">${x[1]?x[1]+" sec":""}</span></div>`).join("");
+  document.getElementById("pq").innerHTML=`${p.q}<cite>Shelf interview</cite>`;}
+const ps=document.getElementById("pseg");
+ps.innerHTML=Object.keys(PATHS).map((k,i)=>`<button class="${i===0?"on":""}" data-p="${k}">${PATHS[k].t.split(",")[0]}</button>`).join("");
+ps.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ps.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));drawMap(b.dataset.p)}));
+drawMap(3);
+const groups=[["Stock-up, in store",r=>r[3]!=="O"&&r[4]==="Stock-up"],["Quick trip, in store",r=>r[3]!=="O"&&r[4]==="Quick trip"],["Online",r=>r[3]==="O"]];
+const gm=groups.map(g=>{const a=R.filter(g[1]);return [g[0],med(a.map(r=>r[7])),a.length]});
+document.getElementById("dwell").innerHTML=gm.map(g=>`<div class="hb"><span class="hbl">${g[0]}</span><span class="hbt"><i style="width:${g[1]/60*100}%;background:var(--s1)"></i></span><span class="hbv mono">${g[1]} s <small>n=${g[2]}</small></span></div>`).join("");
+document.getElementById("where").innerHTML=[["Aisle 7 shelf",11],["Front cooler",4],["Endcap promotion",2]].map(g=>`<div class="hb"><span class="hbl">${g[0]}</span><span class="hbt"><i style="width:${g[1]/17*100}%;background:var(--s3)"></i></span><span class="hbv mono">${g[1]}</span></div>`).join("");
+
+/* funnel */
+const F=[["V",74,41,18],["K",88,52,34],["R",61,30,21],["N",45,22,12],["S",38,19,14]];
+document.getElementById("fun").innerHTML=F.map(f=>{const c=B[f[0]][1];return `<div class="fn3"><div>${bd(f[0])}<div style="font-size:10.5px;color:var(--ink-3);margin-top:3px" class="mono">${Math.round(f[3]/f[2]*100)}% of pick-ups bought</div></div><div class="bars">${[1,2,3].map(i=>`<div class="br"><span class="tr"><i style="width:${f[i]/120*100}%;background:${c};opacity:${[0,.4,.7,1][i]}"></i></span><span class="v">${f[i]} · ${Math.round(f[i]/1.2)}%</span></div>`).join("")}</div></div>`}).join("");
+document.getElementById("why").innerHTML=[["Turned it over, caffeine too high",9],["Per-can price on the 12-pack",6],["Could not tell the flavors apart",5],["Wanted flavor out of stock",3]].map(r=>`<div class="hb"><span class="hbl" title="${r[0]}" style="white-space:normal">${r[0]}</span><span class="hbt"><i style="width:${r[1]/10*100}%;background:var(--b-v)"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+const PS=[["V",18],["K",34],["R",21],["N",12],["S",14],["Other brand",9,"var(--ink-3)"],["Bought none",12,"var(--rule-2)"]];
+document.getElementById("pshare").innerHTML=PS.map(p=>{const c=p[2]||B[p[0]][1];const v=p[1]/1.2;return `<i style="width:${v}%;background:${c}" title="${B[p[0]]?B[p[0]][0]:p[0]}: ${p[1]} of 120">${v>=9?Math.round(v)+"%":""}</i>`}).join("");
+document.getElementById("pleg").innerHTML=PS.map(p=>`<span><i class="sw" style="background:${p[2]||B[p[0]][1]};height:9px"></i>${B[p[0]]?B[p[0]][0]:p[0]} ${p[1]}</span>`).join("");
+const SH=[["Top",["N","N","N","R","R","R","S","S"]],["Eye level",["K","K","K","K","R","R","R","N"]],["Waist",["K","K","K","K","K","N","S","S"]],["Low",["V","V","V","V","S","S","S","S"]],["Bottom",["V","V","V","K","K","S","S","S"]]];
+document.getElementById("shelf").innerHTML=SH.map(r=>`<div class="sh"><span>${r[0]}</span><div class="row2">${r[1].map(k=>`<i style="background:${B[k][1]}" title="${B[k][0]}">${k==="V"?"V":""}</i>`).join("")}</div></div>`).join("");
+
+/* said vs did */
+const L=R.filter(r=>r[8]),Lsw=L.filter(r=>r[5]!==r[6]);
+const NP=R.filter(r=>r[9]),NPc=NP.filter(r=>r[10]);
+const TC=R.filter(r=>r[11]);
+const gaps=[
+ ["\"I always buy the same brand\"",L.length,Lsw.length,`${Lsw.length} of ${L.length} bought a different brand on this trip`],
+ ["\"Price doesn't matter in this aisle\"",NP.length,NPc.length,`${NPc.length} of ${NP.length} were seen checking a shelf tag or price per can`],
+ ["Turned the can or opened product details",TC.length,0,`${TC.length} of 24; caffeine was the first thing they looked for`]];
+document.getElementById("gaps").innerHTML=gaps.map(g=>`<div class="gap"><div><b>${g[0]}</b><small>${g[3]}</small></div><div><span class="tr"><i style="width:${g[1]/24*100}%;background:var(--ink-3)"></i></span><small>${g[1]} of 24</small></div><div><span class="tr"><i style="width:${g[2]/24*100}%;background:var(--s2)"></i></span><small>${g[2]?g[2]+" of 24":"observed only"}</small></div></div>`).join("");
+const feat=[3,4,6,10,13,22];
+const ss=document.getElementById("sseg");
+ss.innerHTML=feat.map((id,i)=>`<button class="${i===0?"on":""}" data-i="${id}">${R[id-1][1]}</button>`).join("");
+function sh(id){const r=R[id-1];document.getElementById("ssaid").innerHTML=`<p style="margin:0">"${r[12]}"</p>`;document.getElementById("sdid").innerHTML=`<p style="margin:0">${r[13]}</p>`;
+  document.getElementById("snote").innerHTML=`<b>${r[1]}, ${W[r[3]]}, ${r[4].toLowerCase()}.</b> Usually buys ${B[r[5]][0]}, bought ${B[r[6]][0]}, ${r[7]} seconds at the set.`}
+ss.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ss.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));sh(+b.dataset.i)}));
+sh(3);
+const why={2:"Found it in the front cooler",6:"Flavor out of stock on the bottom shelf",10:"Per-can price vs the Kestrel promotion",14:"Found it at eye level in Store C",18:"Not in the front cooler",19:"Used buy again",22:"Not on the first screen of search results"};
+document.getElementById("vreg").innerHTML=R.filter(r=>r[5]==="V").map(r=>`<div class="stop${r[6]==="V"?"":" e"}"><span class="no" style="${r[6]==="V"?"background:var(--good);color:#fff":"background:var(--crit);color:#fff"}">${r[6]==="V"?"✓":"×"}</span><div><b>${r[1]}, ${W[r[3]]}</b><span>${why[r[0]]}</span></div><span class="sec">${r[6]==="V"?"kept":"to "+B[r[6]][0]}</span></div>`).join("");
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

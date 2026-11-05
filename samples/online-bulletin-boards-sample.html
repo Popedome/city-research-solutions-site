@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Online Bulletin Board Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* shared components */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+
+/* bulletin board additions */
+.typ{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.typ.g{background:var(--real-bg);color:var(--real-fg)}
+.typ.p{background:var(--warn-bg);color:var(--warn)}
+.typ.pg{background:var(--new-bg);color:var(--new-fg)}
+.typ.m{background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.daybtns{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.daybtns button{font-family:Archivo,sans-serif;font-size:12px;font-weight:600;padding:7px 12px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:5px;color:var(--ink-2);text-align:left;line-height:1.25}
+.daybtns button small{display:block;font-weight:500;font-size:10.5px;color:var(--ink-3)}
+.daybtns button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.daybtns button.on small{color:var(--bg);opacity:.8}
+.daybtns button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.qrow{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.qrow:last-child{border-bottom:none}
+.qrow .qn{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-3);padding-top:2px}
+.qrow b{font-size:13px;display:block;margin-bottom:3px}
+.qrow span.d{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.qrow .chiprow{margin-top:6px}
+/* thread */
+.post{border:1px solid var(--rule);border-radius:6px;padding:11px 13px;background:var(--panel);margin-bottom:9px}
+.post.reply{margin-left:26px}
+.post.mod{background:var(--real-bg);border-color:transparent}
+.post.mod .who b{color:var(--real-fg)}
+.post.priv{border-style:dashed;border-color:var(--warn)}
+.who{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.who b{font-size:12.5px;color:var(--ink)}
+.who .t{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.av{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex:none}
+.post p{margin:0;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.5;color:var(--ink)}
+.ph{margin-top:8px;border:1px dashed var(--rule-2);border-radius:5px;padding:8px 10px;font-size:11.5px;color:var(--ink-2);background:var(--panel-2);display:flex;gap:8px;align-items:flex-start}
+.ph svg{flex:none;margin-top:1px;width:14px;height:14px}
+@media(max-width:560px){.post.reply{margin-left:12px}}
+/* concept board */
+.board{border:1px solid var(--rule-2);border-radius:8px;background:var(--panel);overflow:hidden}
+.board .bt{background:var(--hero);color:#f3f4f0;padding:12px 16px}
+.board .bt small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;font-weight:700}
+.board .bt div{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.bgrid{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:12px}
+@media(max-width:480px){.bgrid{grid-template-columns:1fr}}
+.rg{position:relative;display:block;width:100%;text-align:left;font-family:Archivo,sans-serif;cursor:pointer;background:var(--panel-2);border:1.5px solid transparent;border-radius:6px;padding:9px 11px;color:var(--ink);font-size:12.5px;line-height:1.4}
+.rg:hover{border-color:var(--rule-2)}
+.rg.on{border-color:var(--slate);box-shadow:0 0 0 2px var(--slate) inset}
+.rg:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.rg .rn{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--ink-3);margin-right:5px}
+.rg .mk{display:flex;gap:4px;margin-top:5px}
+.rg .mk i{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px}
+.mk .lk{background:var(--good-bg);color:var(--good)}
+.mk .dk{background:var(--crit-bg);color:var(--crit)}
+.rg.heat-hi{background:var(--good-bg)}
+.rg.heat-lo{background:var(--crit-bg)}
+.bcol{display:grid;gap:8px;align-content:start}
+.det h4{font-size:15px;margin:0 0 3px}
+.det .cm{border-left:3px solid var(--rule-2);padding:3px 0 3px 10px;margin:8px 0 0;font-family:"Source Serif 4",serif;font-size:13px;line-height:1.45}
+.det .cm.l{border-color:var(--good)}.det .cm.d{border-color:var(--crit)}
+.det .cm cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:2px}
+.dv{display:grid;grid-template-columns:minmax(100px,34%) 1fr 1fr;gap:6px;align-items:center;padding:5px 0;font-size:12px;border-bottom:1px solid var(--rule);cursor:pointer}
+.dv:last-child{border-bottom:none}
+.dv:hover .hbl{color:var(--ink)}
+.dv .bn,.dv .bp{position:relative;height:16px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dv .bn i{position:absolute;right:0;top:0;bottom:0;background:var(--crit)}
+.dv .bp i{position:absolute;left:0;top:0;bottom:0;background:var(--good)}
+.dv b{position:absolute;top:0;font-size:10px;font-family:"JetBrains Mono",monospace;line-height:16px;color:var(--ink)}
+.dv .bn b{left:4px}.dv .bp b{right:4px}
+.dv.on{background:var(--panel-2)}
+.theme{border-top:4px solid var(--tc,var(--s1))}
+.theme h3{font-size:15px;margin:0 0 4px;letter-spacing:-.01em}
+.theme .ct{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);margin:0 0 8px}
+.meter{display:flex;gap:2px;margin:0 0 10px}
+.meter i{flex:1;height:8px;border-radius:1px;background:var(--panel-2)}
+.meter i.f{background:var(--tc,var(--s1))}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.vs div{background:var(--panel-2);border-radius:5px;padding:10px 12px}
+.vs .big{font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:700;margin:0}
+.vs small{font-size:11px;color:var(--ink-2);display:block;line-height:1.4}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, product, participant and number on this page is made up to show what an online bulletin board readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Corvane Discussion Board</b><span>Sample · Cordless stick vacuums</span></div>
+    <div class="period">Glide 2 concept · 24 participants · 4 days plus a follow-up morning<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Activity plan</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Sample thread</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Concept markup</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#c4741f">Themes</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">Deliverables</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- PLAN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Corvane, a fictional vacuum brand, is deciding what goes into its next cordless stick vacuum. <b>24 people who own a stick vacuum</b> spent four days on a private online board, about 20 to 30 minutes a day, <b>whenever it suited them</b>. Each day opened a new set of activities: photos of real floors and storage spots, a narrated cleaning video, a markup of the new concept and short polls. A moderator read every post and <b>followed up with probes</b>, in the open thread or privately.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Finished all 4 days</p><p class="val">24<small> of 26</small></p><p class="sub">2 dropped after day 1; their posts are excluded</p></div>
+    <div class="card kpi"><p class="lab">Posts and replies</p><p class="val">1,148</p><p class="sub">about 48 per participant</p></div>
+    <div class="card kpi"><p class="lab">Moderator probes</p><p class="val">212</p><p class="sub">every probe answered within a day</p></div>
+    <div class="card kpi"><p class="lab">Photos and videos</p><p class="val">227</p><p class="sub">186 photos, 41 short videos</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Day by day activity plan <span class="src real">As run</span></p>
+      <div class="daybtns" id="daybtns"></div>
+      <div id="dayq"></div>
+      <div class="legend"><span><span class="typ g">Group</span> everyone sees all answers</span><span><span class="typ p">Private</span> only the moderator sees it</span><span><span class="typ pg">Private first</span> answer alone, then see the group</span></div>
+    </div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+        <div class="funnel" id="funnel"></div>
+        <ul class="chk" style="margin-top:10px">
+          <li><b>Owns a cordless stick vacuum</b> and uses it at least weekly</li>
+          <li><b>Quota:</b> 12 Corvane owners, 12 owners of other brands</li>
+          <li><b>Mix of floors:</b> 10 mostly carpet, 14 mostly hard floors</li>
+          <li><b>11 homes with children</b>, 8 renters, ages 25 to 64</li>
+          <li><b>Writes clearly:</b> a short typed screener answer checked by hand</li>
+          <li class="x">Out: works in retail, appliances or research</li>
+        </ul></div>
+      <div class="card pad"><p class="ttl">18 questions by type</p>
+        <div class="vs" style="grid-template-columns:repeat(3,1fr)"><div><p class="big">10</p><small><span class="typ g">Group</span></small></div><div><p class="big">5</p><small><span class="typ p">Private</span></small></div><div><p class="big">3</p><small><span class="typ pg">Private first</span></small></div></div>
+        <p class="note"><b>Private first</b> is used for reactions to the concept, so the first answer is not shaped by whoever posted first.</p></div>
+    </div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Posts and probes by day <span class="src real">Measured</span></p>
+      <div id="pday"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s1);height:9px"></i>Participant posts and replies</span><span><i class="sw" style="background:var(--s4);height:9px"></i>Moderator probes</span></div>
+      <p class="note">Day 5 is a short follow-up morning: no new activities, only probes on loose ends.</p></div>
+    <div class="card"><p class="ttl">When people posted <span class="src real">Measured</span></p>
+      <div id="tod"></div>
+      <p class="note"><b>45% of posts came after 5 pm.</b> A two-hour group on a weeknight would have missed the people who clean after the kids are in bed.</p></div>
+  </div>
+</div>
+
+<!-- THREAD -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">This is how a board reads from the inside. Participants answer the activity, see each other's posts in <b>group questions</b>, and the moderator steps in with <b>probes</b>: asking for an example, a photo or the reason behind a passing remark. Private questions look the same, but only the participant and moderator see them.</p>
+  <div class="seg" id="thseg"><button class="on" data-t="0">Day 2 · Battery thread (group)</button><button data-t="1">Day 1 · Tell the maker (private)</button></div>
+  <div class="row w21">
+    <div id="thread"></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">What the probes added <span class="src real">Measured</span></p>
+        <div class="vs"><div><p class="big">7</p><small>of 24 mentioned the battery in their first answer</small></div><div><p class="big" style="color:var(--good)">18</p><small>of 24 described cleaning around the battery once probed</small></div></div>
+        <p class="note">People rarely volunteer a habit they have stopped noticing. One question, <b>"what happens on the days it dies early?"</b>, turned a minor complaint into the largest theme of the study.</p></div>
+      <div class="card pad"><p class="ttl">How we probe</p>
+        <ul class="chk">
+          <li><b>Within 12 hours</b>, while the moment is still fresh</li>
+          <li><b>Ask for an example or a photo</b>, never a yes or no</li>
+          <li><b>Do not lead.</b> "Tell me more about that" beats "So you would want a second battery?"</li>
+          <li><b>Go private</b> when a topic is personal or a participant is quieter in the group</li>
+          <li><b>Probe the group</b> when several people hint at the same thing</li>
+        </ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- MARKUP -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">On day 3 each participant saw the <b>Glide 2 concept board</b> privately and placed up to six markers on it: a green marker on anything they liked, a red one on anything they disliked, each with a short comment. Nobody could see anyone else's markers until they had finished. <b>Click any area of the board</b> to see what people said.</p>
+  <div class="row k2">
+    <div>
+      <div class="board">
+        <div class="bt"><small>New concept · Corvane</small><div>Glide 2</div></div>
+        <div class="bgrid">
+          <div class="bcol" id="bcolA"></div>
+          <div class="bcol" id="bcolB"></div>
+        </div>
+      </div>
+      <p class="note">Green fill: liked by at least half the board. Red fill: more dislikes than likes. Numbers are participants who placed a marker on that area, of 24.</p>
+    </div>
+    <div>
+      <div class="card pad det" id="det" style="margin-bottom:13px"></div>
+      <div class="card"><p class="ttl">Liked and disliked hotspots, of 24 <span class="src real">Measured</span></p>
+        <div id="dvs"></div>
+        <div class="legend"><span><i class="sw" style="background:var(--crit);height:9px"></i>Disliked</span><span><i class="sw" style="background:var(--good);height:9px"></i>Liked</span></div>
+        <p class="note">130 markers in all, an average of 5.4 per person. Every marker came with a comment.</p></div>
+    </div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Private answer vs group answer <span class="src real">Measured</span></p>
+      <p class="small">"Would the wall dock stop you from buying the Glide 2?"</p>
+      <div class="vs"><div><p class="big">5<small style="display:inline;font-size:13px"> of 24</small></p><small>said yes in private, day 3, before seeing anyone else</small></div><div><p class="big" style="color:var(--crit)">9<small style="display:inline;font-size:13px"> of 24</small></p><small>said yes by the end of the day 4 group thread on where the dock would go</small></div></div>
+      <p class="note">Four people changed their answer after reading renters describe drilling into a wall they do not own. Both numbers matter: <b>the private one is the cleaner read of first reaction</b>, and the group one shows how the objection spreads once it is said out loud.</p></div>
+    <div class="card pad"><p class="ttl">How to read a markup</p>
+      <ul class="chk">
+        <li><b>Swap-in battery</b> is the clearest win: 19 likes, 1 dislike, and it speaks to the largest theme.</li>
+        <li><b>Touch-free bin</b> is liked, with a doubt: 3 of the 4 dislikes ask whether it jams.</li>
+        <li class="x"><b>Wall dock</b> drew 12 dislikes, more than any other area, almost all from renters and small kitchens.</li>
+        <li class="x"><b>Smart suction</b> is disliked for its wording. Most comments say they do not know what it means.</li>
+      </ul></div>
+  </div>
+</div>
+
+<!-- THEMES -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">Every post was coded. A theme counts a participant once, however often they raised it, so the numbers count <b>people out of 24</b>. Quotes are lightly trimmed. Names are invented first names with a last initial.</p>
+  <div class="row k3" id="themes"></div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Biggest frustration today, ranked first · day 2 <span class="src real">Measured</span></p>
+      <div id="frus"></div>
+      <p class="note">Each person ranked eight frustrations privately; this shows who put each one first. n=24.</p></div>
+    <div class="card"><p class="ttl">10 points across six features · day 4 <span class="src real">Measured</span></p>
+      <div id="pts"></div>
+      <p class="note">Average points out of 10, private. With 24 people, treat this as a direction to check. A survey would size it.</p></div>
+  </div>
+</div>
+
+<!-- DELIVERABLES -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">A board produces a lot of material quickly. The deliverables are built so the product team can <b>follow along while it runs</b> and act on a short answer the week it ends.</p>
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">What Corvane took away</p><p class="hbig">Lead with the battery.<br>Rethink the dock.</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">Runtime worry shapes how 18 of 24 people clean, and the swap-in battery was the most liked area of the board. The touch-free bin earns its place if the pack shows it does not jam. The wall dock puts off more people than it wins over: make a floor stand the default. Replace "smart suction" with words that say what it does.</p>
+    </div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What you get, and when</p>
+      <div class="tl">
+        <div class="tli"><span class="wk">Daily<small>during field</small></span><div><b>Morning topline email</b><span>Five bullets on yesterday's posts and the probes planned for today. Your team can add questions before 10 am.</span></div></div>
+        <div class="tli"><span class="wk">Live<small>during field</small></span><div><b>Observer login</b><span>Read every post as it lands, from a view participants cannot see. Suggest probes to the moderator in a side channel.</span></div></div>
+        <div class="tli"><span class="wk">Day +2<small>after close</small></span><div><b>Topline</b><span>The answer to the question you asked, the markup summary and the top themes on four pages.</span></div></div>
+        <div class="tli"><span class="wk">Day +7<small>after close</small></span><div><b>Full report</b><span>Themes with counts and quotes, markup hotspots, private vs group comparisons and recommendations.</span></div></div>
+        <div class="tli"><span class="wk">Day +7<small>after close</small></span><div><b>Coded transcript and media library</b><span>All 1,148 posts exported and coded, and every photo and video tagged by theme and participant.</span></div></div>
+      </div></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Recommendations, in order</p>
+        <div class="fix"><span class="num">1</span><div><b>Lead the story with the swap-in battery</b><span>Largest theme, most liked area of the board, most points on day 4.</span></div><span class="sev g">Keep</span></div>
+        <div class="fix"><span class="num">2</span><div><b>Show the touch-free bin working</b><span>Liked by 17, but jamming is the doubt. A short demo on pack or online answers it.</span></div><span class="sev w">Prove</span></div>
+        <div class="fix"><span class="num">3</span><div><b>Make the wall dock optional</b><span>12 dislikes, mostly renters. A floor stand that charges both batteries keeps the benefit.</span></div><span class="sev c">Fix</span></div>
+        <div class="fix"><span class="num">4</span><div><b>Rename "smart suction"</b><span>10 dislikes for unclear wording. Test plain alternatives in the concept survey.</span></div><span class="sev q">Check</span></div></div>
+      <div class="card pad"><p class="ttl">Next step</p>
+        <ul class="lst"><li>Concept survey, 400 stick vacuum owners<span>monadic</span></li><li>Glide 2 with dock vs with floor stand<span>2 cells</span></li><li>Three wordings for suction<span>claims test</span></li></ul>
+        <p class="note">The board found what to test. The survey sizes it.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products, participants and figures are fictional. A live version is built on your product, your customers and your own decision.</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const T={g:["g","Group"],p:["p","Private"],pg:["pg","Private first"]};
+const typ=k=>`<span class="typ ${T[k][0]}">${T[k][1]}</span>`;
+const tag=t=>`<span class="tag">${t}</span>`;
+
+/* day plan */
+const D=[
+ {d:"Day 1",s:"Meet your vacuum",q:[
+  ["Introduce yourself and your home","Who lives there, what floors you have and how often you clean.","g",[]],
+  ["Where does your vacuum live?","Upload a photo of the spot where it is stored and charged.","g",["photo"]],
+  ["Walk us through your last clean","Start to finish: where you began, where you stopped, what got in the way.","g",[]],
+  ["What would you tell the maker?","Anything you would never say to a salesperson.","p",[]]]},
+ {d:"Day 2",s:"Watch it work",q:[
+  ["One minute of a normal clean","A narrated phone video. Talk us through what you are doing and why.","g",["video"]],
+  ["Rank eight frustrations","Drag them into order, worst first.","p",["poll"]],
+  ["The bin, right after you empty it","Photo of the bin and wherever the dust ended up.","g",["photo"]],
+  ["When does the battery run out on you?","Tell us about the last time it happened.","g",[]],
+  ["What have you rigged up?","Any fix or habit you have made up to make it work better. Photo if you can.","g",["photo"]]]},
+ {d:"Day 3",s:"The Glide 2 idea",q:[
+  ["Mark up the concept","Place up to six markers: green for like, red for dislike, each with a comment.","p",["markup"]],
+  ["First reaction, in your own words","Answer before you can see anyone else's reaction.","pg",[]],
+  ["Would anything stop you buying it?","Same rule: your answer first, then the group's.","pg",[]],
+  ["Which feature would you give up first?","Pick one of six.","p",["poll"]],
+  ["Read the group and reply to two people","Agree, disagree or add something they missed.","g",[]]]},
+ {d:"Day 4",s:"Make it yours",q:[
+  ["Spend 10 points across six features","Put the points where they matter most to you.","p",["poll"]],
+  ["Name the touch-free bin","Suggest a name and say what it should promise.","g",[]],
+  ["Where would the dock go?","Photo of the spot in your home, or tell us why there is no spot.","g",["photo"]],
+  ["A letter to the product team","What to keep, what to drop, what to fix. Answer first, then read the others.","pg",[]]]},
+ {d:"Day 5",s:"Follow-up morning",q:[
+  ["Moderator probes only","No new activities. 31 probes on loose ends from days 1 to 4, answered by 19 participants.","p",["probes"]]]}];
+let qn=0;D.forEach(x=>x.q.forEach(q=>{if(x.d!=="Day 5")q.n=++qn}));
+function day(i){$("daybtns").querySelectorAll("button").forEach((b,j)=>b.classList.toggle("on",i===j));
+ $("dayq").innerHTML=D[i].q.map(q=>`<div class="qrow"><span class="qn">${q.n?("Q"+q.n):"+"}</span><div><b>${q[0]}</b><span class="d">${q[1]}</span><div class="chiprow">${typ(q[2])}${q[3].map(tag).join("")}</div></div></div>`).join("")}
+$("daybtns").innerHTML=D.map((x,i)=>`<button>${x.d}<small>${x.s}</small></button>`).join("");
+$("daybtns").querySelectorAll("button").forEach((b,i)=>b.addEventListener("click",()=>day(i)));
+day(0);
+
+$("funnel").innerHTML=[["Screened",640],["Qualified",71],["Invited",26],["Finished",24]].map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/640*100,4)}%;background:${i<2?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+
+const PD=[["Day 1",262,41],["Day 2",318,58],["Day 3",301,52],["Day 4",236,30],["Day 5",31,31]];
+$("pday").innerHTML=PD.map(r=>`<div class="hb" style="grid-template-columns:52px 1fr 70px"><span class="hbl mono" style="font-size:11px">${r[0]}</span><span style="display:grid;gap:2px"><span class="hbt" style="height:11px"><i style="width:${r[1]/320*100}%;background:var(--s1)"></i></span><span class="hbt" style="height:11px"><i style="width:${r[2]/320*100}%;background:var(--s4)"></i></span></span><span class="hbv mono">${r[1]} / ${r[2]}</span></div>`).join("");
+const TOD=[["Morning, 6 to 11 am",22],["Midday, 11 am to 2 pm",18],["Afternoon, 2 to 5 pm",15],["Evening, 5 to 9 pm",31],["Late, after 9 pm",14]];
+$("tod").innerHTML=TOD.map((r,i)=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/35*100}%;background:${i>=3?"var(--s7)":"var(--ink-3)"}"></i></span><span class="hbv mono">${r[1]}%</span></div>`).join("");
+
+/* threads */
+const C={"Teresa M.":"#2a78d6","Andre K.":"#eb6834","Lena W.":"#1baf7a","Jun L.":"#8a63d2","Hannah P.":"#c4741f","Moderator":"#3d5a80"};
+const cam=`<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="12" height="9" rx="1.5"/><circle cx="8" cy="8.5" r="2.2"/><path d="M6 4l1-1.5h2L10 4"/></svg>`;
+const TH=[
+ [["Teresa M.","Corvane owner · carpet",0,"g","Tue 7:42 pm","I always start upstairs in the kids' rooms, then the hallway, then the stairs last. Most nights the light goes red halfway down the stairs.","Photo: the vacuum leaning on the stairs, halfway up, battery light red"],
+  ["Moderator","probe",1,"g","Tue 9:05 pm","Teresa, you said the stairs come last. What happens on the nights it dies before you get there?"],
+  ["Teresa M.","",1,"g","Wed 6:58 am","Honestly the stairs just don't get done. I plug it in and tell myself tomorrow. Some weeks the stairs get done once."],
+  ["Andre K.","Other brand · hard floors",0,"g","Wed 8:20 am","Same here. I bought a second charger so I could leave one downstairs. Still have to remember to plug it in.","Photo: a second charger taped to the side of a kitchen cabinet"],
+  ["Moderator","probe to the group",0,"g","Wed 9:10 am","A few of you describe changing the order you clean in because of the battery. Does anyone else plan the clean around it? Tell us what you do."],
+  ["Lena W.","Corvane owner · hard floors",1,"g","Wed 12:31 pm","I do the kitchen first because that is where the crumbs are. If it dies after that, fine. I never thought of it as planning, but I guess it is."],
+  ["Jun L.","Other brand · carpet",1,"g","Wed 9:47 pm","I run it on low for everything except the entry rug, so it lasts. Low does not really get the rug, so I go over it twice."]],
+ [["Hannah P.","Corvane owner · hard floors · renter",0,"p","Mon 10:14 pm","I almost returned this one in the first month. It was fine, it just did not feel like the ad. The ad makes it look like you clean the whole apartment in one go."],
+  ["Moderator","private probe",1,"p","Tue 8:02 am","Thank you, Hannah. What did the ad make you expect that the vacuum did not do? An example would help."],
+  ["Hannah P.","",1,"p","Tue 12:40 pm","The ad shows someone going room to room, rugs, couch, car, all on one charge. I get the living room and the bedroom and it is done. I am not mad at it, I just stopped believing the box.","Photo: the vacuum box, kept in the closet, with the 'whole home clean' line circled in pen"],
+  ["Moderator","private probe",1,"p","Tue 1:15 pm","That is helpful. If the next box said something different, what would you want it to say?"],
+  ["Hannah P.","",1,"p","Tue 6:30 pm","Tell me how many rooms. Like, 'two bedrooms and a kitchen' or whatever it really does. I would trust that more than minutes."]]];
+function thread(i){$("thread").innerHTML=`<div class="card pad"><p class="ttl">${i?"Q4 · What would you tell the maker? ":"Q8 · When does the battery run out on you? "}${typ(i?"p":"g")}</p>`+TH[i].map(p=>{const m=p[0]==="Moderator";const ini=m?"M":p[0].split(" ").map(s=>s[0]).join("");
+  return `<div class="post${p[2]?" reply":""}${m?" mod":""}${p[3]==="p"?" priv":""}"><div class="who"><span class="av" style="background:${C[p[0]]}">${ini}</span><b>${p[0]}</b><span>${p[1]}</span><span class="t">${p[4]}</span></div><p>${p[5]}</p>${p[6]?`<div class="ph">${cam}<span><i>${p[6]}</i></span></div>`:""}</div>`}).join("")+
+  `<p class="note">${i?"Private thread: only Hannah and the moderator see these posts. 5 posts, all shown.":"Group thread: 31 posts and 9 probes in all; 7 shown. Photos are described here in place of the images."}</p></div>`}
+thread(0);
+$("thseg").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{$("thseg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));thread(+b.dataset.t)}));
+
+/* markup */
+const R=[
+ {n:"Headline",t:"“Clean the whole house on one charge”",l:9,d:7,col:"B",c:[["l","Kayla S.","That is the dream, if it is true."],["d","Andre K.","Every vacuum box says this. I stopped believing it two vacuums ago."]]},
+ {n:"Product image",t:"Slim stick vacuum, floor head lit",l:11,d:3,col:"A",c:[["l","Teresa M.","Slim enough to leave out in the kitchen."],["d","Marco D.","Can't tell how big the bin is from this."]]},
+ {n:"Swap-in battery",t:"A second battery clicks in: two runs of 40 minutes",l:19,d:1,col:"B",c:[["l","Jun L.","This. This is the one. I would stop planning my whole clean around the light."],["l","Lena W.","Keep one charging while I use the other. Finally."]]},
+ {n:"Touch-free bin",t:"Push the slider and the dust drops straight down",l:17,d:4,col:"B",c:[["l","Rosa G.","No more picking the clump out with my fingers."],["d","Derek F.","Mine has a slider like this and it jams with anything fluffy."]]},
+ {n:"Floor light",t:"A light on the floor head shows fine dust",l:8,d:2,col:"A",c:[["l","Nadia B.","Under the bed, yes please."],["d","Owen T.","Nice, but I would not pay more for it."]]},
+ {n:"Wall dock",t:"Mounts on the wall and charges both batteries",l:6,d:12,col:"A",c:[["d","Hannah P.","I rent. I am not drilling into a wall for a vacuum."],["l","Bea C.","Mine leans in a corner and falls over. A dock would help."]]},
+ {n:"Weight",t:"2.9 lb in the hand",l:14,d:2,col:"A",c:[["l","Teresa M.","The stairs are where weight matters. This would help."],["d","Marco D.","Light usually means weak suction."]]},
+ {n:"Smart suction",t:"Smart suction adjusts to each floor",l:5,d:10,col:"B",c:[["d","Owen T.","What does smart mean here? Sounds like marketing."],["d","Kayla S.","I want to choose the power myself."]]}];
+R.forEach((r,i)=>r.i=i+1);
+function heat(r){return r.l>=12?" heat-hi":(r.d>r.l?" heat-lo":"")}
+function rgb(r){return `<button class="rg${heat(r)}" data-i="${r.i-1}"><span class="rn">${r.i}</span>${r.t}<span class="mk"><i class="lk">+${r.l}</i><i class="dk">−${r.d}</i></span></button>`}
+const vac=`<svg viewBox="0 0 120 120" style="max-width:110px;margin:4px auto 6px" aria-hidden="true"><rect x="56" y="6" width="8" height="64" rx="3" fill="var(--ink-3)"/><rect x="50" y="56" width="20" height="30" rx="5" fill="var(--s1)"/><rect x="53" y="62" width="14" height="10" rx="2" fill="var(--panel)" opacity=".6"/><rect x="30" y="94" width="60" height="14" rx="6" fill="var(--slate)"/><circle cx="60" cy="101" r="3" fill="var(--s4)"/><rect x="58" y="86" width="4" height="8" fill="var(--ink-3)"/></svg>`;
+$("bcolA").innerHTML=R.filter(r=>r.col==="A").map((r,k)=>k===0?rgb(r).replace(`<span class="rn">`,vac+`<span class="rn">`):rgb(r)).join("");
+$("bcolB").innerHTML=R.filter(r=>r.col==="B").map(rgb).join("");
+$("dvs").innerHTML=R.map(r=>`<div class="dv" data-i="${r.i-1}"><span class="hbl"><span class="mono" style="color:var(--ink-3);font-size:10px">${r.i}</span> ${r.n}</span><span class="bn"><i style="width:${r.d/24*100}%"></i><b>${r.d}</b></span><span class="bp"><i style="width:${r.l/24*100}%"></i><b>${r.l}</b></span></div>`).join("");
+function det(i){const r=R[i];
+ document.querySelectorAll(".rg").forEach(b=>b.classList.toggle("on",+b.dataset.i===i));
+ document.querySelectorAll(".dv").forEach(b=>b.classList.toggle("on",+b.dataset.i===i));
+ $("det").innerHTML=`<p class="ttl">Area ${r.i} of 8 <span class="src real">Measured</span></p><h4>${r.n}</h4><p class="small">${r.t}</p>
+ <div class="vs"><div><p class="big" style="color:var(--good)">${r.l}</p><small>liked it (${Math.round(r.l/24*100)}% of 24)</small></div><div><p class="big" style="color:var(--crit)">${r.d}</p><small>disliked it (${Math.round(r.d/24*100)}% of 24)</small></div></div>`+
+ r.c.map(c=>`<div class="cm ${c[0]}">${c[2]}<cite>${c[1]} · ${c[0]==="l"?"liked":"disliked"}</cite></div>`).join("")}
+document.querySelectorAll(".rg,.dv").forEach(b=>b.addEventListener("click",()=>det(+b.dataset.i)));
+det(2);
+
+/* themes */
+const TM=[
+ ["Battery worry shapes the whole clean",18,"var(--s1)","People plan the order of rooms, the power setting and even which days they clean around when the battery will die.",[["I start in the room that matters most, because I never know when it will quit.","Lena W., Corvane owner"],["Some weeks the stairs get done once.","Teresa M., Corvane owner"]]],
+ ["Emptying the bin is the worst moment",15,"var(--s2)","The dirtiest step of the job. Photos show dust on the floor, the counter and hands right after emptying.",[["I empty it outside now, over the garden bed, so the cloud blows away from me.","Rosa G., other brand"],["Picking the clump out with my fingers is the part I hate.","Derek F., other brand"]]],
+ ["Where it lives matters",13,"var(--s3)","Storage photos showed vacuums leaning in corners, behind doors and in closets with the charger on an extension cord.",[["It lives behind the bathroom door because that is the only outlet near a corner.","Bea C., Corvane owner"],["I rent. I am not drilling into a wall for a vacuum.","Hannah P., Corvane owner"]]],
+ ["“Smart” claims read as marketing",10,"var(--s7)","Feature words that do not say what happens are discounted. People want to know what it does and choose for themselves.",[["Tell me how many rooms. I would trust that more than minutes.","Hannah P., Corvane owner"],["What does smart mean here?","Owen T., other brand"]]],
+ ["Stairs decide how heavy is too heavy",9,"var(--s4)","Weight only comes up on stairs and high corners, but there it decides whether the job gets done.",[["On the floor I don't notice the weight. On the stairs my wrist does.","Jun L., other brand"],["I carry it up and do the top step last, holding the rail.","Nadia B., Corvane owner"]]],
+ ["A second charger is a common fix",6,"var(--s5)","One in four had bought a second charger, an extra battery or a spare from an old model to keep going.",[["I bought a second charger so I could leave one downstairs.","Andre K., other brand"],["My old one's battery fits, so I keep it charged in the garage.","Marco D., Corvane owner"]]]];
+$("themes").innerHTML=TM.map(t=>`<div class="card pad theme" style="--tc:${t[2]}"><h3>${t[0]}</h3><p class="ct">${t[1]} of 24 participants</p><div class="meter">${Array.from({length:24},(_,i)=>`<i class="${i<t[1]?"f":""}"></i>`).join("")}</div><p class="small" style="margin-bottom:10px">${t[3]}</p>${t[4].map(q=>`<div class="quote">${q[0]}<cite>${q[1]}</cite></div>`).join("")}</div>`).join("");
+const FR=[["Battery dies mid-clean",9],["Emptying the bin is messy",6],["Brush roll clogs and tangles",4],["Heavy on stairs",2],["Too loud",2],["Nowhere good to store it",1]];
+$("frus").innerHTML=FR.map(r=>`<div class="hb"><span class="hbl" title="${r[0]}">${r[0]}</span><span class="hbt"><i style="width:${r[1]/10*100}%;background:var(--s2)"></i></span><span class="hbv mono">${r[1]} <small>${Math.round(r[1]/24*100)}%</small></span></div>`).join("");
+const PT=[["Swap-in battery",3.1],["Touch-free bin",2.4],["Lighter weight",1.6],["Wall dock",1.1],["Floor light",1.0],["Smart suction",0.8]];
+$("pts").innerHTML=PT.map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/3.5*100}%;background:var(--s3)"></i></span><span class="hbv mono">${r[1].toFixed(1)}</span></div>`).join("");
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);$("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

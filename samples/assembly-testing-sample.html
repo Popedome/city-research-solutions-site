@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Assembly Testing Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* movers */
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* shared sample components */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.code{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:11px;padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
+.code.c0{background:var(--p0)}.code.c1{background:var(--p1)}.code.c2{background:var(--p2)}
+.prodrow{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px}
+@media(max-width:1000px){.prodrow{grid-template-columns:1fr}}
+.prod{border-top:4px solid var(--pc)}
+.prod h3{font-size:15px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
+.funnel{display:grid;gap:6px}
+.fn{display:grid;grid-template-columns:minmax(96px,34%) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.fn .hbt{height:18px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* ballot */
+.ballot{background:var(--panel);border:1px solid var(--rule-2);border-radius:6px;overflow:hidden}
+.bhd{background:var(--hero);color:#f3f4f0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bhd b{font-size:14px}
+.bhd span{font-family:"JetBrains Mono",monospace;font-size:11px;opacity:.85}
+.bq{padding:13px 16px;border-bottom:1px solid var(--rule)}
+.bq:last-child{border-bottom:none}
+.bq p{margin:0 0 9px;font-size:13px;font-weight:600}
+.bq p small{font-weight:500;color:var(--ink-3);font-size:11px;margin-left:4px}
+.sc{display:grid;gap:4px}
+.sc9{grid-template-columns:repeat(9,minmax(0,1fr))}
+.sc5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sc label{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:10.5px;color:var(--ink-3);text-align:center;line-height:1.2}
+.sc input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule-2);background:var(--panel);margin:0;cursor:pointer}
+.sc input:checked{border-color:var(--s1);background:radial-gradient(circle,var(--s1) 0 45%,var(--panel) 50%)}
+.sc input:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.sc5 input{border-radius:4px}
+.sc5 input:checked{background:var(--s1)}
+.sc label.mid{color:var(--ink-2);font-weight:600}
+.ends{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-3);margin-top:5px;gap:10px}
+.oe{border:1px dashed var(--rule-2);border-radius:4px;height:42px;font-size:11px;color:var(--ink-3);padding:6px 8px;font-family:"Source Serif 4",serif;font-style:italic}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.flag{background:var(--crit-bg)!important}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.ptlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+.zone{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+/* week by week */
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.mult{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.mult{grid-template-columns:1fr}}
+.mult h4{font-size:12px;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+/* readout */
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+.sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:3px;white-space:nowrap}
+
+/* assembly test */
+:root{--r1:#8b939a;--r2:#2a78d6;--heat:224,114,46}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--r1:#6f777e;--r2:#3987e5;--heat:236,138,74}}
+:root[data-theme="dark"]{--r1:#6f777e;--r2:#3987e5;--heat:236,138,74}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.stp{display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:start;padding:9px 10px;border:1px solid var(--rule);border-radius:5px;background:var(--panel)}
+.stp .sn{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;width:26px;height:26px;border-radius:50%;background:var(--slate);color:var(--bg);display:flex;align-items:center;justify-content:center}
+.stp b{font-size:12.5px;display:block;line-height:1.3}
+.stp span{font-size:10.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace}
+.stp.hot{border-color:var(--crit)}
+.stp.hot .sn{background:var(--crit);color:#fff}
+.defs{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:12px;margin:0}
+.defs dt{font-weight:700;color:var(--ink)}
+.defs dd{margin:0;color:var(--ink-2);line-height:1.45}
+.out{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:10px;align-items:center;margin:8px 0}
+.out .pl{font-size:12px;color:var(--ink-2);line-height:1.3}
+.out .pl small{display:block;color:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.out .stk{height:24px}
+.st{display:grid;grid-template-columns:minmax(120px,34%) 1fr 64px;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.st .bars{display:grid;gap:2px;position:relative}
+.st .bars i{display:block;height:9px;border-radius:2px}
+.st .tg{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);border-radius:1px}
+.st .v{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-2);text-align:right;line-height:1.25}
+.ebar{display:flex;height:14px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.ebar i{display:block;height:100%}
+.book{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px}
+.pg{position:relative;aspect-ratio:3/4;border:1px solid var(--rule-2);border-radius:4px;padding:8px 8px 6px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;cursor:default}
+.pg .pn{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700}
+.pg .pt{font-size:10.5px;font-weight:600;line-height:1.25}
+.pg .pv{font-family:"JetBrains Mono",monospace;font-size:15px;font-weight:700;letter-spacing:-.02em}
+.pg .ln{display:grid;gap:3px;margin:4px 0}
+.pg .ln i{display:block;height:3px;border-radius:2px;background:currentColor;opacity:.18}
+.ramp{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);margin-top:10px;flex-wrap:wrap}
+.ramp .rb{width:140px;height:10px;border-radius:2px;border:1px solid var(--rule)}
+.sdet{border:1px solid var(--rule);border-radius:6px;padding:14px 16px;background:var(--panel)}
+.sdet h3{font-size:16px;margin:0 0 4px;letter-spacing:-.01em}
+.sdet .meta{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.cause{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--real-bg);color:var(--real-fg)}
+.clip{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);align-items:start}
+.clip:last-child{border-bottom:none}
+.clip .ts{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap;padding-top:2px}
+.clip q{font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;quotes:"\201C" "\201D"}
+.fixbox{background:var(--good-bg);color:var(--good);border-radius:5px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin-top:12px}
+.fixbox b{color:var(--good)}
+td.dlt{color:var(--good);font-weight:700}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, product, participant and number on this page is made up to show what an instructions and assembly test looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Corvo Rise Assembly Test</b><span>Sample · Standing desk</span></div>
+    <div class="period">Electric standing desk · 9 steps · 2 rounds · 40 builders<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Design</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Task results</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#c0392f">Where they got stuck</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#d0602b">Instruction heat</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#1a8f65">Rewrite and retest</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DESIGN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Corvo sells the Rise, a flat-pack electric standing desk, online. Support calls and returns cluster around setup, and reviews mention the instructions. In <b>round 1</b>, 20 people each built the desk from a sealed box in our facility, using only the booklet and the tools inside, while we <b>timed and observed every step</b>. Corvo rewrote the booklet from what we saw, and in <b>round 2</b>, 20 different people built it again.</p>
+
+  <div class="card pad" style="margin-bottom:13px"><p class="ttl">The nine steps in the booklet</p>
+    <div class="steps" id="steps"></div>
+    <p class="note">Red outlines mark the four steps that caused most of the trouble in round 1. Booklet page numbers are shown under each step.</p></div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+      <div class="funnel" id="funnel"></div>
+      <p class="note">We schedule 22 per round to seat 20. Two standbys were thanked and released.</p></div>
+    <div class="card pad"><p class="ttl">Screener, each round</p>
+      <ul class="chk">
+        <li><b>Bought a standing desk</b> in the past year or plans to in the next twelve months, any brand</li>
+        <li><b>Quota:</b> 10 who call themselves handy (built three or more flat-pack items in two years), 10 who do not</li>
+        <li><b>Ages 22 to 68</b>, a mix of women and men</li>
+        <li><b>Able to lift 20 kg</b> with help, per the booklet's safety note</li>
+        <li class="x">Out: has built any Corvo desk before</li>
+        <li class="x">Out: works in furniture, retail or market research</li>
+        <li class="x">Out: took part in round 1 (round 2 only)</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">The room</p>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M2 6h12"/></svg></span><div><b>Sealed box, floor mat</b><span>A 4 by 4 meter build area. Only the box, the booklet and the tools inside it.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="8" rx="1.5"/><path d="M11 7l3-2v6l-3-2"/></svg></span><div><b>Four cameras</b><span>Overhead, two side angles, and one above the booklet stand to log which page is open.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5" r="2.5"/><path d="M3 14c0-3 2.2-5 5-5s5 2 5 5"/></svg></span><div><b>Moderator in the room</b><span>Prompts people to think aloud. Helps only when asked, or at step 8, where the booklet calls for a second person to turn the desk upright.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8l3 3 7-7"/></svg></span><div><b>14-point check at the end</b><span>A facility technician checks every bolt, cable and setting, so mistakes that looked fine to the builder still count.</span></div></div></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What we measure</p>
+      <dl class="defs">
+        <dt>Task success</dt><dd>Built correctly without help, built correctly after asking for help, or a fault found at the final check.</dd>
+        <dt>Time per step</dt><dd>From first touching that step's parts to the last action of the step.</dd>
+        <dt>Error</dt><dd>Anything that had to be undone or left the desk wrong. Minor: caught and fixed by the builder. Major: desk would not work or had to be partly taken apart. Critical: damage or a safety risk.</dd>
+        <dt>Stuck</dt><dd>No progress for more than 60 seconds, or a request for help.</dd>
+        <dt>Page heat</dt><dd>Seconds each booklet page was open, how many builders opened it, and how often they went back.</dd>
+        <dt>Ratings</dt><dd>Ease of assembly (1 to 7) and confidence it was built right, asked before the technician's check.</dd>
+      </dl></div>
+    <div class="card pad"><p class="ttl">Schedule</p>
+      <div class="tl">
+        <div class="tli"><span class="wk">Week 1<small>recruit</small></span><div><b>Screen and schedule</b><span>Online screener and a short call. 640 screened, 118 qualified.</span></div></div>
+        <div class="tli"><span class="wk">Week 2<small>round 1</small></span><div><b>20 builders, two days</b><span>Ten sessions a day in two rooms, 90 minutes each including the interview.</span><div class="tbar"><i>current booklet</i><i>video</i></div></div></div>
+        <div class="tli"><span class="wk">Week 3<small>rewrite</small></span><div><b>Findings workshop and rewrite</b><span>Clips of every sticking point reviewed with Corvo's product and packaging team. New booklet drafted and printed.</span></div></div>
+        <div class="tli"><span class="wk">Week 4<small>round 2</small></span><div><b>20 new builders</b><span>Same screener, same room, same measures, new booklet and keypad sticker.</span><div class="tbar"><i>new booklet</i><i>video</i></div></div></div>
+        <div class="tli"><span class="wk">Week 5<small>read out</small></span><div><b>Before and after readout</b><span>Results, clips, and the remaining open issues.</span></div></div>
+      </div></div>
+  </div>
+</div>
+
+<!-- TASK RESULTS -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">Round 1 used the <b>current booklet</b>. Just over half of the builders finished correctly without help, and time and errors piled up in <b>four of the nine steps</b>. The desk took 52 minutes on average against the booklet's promise of "about 30 minutes."</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Built right, no help</p><p class="val">55%</p><p class="sub">11 of 20 builders</p></div>
+    <div class="card kpi"><p class="lab">Mean build time</p><p class="val">52<small> min</small></p><p class="sub">range 31 to 86, booklet says 30</p></div>
+    <div class="card kpi"><p class="lab">Errors observed</p><p class="val" style="color:var(--crit)">40</p><p class="sub">2.0 per builder, 2 critical</p></div>
+    <div class="card kpi"><p class="lab">Asked for help</p><p class="val">6<small> of 20</small></p><p class="sub">9 requests in all</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Task success, round 1 <span class="src real">Measured</span></p>
+      <div id="outc"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--good);height:9px"></i>Built right, no help</span><span><i class="sw" style="background:var(--s4);height:9px"></i>Built right after help</span><span><i class="sw" style="background:var(--crit);height:9px"></i>Fault at final check</span></div>
+      <p class="note"><b>All three faults came from less experienced builders:</b> two desktops marked by long screws in step 5, and one motor cable not fully seated in step 7. The booklet works for people who already know how flat-pack goes together.</p></div>
+    <div class="card pad"><p class="ttl">Mean minutes per step, round 1 <span class="src real">Measured</span></p>
+      <div id="stime"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--r1);height:9px"></i>Actual mean</span><span><i class="sw" style="background:var(--ink);width:2px;height:12px"></i>Corvo's target (30 min in all)</span></div>
+      <p class="note">Steps 4, 5, 7 and 9 account for 30 of the 52 minutes.</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card"><p class="ttl">Errors by step and severity, round 1 <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:600px"><thead><tr><th>Step</th><th class="n">Minor</th><th class="n">Major</th><th class="n">Critical</th><th class="n">Total</th><th style="width:34%">Errors at this step</th><th class="n">Stuck</th><th class="n">Help asked</th></tr></thead><tbody id="etab"></tbody></table></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s4);height:9px"></i>Minor</span><span><i class="sw" style="background:var(--s2);height:9px"></i>Major</span><span><i class="sw" style="background:var(--crit);height:9px"></i>Critical</span></div>
+      <p class="note">Stuck counts builders who stopped for more than a minute or asked for help at that step. 31 stuck moments in all across 20 builders.</p></div>
+  </div>
+</div>
+
+<!-- STUCK -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">A builder counts as <b>stuck</b> when they make no progress for over a minute or ask for help. Four steps hold most of it. <b>Click a step</b> to see what happened, what people said while they worked, and the fix we tested in round 2.</p>
+
+  <div class="row w12">
+    <div class="card"><p class="ttl">Builders stuck, by step, round 1 <span class="src real">Measured</span></p>
+      <div id="stuck"></div>
+      <p class="note">Of 20 builders. One person can be stuck at more than one step.</p></div>
+    <div class="card pad"><p class="ttl">Sticking points <span class="src ill">Illustrative clips</span></p>
+      <div class="seg" id="sseg"><button class="on" data-p="4">Step 4 width</button><button data-p="9">Step 9 reset</button><button data-p="7">Step 7 cables</button><button data-p="5">Step 5 screws</button><button data-p="3">Step 3 legs</button></div>
+      <div id="sdet"></div></div>
+  </div>
+</div>
+
+<!-- HEAT -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">The camera above the booklet stand logged <b>which page was open, for how long, and how often builders went back</b>. The darker the page, the more it held people up. Switch rounds to see the rewritten booklet.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Booklet time per builder</p><p class="val" id="kb1">21<small> min</small></p><p class="sub" id="kb1s">of 52 minutes building</p></div>
+    <div class="card kpi"><p class="lab">Hottest page</p><p class="val" id="kb2">p. 8</p><p class="sub" id="kb2s">step 4, frame width</p></div>
+    <div class="card kpi"><p class="lab">Returns to hardware page</p><p class="val" id="kb3">4.2</p><p class="sub">times per builder, page 3</p></div>
+    <div class="card kpi"><p class="lab">Opened troubleshooting</p><p class="val" id="kb4">3<small> of 20</small></p><p class="sub" id="kb4s">where the reset step was hiding</p></div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">Instruction booklet, page by page <span class="src real">Measured</span></p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px">
+        <div class="seg" id="hround" style="margin:0"><button class="on" data-p="1">Round 1, current</button><button data-p="2">Round 2, rewrite</button></div>
+        <div class="seg" id="hmet" style="margin:0"><button class="on" data-p="s">Seconds open</button><button data-p="r">Times returned</button><button data-p="o">Share who opened</button></div>
+      </div>
+      <div class="book" id="book"></div>
+      <div class="ramp"><span>Low</span><span class="rb" style="background:linear-gradient(90deg,rgba(var(--heat),.06),rgba(var(--heat),1))"></span><span>High</span><span id="rampnote" style="margin-left:6px"></span></div>
+      <p class="note">Means per builder, n=20 per round. Page 16 held the reset instructions in round 1. The rewrite moved them to page 15, inside step 9, and shows each step's screws on that step's own page.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What the heat says</p>
+      <ul class="chk">
+        <li><b>Page 3, the hardware list, was opened again 4.2 times per builder.</b> People flipped back to match screws to letters. The steps never showed the screws themselves.</li>
+        <li><b>Pages 8 and 9 (frame width) held builders for 5.5 minutes.</b> The drawing gives a width in millimeters that nobody could measure without a metric tape.</li>
+        <li><b>Page 13 (cables) held 3 minutes,</b> mostly with the builder holding the booklet next to the control box, trying to match ports.</li>
+        <li class="x"><b>Only 3 of 20 opened page 16.</b> The reset instruction lived there. The other 17 never saw it.</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Pages people skipped</p>
+      <ul class="lst"><li>Page 4, tools<span>45% opened</span></li><li>Page 1, cover and safety<span>60% opened</span></li><li>Page 14, turn upright<span>70% opened</span></li><li>Page 16, troubleshooting<span>15% opened</span></li></ul>
+      <p class="note"><b>Skipped pages are fine when nothing important is on them.</b> Safety and the reset are important, so in the rewrite both moved to the step where they apply.</p></div>
+  </div>
+</div>
+
+<!-- RETEST -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">Corvo's team rewrote the booklet with us, added a sticker to the keypad and color-coded the cable plugs. <b>Twenty new builders</b> assembled the desk with the new version, under the same conditions and measures.</p>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p><p class="hbig">Ship the new booklet<br>and the keypad sticker</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">Building the desk right without help rose from 55% to 90%. Mean build time fell from 52 to 38 minutes, errors fell from 40 to 11, and no desktop was damaged. Change the booklet's time estimate to "about 40 minutes," which is honest and achievable. Step 5 is still slow, and that is a hardware question for the next model.</p>
+    </div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Before and after <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:520px"><thead><tr><th>Measure</th><th class="n">Round 1</th><th class="n">Round 2</th><th class="n">Change</th></tr></thead><tbody>
+        <tr><td>Built right, no help</td><td class="n">55% <small>(11)</small></td><td class="n">90% <small>(18)</small></td><td class="n dlt">+35 pts</td></tr>
+        <tr><td>Built right after help</td><td class="n">30% <small>(6)</small></td><td class="n">10% <small>(2)</small></td><td class="n dlt">−20 pts</td></tr>
+        <tr><td>Fault at final check</td><td class="n">15% <small>(3)</small></td><td class="n">0%</td><td class="n dlt">−15 pts</td></tr>
+        <tr><td>Mean build time</td><td class="n">52 min</td><td class="n">38 min</td><td class="n dlt">−14 min</td></tr>
+        <tr><td>Errors observed</td><td class="n">40</td><td class="n">11</td><td class="n dlt">−29</td></tr>
+        <tr><td>Critical errors</td><td class="n">2</td><td class="n">0</td><td class="n dlt">−2</td></tr>
+        <tr><td>Stuck moments</td><td class="n">31</td><td class="n">5</td><td class="n dlt">−26</td></tr>
+        <tr><td>Help requests</td><td class="n">9</td><td class="n">2</td><td class="n dlt">−7</td></tr>
+        <tr><td>Ease of assembly, mean of 1 to 7</td><td class="n">4.1</td><td class="n">5.9</td><td class="n dlt">+1.8</td></tr>
+        <tr><td>Confident it was built right (6 or 7)</td><td class="n">45%</td><td class="n">85%</td><td class="n dlt">+40 pts</td></tr>
+        <tr><td>Time looking at the booklet</td><td class="n">21 min</td><td class="n">12 min</td><td class="n dlt">−9 min</td></tr>
+      </tbody></table></div>
+      <p class="note">n=20 builders per round, different people each round, same screener and quotas. Less experienced builders: 3 of 10 built it right without help in round 1, 8 of 10 in round 2.</p></div>
+    <div class="card pad"><p class="ttl">Task success by round <span class="src real">Measured</span></p>
+      <div id="outc2"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--good);height:9px"></i>No help</span><span><i class="sw" style="background:var(--s4);height:9px"></i>After help</span><span><i class="sw" style="background:var(--crit);height:9px"></i>Fault</span></div></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card"><p class="ttl">Mean minutes per step, before and after <span class="src real">Measured</span></p>
+      <div id="stime2"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--r1);height:9px"></i>Round 1</span><span><i class="sw" style="background:var(--r2);height:9px"></i>Round 2</span><span><i class="sw" style="background:var(--ink);width:2px;height:12px"></i>Target</span></div></div>
+    <div class="card pad"><p class="ttl">What changed, and what it did</p>
+      <div class="fix"><span class="num">4</span><div><b>Width letters on the frame and the desktop label</b><span>S, M and L stamped on the frame, matching the desktop's label. Stuck at step 4: 9 to 1. Time: 9 to 4 min.</span></div><span class="sev g">Worked</span></div>
+      <div class="fix"><span class="num">9</span><div><b>Reset moved into step 9, plus a keypad sticker</b><span>"First use: hold the down button 10 seconds until it beeps." Errors at step 9: 7 to 1.</span></div><span class="sev g">Worked</span></div>
+      <div class="fix"><span class="num">7</span><div><b>Color-coded plugs and ports, full-page photo</b><span>Errors at step 7: 8 to 2. Time: 8 to 4 min.</span></div><span class="sev g">Worked</span></div>
+      <div class="fix"><span class="num">5</span><div><b>Actual-size screw outlines, named in words</b><span>"Short screws for the desktop." No long screws in the desktop. Time barely moved: 10 to 9 min.</span></div><span class="sev w">Partly</span></div>
+      <div class="fix"><span class="num">3</span><div><b>Right and wrong photos for the legs</b><span>"This side faces in" arrow on each leg. Errors: 5 to 1.</span></div><span class="sev g">Worked</span></div>
+      <div class="fix"><span class="num">1</span><div><b>Hardware shown on each step's page</b><span>Returns to the hardware page: 4.2 to 1.1 per builder.</span></div><span class="sev g">Worked</span></div></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Still open</p>
+      <ul class="chk">
+        <li><b>Step 5 takes 9 minutes.</b> It is twelve screws driven by hand with the included driver. Fewer, larger screws or pre-set inserts in the desktop would cut it. That is a parts decision for the next model.</li>
+        <li><b>Two builders still asked for help,</b> once at step 4 and once at step 7. Both were less experienced builders and both finished correctly.</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Where this test could mislead</p>
+      <ul class="chk">
+        <li><b>20 builders per round</b> finds the common problems. A rare one that affects 1 in 50 buyers may not show up.</li>
+        <li><b>Our build room is clean, bright and roomy.</b> A small apartment with the box on a rug, and a child helping, is harder.</li>
+        <li><b>People try harder when watched.</b> Real buyers may skip more pages, which makes moving key steps out of the troubleshooting page even more important.</li>
+      </ul></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products and figures are fictional. A live version is built on your product, your instructions and real buyers.</footer>
+</div>
+
+<script>
+(function(){
+const seg=(id,fn)=>document.querySelectorAll("#"+id+" button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.toggle("on",x===b));fn(b.dataset.p)}));
+/* step, name, pages, target, time r1, time r2, errors r1 [minor,major,critical], errors r2, stuck r1, stuck r2, help r1 */
+const S=[
+ [1,"Unpack and check parts","pp. 2 to 4",4,6,4,[2,0,0],[1,0,0],1,0,0],
+ [2,"Attach feet to legs","p. 5",2,3,3,[1,0,0],[1,0,0],0,0,0],
+ [3,"Attach legs to frame","pp. 6 to 7",4,7,6,[2,3,0],[1,0,0],3,1,0],
+ [4,"Set frame width","pp. 8 to 9",3,9,4,[3,6,0],[1,1,0],9,1,3],
+ [5,"Fix frame to desktop","pp. 10 to 11",7,10,9,[4,0,2],[2,0,0],4,1,0],
+ [6,"Mount control box and keypad","p. 12",3,4,4,[2,0,0],[1,0,0],1,0,0],
+ [7,"Connect cables","p. 13",3,8,4,[3,5,0],[1,1,0],6,1,2],
+ [8,"Turn desk upright","p. 14",2,2,2,[0,0,0],[0,0,0],0,0,0],
+ [9,"Reset and test height","p. 15",2,3,2,[0,7,0],[1,0,0],7,1,4]];
+const HOT=[4,5,7,9];
+document.getElementById("steps").innerHTML=S.map(s=>`<div class="stp${HOT.includes(s[0])?" hot":""}"><span class="sn">${s[0]}</span><div><b>${s[1]}</b><span>${s[2]}</span></div></div>`).join("");
+const fun=[["Screened",640],["Qualified",118],["Scheduled",44],["Arrived",42],["Built the desk",40]];
+document.getElementById("funnel").innerHTML=fun.map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/640*100,4)}%;background:${i<2?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+
+/* outcomes [no help, help, fault] counts */
+const outRow=(lab,n,c)=>{const v=c.map(x=>Math.round(x/n*100));const col=["var(--good)","var(--s4)","var(--crit)"];
+  return `<div class="out"><span class="pl">${lab}<small>n=${n}</small></span><div class="stk">${v.map((x,i)=>x?`<i style="width:${x}%;background:${col[i]}" title="${c[i]} of ${n}">${x}%</i>`:"").join("")}</div></div>`};
+document.getElementById("outc").innerHTML=outRow("All builders",20,[11,6,3])+outRow("Handy",10,[8,2,0])+outRow("Less experienced",10,[3,4,3]);
+document.getElementById("outc2").innerHTML=outRow("Round 1, all",20,[11,6,3])+outRow("Round 2, all",20,[18,2,0])+outRow("Round 1, less experienced",10,[3,4,3])+outRow("Round 2, less experienced",10,[8,2,0]);
+
+/* times */
+const MX=11;
+function times(id,both){document.getElementById(id).innerHTML=S.map(s=>`<div class="st"><span class="hbl" title="${s[1]}">${s[0]}. ${s[1]}</span><div class="bars"><i style="width:${s[4]/MX*100}%;background:var(--r1)"></i>${both?`<i style="width:${s[5]/MX*100}%;background:var(--r2)"></i>`:""}<span class="tg" style="left:${s[3]/MX*100}%"></span></div><span class="v">${s[4]} min${both?`<br><span style="color:var(--r2)">${s[5]} min</span>`:""}</span></div>`).join("")}
+times("stime",false);times("stime2",true);
+
+/* error table */
+const ec=["var(--s4)","var(--s2)","var(--crit)"];
+document.getElementById("etab").innerHTML=S.map(s=>{const e=s[6],t=e[0]+e[1]+e[2];return `<tr${HOT.includes(s[0])?' class="hl"':""}><td><b>${s[0]}</b> ${s[1]}</td><td class="n">${e[0]}</td><td class="n">${e[1]}</td><td class="n" style="${e[2]?"color:var(--crit);font-weight:700":""}">${e[2]}</td><td class="n" style="font-weight:700">${t}</td><td><div class="ebar">${e.map((x,i)=>x?`<i style="width:${x/40*100*4}%;background:${ec[i]}"></i>`:"").join("")}</div></td><td class="n">${s[8]}</td><td class="n">${s[10]}</td></tr>`}).join("")+
+ `<tr><td><b>All steps</b></td><td class="n">17</td><td class="n">21</td><td class="n">2</td><td class="n" style="font-weight:700">40</td><td style="font-size:11px;color:var(--ink-3)">bar scale: 10 errors = full width</td><td class="n">31</td><td class="n">9</td></tr>`;
+
+/* stuck chart */
+document.getElementById("stuck").innerHTML=S.map(s=>`<div class="hb"><span class="hbl" title="${s[1]}">${s[0]}. ${s[1]}</span><span class="hbt"><i style="width:${s[8]/20*100}%;background:${HOT.includes(s[0])?"var(--crit)":"var(--ink-3)"}"></i></span><span class="hbv mono">${s[8]}</span></div>`).join("");
+
+const D={
+ "4":{t:"Step 4 · Set frame width",st:"9 of 20 stuck · 9 errors · 9 min against a 3 min target",c:["Picture","Part"],
+  w:"The frame slides to fit three desktop sizes. The drawing shows the frame from above with a width in millimeters, and nothing on the frame or the desktop says which setting to use. Six builders set the wrong width and only found out when the holes did not line up in step 5.",
+  q:[["P04","18:42","Which holes? There are three sets of holes on this bar."],["P11","21:05","It says 1,200. One thousand two hundred what? Oh, millimeters. I don't own a metric tape."],["P16","17:30","I'll just set it in the middle and see what happens."]],
+  f:"Stamp S, M and L at the three width settings on the frame and print the matching letter on the desktop's label. The step becomes \"match the letter.\""},
+ "9":{t:"Step 9 · Reset and test height",st:"7 of 20 stuck · 7 errors · 4 help requests",c:["Words","Page order"],
+  w:"After wiring, the desk has to be reset once by holding the down button for 10 seconds until it beeps. That instruction sits on page 16, the troubleshooting page. Page 15 only says \"press to test.\" Seven builders thought the desk was broken. Three found page 16 on their own; four asked for help.",
+  q:[["P09","44:10","Nothing. It's dead. Did I break it?"],["P02","38:55","It beeped once and stopped. Is that bad?"],["P18","51:20","Okay, I'm going to look this up on my phone."]],
+  f:"Put the reset inside step 9, in a box with a picture of the keypad, and add a sticker to the keypad itself: \"First use: hold the down button 10 seconds until it beeps.\""},
+ "7":{t:"Step 7 · Connect cables",st:"6 of 20 stuck · 8 errors · 2 help requests",c:["Part","Picture"],
+  w:"The control box has four ports that all accept every plug. Motor cables go in M1 and M2, the keypad in HS. The labels are molded into black plastic and hard to read under a desk. Four builders used the wrong port, and one cable was left half seated.",
+  q:[["P13","33:40","I need a flashlight to read these."],["P07","29:12","They all fit in all of them, so how do I know which is which?"]],
+  f:"Color-code each plug and its port, and replace the line drawing with a full-page photo of a correctly wired control box."},
+ "5":{t:"Step 5 · Fix frame to desktop",st:"4 of 20 stuck · 6 errors, 2 critical",c:["Part","Words"],
+  w:"Bags C and D hold screws that look alike, 12 mm and 16 mm. The booklet refers to them by letter only. Two builders used the long screws in the desktop, which pushed a bump up through the top surface.",
+  q:[["P20","26:03","C or D? They look the same to me."],["P14","31:47","Was that supposed to happen? There's a bump on the top now."]],
+  f:"Print actual-size screw outlines on each step's page and on each bag, and name them in words: \"short screws for the desktop.\" Ask packaging about a different head color for the long screws."},
+ "3":{t:"Step 3 · Attach legs to frame",st:"3 of 20 stuck · 5 errors",c:["Picture"],
+  w:"Each leg fits on the frame two ways, with the motor housing facing in or out. Only one is right, and the drawing does not show the difference. Three builders mounted a leg backward and had to take it off again.",
+  q:[["P05","12:18","Does it matter which way this faces?"],["P12","14:02","Okay, that one's backward. Great."]],
+  f:"Add a pair of photos, right and wrong, and an arrow sticker on each leg: \"This side faces in.\""}};
+function sdet(k){const d=D[k];document.getElementById("sdet").innerHTML=`<div class="sdet"><h3>${d.t}</h3><div class="meta"><span class="sev c" style="white-space:normal;font-size:10px;letter-spacing:.04em;line-height:1.4">${d.st}</span>${d.c.map(c=>`<span class="cause">Cause: ${c}</span>`).join("")}</div><p class="small" style="margin-bottom:8px">${d.w}</p>${d.q.map(q=>`<div class="clip"><span class="ts">${q[0]} · ${q[1]}</span><q>${q[2]}</q></div>`).join("")}<div class="fixbox"><b>Tested in round 2:</b> ${d.f}</div></div>`}
+sdet("4");seg("sseg",sdet);
+
+/* booklet heat: page, label, round 1 [sec, opened %, returns], round 2 [sec, opened %, returns] */
+const B=[
+ [1,"Cover and safety",[8,60,.1],[10,70,.1]],[2,"Parts list",[95,100,.8],[80,100,.5]],[3,"Hardware, bags A to F",[140,100,4.2],[60,100,1.1]],[4,"Tools",[12,45,.1],[10,50,.1]],
+ [5,"Step 2 · Feet",[40,100,.2],[35,100,.2]],[6,"Step 3 · Legs, 1",[70,100,.6],[50,100,.3]],[7,"Step 3 · Legs, 2",[85,100,.9],[45,100,.3]],[8,"Step 4 · Width, 1",[210,100,1.8],[70,100,.4]],
+ [9,"Step 4 · Width, 2",[120,100,1.4],[40,100,.3]],[10,"Step 5 · Desktop, 1",[90,100,.7],[75,100,.4]],[11,"Step 5 · Desktop, 2",[60,95,.4],[50,95,.3]],[12,"Step 6 · Control box",[45,95,.3],[40,100,.2]],
+ [13,"Step 7 · Cables",[180,100,1.6],[70,100,.5]],[14,"Step 8 · Upright",[15,70,0],[20,85,.1]],[15,"Step 9 · Test",[75,90,.9],[45,100,.3]],[16,"Troubleshooting",[10,15,.1],[5,10,0]]];
+let rnd="1",met="s";
+const MAXM={s:210,r:4.2,o:100};
+function book(){const ri=rnd==="1"?2:3,mi={s:0,o:1,r:2}[met];
+  document.getElementById("book").innerHTML=B.map(p=>{const v=p[ri][mi],a=Math.max(.06,v/MAXM[met]);const dark=a>.55;
+    const lab=rnd==="2"&&p[0]===15?"Step 9 · Reset and test":rnd==="2"&&p[0]===3?"Hardware overview":p[1];
+    const txt=met==="s"?v+"s":met==="r"?v.toFixed(1)+"×":v+"%";
+    return `<div class="pg" style="background:rgba(var(--heat),${a.toFixed(2)});color:${dark?"#fff":"var(--ink)"}" title="Page ${p[0]}, ${lab}: ${p[ri][0]} s open, ${p[ri][1]}% opened, ${p[ri][2]} returns"><div><span class="pn">p. ${p[0]}</span><div class="pt">${lab}</div></div><div class="ln"><i style="width:90%"></i><i style="width:70%"></i><i style="width:80%"></i></div><span class="pv">${txt}</span></div>`}).join("");
+  document.getElementById("rampnote").textContent=met==="s"?"mean seconds the page was open, per builder":met==="r"?"mean times a builder went back to the page":"share of builders who opened the page at all";
+  const r1=rnd==="1";
+  document.getElementById("kb1").innerHTML=(r1?21:12)+"<small> min</small>";document.getElementById("kb1s").textContent=r1?"of 52 minutes building":"of 38 minutes building";
+  document.getElementById("kb2").textContent=r1?"p. 8":"p. 2";document.getElementById("kb2s").textContent=r1?"step 4, frame width":"parts list, as it should be";
+  document.getElementById("kb3").textContent=r1?"4.2":"1.1";
+  document.getElementById("kb4").innerHTML=(r1?3:2)+"<small> of 20</small>";document.getElementById("kb4s").textContent=r1?"where the reset step was hiding":"no longer needed to finish";}
+book();seg("hround",p=>{rnd=p;book()});seg("hmet",p=>{met=p;book()});
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

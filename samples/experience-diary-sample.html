@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Experience Diary Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* shared components */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+
+/* experience diary additions */
+:root{--st0:#6b7680;--st1:#2a78d6;--st2:#8a63d2;--st3:#1baf7a;--st4:#eb6834}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--st0:#9aa3ab;--st1:#3987e5;--st2:#9b7ae0;--st3:#199e70;--st4:#d95926}}
+:root[data-theme="dark"]{--st0:#9aa3ab;--st1:#3987e5;--st2:#9b7ae0;--st3:#199e70;--st4:#d95926}
+.jmap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:13px}
+@media(max-width:1000px){.jmap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.jmap{grid-template-columns:1fr}}
+.stg{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--sc);border-radius:6px;padding:12px 13px;min-width:0}
+.stg h3{font-size:14.5px;margin:0;letter-spacing:-.01em;display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.stg h3 small{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);font-weight:500}
+.stg .meta{display:flex;gap:6px;flex-wrap:wrap;margin:7px 0 9px}
+.stg .meta span{font-family:"JetBrains Mono",monospace;font-size:10px;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-2)}
+.stg .q{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:2px 0 4px}
+.tp{display:grid;grid-template-columns:1fr 34px;gap:2px 6px;align-items:center;padding:3px 0;font-size:11.5px;color:var(--ink-2)}
+.tp .tb{grid-column:1/-1;height:6px;background:var(--panel-2);border-radius:2px;overflow:hidden}
+.tp .tb i{display:block;height:100%;background:var(--sc)}
+.tp b{font-family:"JetBrains Mono",monospace;font-size:10.5px;text-align:right;color:var(--ink);font-weight:700}
+.arrow{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-3);margin:-4px 0 12px;flex-wrap:wrap}
+.arrow i{flex:1;min-width:30px;height:2px;background:linear-gradient(90deg,var(--st0),var(--st1),var(--st2),var(--st3),var(--st4));border-radius:2px}
+.stchip{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
+.mom{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px solid var(--rule);cursor:pointer}
+.mom:last-child{border-bottom:none}
+.mom b{font-size:13px}
+.mom .sh{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;white-space:nowrap}
+.mom .bar{grid-column:1/-1;height:8px;background:var(--panel-2);border-radius:2px;overflow:hidden}
+.mom .bar i{display:block;height:100%}
+.mom .ex{grid-column:1/-1;display:none;font-family:"Source Serif 4",serif;font-size:13px;color:var(--ink-2);border-left:2px solid var(--rule-2);padding:2px 0 2px 10px;margin-top:4px}
+.mom .ex cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:2px}
+.mom.open .ex{display:block}
+.mom:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.phone{max-width:300px;margin:0 auto;border:8px solid var(--slate);border-radius:26px;background:var(--panel);overflow:hidden}
+.phone .pt{background:var(--hero);color:#f3f4f0;padding:10px 14px;font-size:12px;font-weight:700;display:flex;justify-content:space-between}
+.phone .pt span{font-family:"JetBrains Mono",monospace;font-weight:400;opacity:.8}
+.phone .pq{padding:10px 14px;border-bottom:1px solid var(--rule);font-size:12px}
+.phone .pq p{margin:0 0 6px;font-weight:600}
+.phone .opts{display:flex;gap:4px;flex-wrap:wrap}
+.phone .opts span{font-size:10.5px;padding:3px 7px;border-radius:12px;border:1px solid var(--rule-2);color:var(--ink-2)}
+.phone .opts span.on{background:var(--s1);border-color:var(--s1);color:#fff}
+.sl10{display:grid;grid-template-columns:repeat(11,1fr);gap:2px}
+.sl10 span{font-family:"JetBrains Mono",monospace;font-size:9.5px;text-align:center;padding:3px 0;border-radius:3px;background:var(--panel-2);color:var(--ink-3)}
+.sl10 span.on{background:var(--s1);color:#fff}
+.ent{border:1px solid var(--rule);border-left:4px solid var(--sc);border-radius:6px;padding:11px 13px;background:var(--panel)}
+.ent .eh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11px;color:var(--ink-3);margin-bottom:6px}
+.ent .eh b{color:var(--ink);font-size:12px}
+.ent .eh .r{margin-left:auto;font-family:"JetBrains Mono",monospace}
+.ent q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.ent .md{margin-top:7px;border:1px dashed var(--rule-2);border-radius:5px;padding:7px 9px;font-size:11.5px;color:var(--ink-2);background:var(--panel-2);font-style:italic}
+.ent .dir{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.dir.t{background:var(--good-bg);color:var(--good)}.dir.a{background:var(--crit-bg);color:var(--crit)}.dir.n{background:var(--panel-2);color:var(--ink-3)}
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+@media(max-width:400px){.egrid{grid-template-columns:1fr}}
+.cv{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:11px;text-align:center}
+.cv div{background:var(--panel-2);border-radius:4px;padding:8px 4px}
+.cv b{display:block;font-family:"JetBrains Mono",monospace;font-size:18px}
+td.miss{background:var(--crit-bg);color:var(--crit);font-weight:700}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, product, participant and number on this page is made up to show what an experience diary readout looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Tamber Experience Diary</b><span>Sample · Countertop air fryers</span></div>
+    <div class="period">Path to purchase · 40 shoppers · 21 days · 1,284 entries<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Design</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#2a78d6">Journey map</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Moments that moved people</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#c0392f">Where Tamber was missing</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">Diary entries</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DESIGN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Tamber, a fictional small-appliance brand, sells a well-reviewed air fryer that loses more often than it should. To see why, <b>40 people about to buy an air fryer</b> kept a diary on their phone for <b>three weeks</b>. Every time anything touched the decision, a video, a store aisle, a friend's kitchen, a review, they logged it <b>in the moment</b>: a photo or a short video, a line of text and two quick ratings. The diary kept going through purchase and the first uses at home.</p>
+
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Kept the diary 21 days</p><p class="val">40<small> of 42</small></p><p class="sub">20 first-time buyers, 20 replacing an older fryer</p></div>
+    <div class="card kpi"><p class="lab">Entries logged</p><p class="val">1,284</p><p class="sub">median 31 per person, range 12 to 64</p></div>
+    <div class="card kpi"><p class="lab">Bought within 21 days</p><p class="val">36<small> of 40</small></p><p class="sub">4 still deciding at the end</p></div>
+    <div class="card kpi"><p class="lab">Trigger to purchase</p><p class="val">9<small> days</small></p><p class="sub">median among the 36 buyers</p></div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Entries by diary day <span class="src real">Measured</span></p>
+      <div class="chartwrap" id="eday"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--s1);height:9px"></i>Week 1</span><span><i class="sw" style="background:var(--s7);height:9px"></i>Week 2</span><span><i class="sw" style="background:var(--s3);height:9px"></i>Week 3</span></div>
+      <p class="note">A gentle evening nudge goes out on any day with no entry. Entries stay above 45 a day for all three weeks, so the later stages are as well covered as the first.</p></div>
+    <div class="card"><p class="ttl">Entries per participant <span class="src real">Measured</span></p>
+      <div id="eper"></div>
+      <p class="ttl" style="margin-top:16px">Entry type, of 1,284 <span class="src real">Measured</span></p>
+      <div id="etype"></div></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">What the app asks, every entry</p>
+      <div class="phone" aria-label="Sample diary entry screen">
+        <div class="pt">New entry<span>Day 6 · 6:45 pm</span></div>
+        <div class="pq"><p>What just happened?</p><div class="opts"><span class="on">Photo</span><span>Video</span><span>Text</span></div></div>
+        <div class="pq"><p>Where are you in the decision?</p><div class="opts"><span>Need</span><span>Looking</span><span class="on">Comparing</span><span>Buying</span><span>Using</span></div></div>
+        <div class="pq"><p>How sure are you which one you will buy?</p><div class="sl10" id="sl10"></div></div>
+        <div class="pq"><p>Did this push you toward or away from a model?</p><div class="opts"><span>Toward</span><span class="on">Away</span><span>Neither</span></div></div>
+        <div class="pq" style="border-bottom:none"><p>Which brand, if any?</p><div class="opts"><span class="on">Volta Kitchen</span><span>Other</span></div></div>
+      </div>
+      <p class="note">About 40 seconds an entry. Short enough that people log the moment and do not save it for later.</p></div>
+    <div class="card pad"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+      <div class="funnel" id="funnel"></div>
+      <ul class="chk" style="margin-top:10px">
+        <li><b>Plans to buy an air fryer</b> within a month, and has not started shopping in earnest</li>
+        <li><b>Quota:</b> 20 first-time buyers, 20 replacing an older or smaller fryer</li>
+        <li><b>16 households with children</b>, all four US regions</li>
+        <li><b>Smartphone</b> and willing to post photos and short videos</li>
+        <li class="x">Out: works in retail, appliances, advertising or research</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">Why in the moment</p>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg></span><div><b>Memory tidies the story</b><span>Asked a month later, people name two or three steps. The diary logged a median of 31.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l4-4 3 3 3-6"/></svg></span><div><b>Small moments get lost</b><span>A box too tall for the counter, a review read at midnight. They decide sales and rarely survive recall.</span></div></div>
+      <div class="task"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="9" height="8" rx="1.5"/><path d="M11 7l3-2v6l-3-2"/></svg></span><div><b>The photo is the evidence</b><span>A tape measure against the cabinet says more than "I worried about size."</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- JOURNEY -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">The journey map is <b>built from the entries themselves</b>. Each entry was tagged to a stage and a touchpoint. Percentages are the share of participants who logged that touchpoint at least once in that stage. The first three stages use all 40; purchase and first use use the 36 who bought.</p>
+  <div class="arrow"><span>Need</span><i></i><span>First use</span></div>
+  <div class="jmap" id="jmap"></div>
+  <div class="row k2">
+    <div class="card"><p class="ttl">Days from trigger to purchase, n=36 buyers <span class="src real">Measured</span></p>
+      <div id="ttp"></div>
+      <p class="note">Median 9 days. <b>21 of 36 buyers took more than a week</b>, which leaves time for a brand to get onto the list. Trigger date is the first entry tagged as the need.</p></div>
+    <div class="card"><p class="ttl">How sure, by stage, 0 to 10 <span class="src real">Measured</span></p>
+      <div id="sure"></div>
+      <p class="note">Average of the "how sure are you" rating on every entry in that stage. Confidence climbs only 1.2 points while comparing: reviews raise as many doubts as they settle. For first use, the question changes to "how glad are you that you bought it?"</p></div>
+  </div>
+</div>
+
+<!-- MOMENTS -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">Every entry asked whether the moment pushed the participant <b>toward or away from</b> a model. These are the moments that came up most, with the share of the 40 who logged one and the <b>average change in how sure they felt</b> on their next entry. <b>Click any moment</b> to read an entry.</p>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Moved people toward a model <span class="src real">Measured</span></p><div id="mt"></div></div>
+    <div class="card pad"><p class="ttl">Moved people away from a model <span class="src real">Measured</span></p><div id="ma"></div></div>
+  </div>
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Seeing it beats reading about it</p><p class="small">The two strongest positive moments, a friend's kitchen and an open display, both let people see the basket and the food. Neither is something a product page offers today.</p></div>
+    <div class="card pad"><p class="ttl">Size worries arrive late</p><p class="small">Counter and cabinet space came up in comparing, after a favorite was chosen. 11 people photographed a tape measure. Most could not find the height of the model they wanted.</p></div>
+    <div class="card pad"><p class="ttl">One bad review travels</p><p class="small">The coating complaint was logged by 13 people, usually after sorting reviews by lowest stars. It followed the leading brand and rarely touched Tamber.</p></div>
+  </div>
+</div>
+
+<!-- MISSING -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">Tamber is easy to find at the shelf and hard to find anywhere earlier. <b>Shortlists are set while people compare</b>, and by then most had never seen a Tamber. When it did make the list, it won more often than any other brand.</p>
+  <div class="row">
+    <div class="card"><p class="ttl">Participants who saw each brand, by stage <span class="src real">Measured</span></p>
+      <div class="scroll"><table style="min-width:560px"><thead><tr><th>Stage</th><th class="n">n</th><th class="n">Any brand</th><th class="n">Tamber</th><th class="n">Volta Kitchen</th><th class="n">Crispwell</th></tr></thead><tbody id="bst"></tbody></table></div>
+      <p class="note">Seen means the brand appeared in at least one entry at that stage: a video, a photo of a shelf, a review read, a friend's kitchen. Red cells mark where Tamber was seen by fewer than a fifth of people.</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">From seen to shortlisted to bought <span class="src real">Measured</span></p>
+      <div id="conv"></div>
+      <p class="note">Seen: during comparing, of 40. Shortlist: the two or three models named in the last comparing entry. Bought: of the 36 who bought. Other brands and store brands account for the remaining 8 purchases.</p></div>
+    <div class="card pad"><p class="ttl">What people looked for and could not find about Tamber <span class="src real">Measured</span></p>
+      <div id="gaps"></div>
+      <p class="note">Count of participants who logged searching for this and not finding it.</p></div>
+  </div>
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">What it means for Tamber</p><p class="hbig">Get on the list<br>in the first week</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">The product converts. The problem is being missing while lists form. Put Tamber in the recipe videos people watch in the first days, publish the inside basket size and the height with the drawer open, and push for open displays where people can pull the basket out. Test a photo of the basket after six months of use as an answer to the coating worry.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ENTRIES -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">A selection of entries, as logged. Photos and videos are described in place of the images. Participant numbers are study IDs. <b>Filter by stage</b> to follow the journey.</p>
+  <div class="seg" id="eseg"></div>
+  <div class="egrid" id="ents"></div>
+  <p class="note">Ratings show the "how sure" score at that entry, or "how glad" at first use. Entries are lightly trimmed for length.</p>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products, participants and figures are fictional. A live version follows your category, your shoppers and your own brand.</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const ST=[["Need","var(--st0)"],["Looking","var(--st1)"],["Comparing","var(--st2)"],["Buying","var(--st3)"],["First use","var(--st4)"]];
+const chip=i=>`<span class="stchip" style="background:${ST[i][1]}">${ST[i][0]}</span>`;
+const pc=(c,n)=>Math.round(c*100/n);
+
+/* design */
+const ED=[84,71,69,68,66,65,64,63,62,61,60,62,59,58,57,56,55,54,52,50,48];
+(function(){const d=$("eday"),w=520,h=190,L=30,R=6,T=10,B=24,s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":"Entries by diary day"},d);
+ const bw=(w-L-R)/21,Y=v=>T+(1-v/90)*(h-T-B);
+ [0,30,60,90].forEach(v=>{el("line",{x1:L,x2:w-R,y1:Y(v),y2:Y(v),class:"gl"},s);el("text",{x:L-5,y:Y(v)+3,"text-anchor":"end",class:"ax"},s).textContent=v});
+ ED.forEach((v,i)=>{const r=el("rect",{x:L+i*bw+2,y:Y(v),width:bw-4,height:Y(0)-Y(v),rx:2,fill:i<7?"var(--s1)":i<14?"var(--s7)":"var(--s3)"},s);el("title",{},r).textContent=`Day ${i+1}: ${v} entries`;
+  if(i%5===0||i===20)el("text",{x:L+i*bw+bw/2,y:h-8,"text-anchor":"middle",class:"ax"},s).textContent="D"+(i+1)});
+ const tot=ED.reduce((a,b)=>a+b,0);el("text",{x:w-R,y:T+8,"text-anchor":"end",class:"dl",fill:"var(--ink-2)"},s).textContent=tot.toLocaleString()+" entries";})();
+$("eper").innerHTML=[["12 to 19",6],["20 to 29",11],["30 to 39",12],["40 to 49",6],["50 to 64",5]].map(r=>`<div class="hb"><span class="hbl mono" style="font-size:11px">${r[0]} entries</span><span class="hbt"><i style="width:${r[1]/12*100}%;background:var(--s1)"></i></span><span class="hbv mono">${r[1]} <small>people</small></span></div>`).join("");
+$("etype").innerHTML=[["Photo with a note",591],["Quick rating only",282],["Text note",244],["Short video",167]].map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/600*100}%;background:var(--s7)"></i></span><span class="hbv mono">${r[1]} <small>${pc(r[1],1284)}%</small></span></div>`).join("");
+$("sl10").innerHTML=Array.from({length:11},(_,i)=>`<span class="${i===4?"on":""}">${i}</span>`).join("");
+$("funnel").innerHTML=[["Screened",910],["Qualified",118],["Started",42],["Finished",40]].map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/910*100,4)}%;background:${i<2?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+
+/* journey */
+const J=[
+ {n:40,m:["96 entries","sure 1.8"],q:"Main trigger, one per person",tp:[["Saw one in use at a friend's or family home",12],["Old fryer broke or wore out",10],["Tired of heating the big oven for small meals",8],["A recipe video",6],["Family grew, old one too small",4]]},
+ {n:40,m:["362 entries","median 3 days","sure 3.4"],q:"Logged at least once",tp:[["Recipe and review videos",29],["Star reviews on a retailer site",26],["Asked a friend or family member",19],["Searched for the best air fryer",18],["Store visit just to look",12],["Brand websites",7]]},
+ {n:40,m:["418 entries","median 4 days","sure 4.6"],q:"Logged at least once",tp:[["Read reviews sorted by lowest stars",32],["Compared capacity in quarts",25],["Basket style vs oven style",22],["Watched a video review",16],["Measured counter or cabinet space",13],["Looked at the box in a store",11]]},
+ {n:36,m:["141 entries","sure 8.2"],q:"Where they bought, one per buyer",tp:[["Big-box retailer, online",14],["Big-box retailer, in store",9],["Online marketplace",8],["Warehouse club",5]]},
+ {n:36,m:["267 entries","median 1 day to first use","glad 8.4"],q:"First thing cooked, one per buyer",tp:[["Frozen fries or snacks",15],["Reheated leftovers",9],["Chicken from a recipe video",8],["Vegetables",4]]}];
+$("jmap").innerHTML=J.map((s,i)=>`<div class="stg" style="--sc:${ST[i][1]}"><h3>${["Need","Looking","Comparing","Buying","First use"][i]}<small>n=${s.n}</small></h3><div class="meta">${s.m.map(x=>`<span>${x}</span>`).join("")}</div><p class="q">${s.q}</p>${s.tp.map(t=>{const p=pc(t[1],s.n);return `<div class="tp"><span>${t[0]}</span><b>${p}%</b><span class="tb"><i style="width:${p}%"></i></span></div>`}).join("")}</div>`).join("");
+$("ttp").innerHTML=[["0 to 3 days",6],["4 to 7 days",9],["8 to 14 days",13],["15 to 21 days",8]].map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/14*100}%;background:var(--st3)"></i></span><span class="hbv mono">${r[1]} <small>${pc(r[1],36)}%</small></span></div>`).join("");
+$("sure").innerHTML=[["Need",1.8],["Looking",3.4],["Comparing",4.6],["Buying",8.2],["First use (glad)",8.4]].map((r,i)=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]*10}%;background:${ST[i][1]}"></i></span><span class="hbv mono">${r[1].toFixed(1)}</span></div>`).join("");
+
+/* moments */
+const MT=[
+ ["Saw it in use at a friend's or family home, tasted the food",16,2.1,"Had dinner at my sister's. She made wings in that thing in 15 minutes. I want one.","P07, first-time buyer, day 1"],
+ ["Reviews saying the basket is dishwasher safe",14,1.4,"Three reviews in a row say the basket goes in the dishwasher. That matters more to me than the presets.","P11, replacing, day 5"],
+ ["A recipe video made with the exact model",12,1.6,"Same fryer in every video I save. At this point I feel like I already own it.","P13, first-time buyer, day 4"],
+ ["Open display in store, could pull the basket out",7,1.9,"It was the only one with the basket out on display and I could see a chicken fits.","P26, replacing, day 9"],
+ ["Store associate answered a capacity question",4,1.2,"Asked if it would do dinner for five. He said get the 6 quart. Done.","P35, replacing, day 7"]];
+const MA=[
+ ["Reviews about the nonstick coating peeling",13,-1.7,"Volta reviews: three people say the nonstick peels after a few months. Now I am not sure.","P07, first-time buyer, day 6"],
+ ["Box size vs the space under the cabinets",11,-1.5,"The one I liked is 15 inches tall. I have 17 under the cabinet. Need room to open it? It doesn't say.","P18, first-time buyer, day 6"],
+ ["Too many preset buttons in the photos",7,-0.9,"Twelve buttons. I want hot and a timer.","P29, first-time buyer, day 8"],
+ ["Fan noise heard in a video review",5,-1.1,"You can hear it over the guy talking. Our kitchen is open to the living room.","P04, replacing, day 10"],
+ ["Delivery date slipped at checkout",4,-0.8,"It said two weeks at checkout. Bought the other one in the store instead.","P38, replacing, day 12"]];
+function mom(arr,id,col){$(id).innerHTML=arr.map(m=>`<div class="mom" tabindex="0" role="button" aria-expanded="false"><b>${m[0]}</b><span class="sh" style="color:${col}">${m[2]>0?"+":"−"}${Math.abs(m[2]).toFixed(1)}</span><span class="bar"><i style="width:${pc(m[1],40)}%;background:${col}"></i></span><span style="grid-column:1/-1;font-size:11px;color:var(--ink-3)">${m[1]} of 40 (${pc(m[1],40)}%) logged this · change in how sure, next entry</span><div class="ex">${m[3]}<cite>${m[4]}</cite></div></div>`).join("")}
+mom(MT,"mt","var(--good)");mom(MA,"ma","var(--crit)");
+document.querySelectorAll(".mom").forEach(m=>{const f=()=>{m.classList.toggle("open");m.setAttribute("aria-expanded",m.classList.contains("open"))};m.addEventListener("click",f);m.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}})});
+document.querySelector("#mt .mom").classList.add("open");
+
+/* missing */
+const BS=[["Need",40,30,2,14,6],["Looking",40,40,6,29,18],["Comparing",40,40,15,31,24],["Buying",36,36,22,30,25]];
+$("bst").innerHTML=BS.map((r,i)=>`<tr><td>${chip(i)}</td><td class="n">${r[1]}</td>${r.slice(2).map((v,j)=>`<td class="n${j===1&&pc(v,r[1])<20?" miss":""}">${v} <span style="color:var(--ink-3);font-size:10.5px">${pc(v,r[1])}%</span></td>`).join("")}</tr>`).join("");
+const CV=[["Tamber",15,11,9,"var(--s4)"],["Volta Kitchen",31,27,11,"var(--s1)"],["Crispwell",24,16,8,"var(--s7)"]];
+$("conv").innerHTML=CV.map(c=>`<div style="margin-bottom:12px"><p class="mini" style="color:var(--ink-2)">${c[0]} <span style="font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink-3)">shortlist to purchase: ${pc(c[3],c[2])}%</span></p><div class="cv"><div><b>${c[1]}</b>seen</div><div><b>${c[2]}</b>shortlisted</div><div style="background:${c[0]==="Tamber"?"var(--good-bg)":"var(--panel-2)"}"><b>${c[3]}</b>bought</div></div></div>`).join("");
+$("gaps").innerHTML=[["Inside basket size, to check a whole chicken fits",9],["Recipe videos made with a Tamber",7],["Photos of the basket after months of use",6],["Height with the drawer open",5]].map(r=>`<div class="hb" style="grid-template-columns:minmax(150px,62%) 1fr auto"><span class="hbl" style="white-space:normal">${r[0]}</span><span class="hbt"><i style="width:${r[1]/10*100}%;background:var(--crit)"></i></span><span class="hbv mono">${r[1]}</span></div>`).join("");
+
+/* entries */
+const E=[
+ [0,"P07","first-time buyer",1,"7:12 pm","Photo",1,"t","Had dinner at my sister's. She made wings in that thing in 15 minutes. I want one.","Photo: a basket of wings on a counter next to a black air fryer"],
+ [0,"P22","replacing",1,"8:40 am","Photo",2,"n","The coating is coming off in the basket. Not putting food in that anymore.","Photo: an old fryer basket with flaking gray coating"],
+ [1,"P13","first-time buyer",3,"9:55 pm","Video 0:18",3,"t","Third recipe video tonight. They all use the same one with the window in the front. Never heard of the brand before Tuesday.","Video: scrolling past saved recipe videos of crispy potatoes"],
+ [1,"P31","replacing",4,"12:20 pm","Photo",3,"n","Went to look on my lunch break. Everything is in a box. I wanted to pull a basket out and feel it.","Photo: a store aisle with air fryer boxes stacked high, none open"],
+ [2,"P07","first-time buyer",6,"10:05 pm","Rating",4,"a","Volta reviews: three people say the nonstick peels after a few months. Now I am not sure.",""],
+ [2,"P18","first-time buyer",6,"6:45 pm","Photo",4,"a","The one I liked is 15 inches tall. I have 17 under the cabinet. Need room to open it? It doesn't say.","Photo: a tape measure from the counter to the bottom of the cabinet, reading 17 inches"],
+ [2,"P13","first-time buyer",8,"8:30 pm","Text",5,"t","Tamber came up under similar items in the store app. Square basket, looks bigger. Could not find the inside measurement anywhere.",""],
+ [3,"P26","replacing",9,"11:15 am","Photo",9,"t","Ended up with the Tamber. It was the only one with the basket out on display and I could see a chicken fits.","Photo: a Tamber box in a cart at a warehouse club"],
+ [3,"P22","replacing",10,"7:00 pm","Rating",8,"t","Ordered the Volta online. Delivery says Friday.",""],
+ [4,"P26","replacing",10,"6:20 pm","Video 0:24",9,"t","First fries. Kids ate them before I got a photo. Basket went in the dishwasher, came out fine.","Video: pulling out the drawer, fries inside, a hand reaching in"],
+ [4,"P18","first-time buyer",15,"8:10 pm","Photo",7,"n","I have to pull it out from under the cabinet every time so the steam does not hit the wood. Small annoyance.","Photo: the fryer pulled to the front edge of the counter, cabinet above"],
+ [2,"P31","replacing",21,"9:00 pm","Text",5,"n","Still have not decided. Two tabs open for a week now. Waiting to see one in person.",""]];
+const DIR={t:"Toward",a:"Away",n:"Neither"};
+$("eseg").innerHTML=`<button class="on" data-s="all">All stages</button>`+ST.map((s,i)=>`<button data-s="${i}">${s[0]}</button>`).join("");
+function ents(sel){$("ents").innerHTML=E.filter(e=>sel==="all"||e[0]===+sel).sort((a,b)=>a[3]-b[3]).map(e=>`<div class="ent" style="--sc:${ST[e[0]][1]}"><div class="eh">${chip(e[0])}<b>${e[1]}</b><span>${e[2]} · day ${e[3]}, ${e[4]}</span><span class="dir ${e[7]}">${DIR[e[7]]}</span><span class="r">${e[5]} · ${e[0]===4?"glad":"sure"} ${e[6]}/10</span></div><q>${e[8]}</q>${e[9]?`<div class="md">${e[9]}</div>`:""}</div>`).join("")}
+ents("all");
+$("eseg").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{$("eseg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));ents(b.dataset.s)}));
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);$("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

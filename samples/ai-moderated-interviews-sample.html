@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI-Moderated Interviews Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+.mkt{display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.mktlab{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-right:7px}
+.mkt button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.mkt button:hover{color:var(--ink);border-color:var(--rule-2)}
+.mkt button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.mkt button.cmp{margin-left:7px;border-style:dashed}
+.mkt button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.mktnote{font-size:11px;color:var(--ink-3);text-align:right;max-width:330px;line-height:1.4}
+.usonly{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:9px 13px;font-size:12px;
+  margin-bottom:12px;display:none}
+.usonly b{font-weight:700}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k6{grid-template-columns:repeat(6,1fr)}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k6{grid-template-columns:repeat(3,1fr)}.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k6,.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:2px 6px;
+  border-radius:3px;margin-left:7px;vertical-align:2px}
+.pill.up{background:var(--good-bg);color:var(--good)}
+.pill.dn{background:var(--crit-bg);color:var(--crit)}
+.pill.fl{background:var(--panel-2);color:var(--ink-3)}
+.spark{margin-top:8px;height:26px}
+
+/* movers */
+.mv .sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.brd{font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .1s;background:var(--slate);
+  color:var(--bg);border-radius:4px;padding:6px 9px;font-family:"JetBrains Mono",monospace;font-size:11px;
+  line-height:1.45;white-space:nowrap;z-index:5;transform:translate(-50%,-115%)}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:3px 8px;border-radius:3px;
+  background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.yes{color:var(--good);font-weight:700} .no{color:var(--ink-3)}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.you{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin-left:4px}
+.hb,.db{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.dbt{display:grid;grid-template-columns:1fr 1fr;height:14px;gap:2px}
+.dbn,.dbp{position:relative;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.dbn i{position:absolute;right:0;top:0;bottom:0}.dbp i{position:absolute;left:0;top:0;bottom:0}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb,.db{grid-template-columns:minmax(80px,40%) 1fr auto}}
+/* shared sample components */
+:root{--hero:#1e2b3a;--p0:#6b7680;--p1:#1baf7a;--p2:#eb6834;--jar:#cfe6d7;--jar-fg:#1d4d33;--lk1:#a9c8ee;--lk2:#2a78d6;--band:rgba(235,104,52,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}}
+:root[data-theme="dark"]{--hero:#24344a;--p0:#9aa3ab;--p1:#199e70;--p2:#d95926;--jar:#234232;--jar-fg:#bfe3cd;--lk1:#2c4a73;--lk2:#3987e5;--band:rgba(217,89,38,.13)}
+.code{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:11px;padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
+.code.c0{background:var(--p0)}.code.c1{background:var(--p1)}.code.c2{background:var(--p2)}
+.prodrow{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px}
+@media(max-width:1000px){.prodrow{grid-template-columns:1fr}}
+.prod{border-top:4px solid var(--pc)}
+.prod h3{font-size:15px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
+.funnel{display:grid;gap:6px}
+.fn{display:grid;grid-template-columns:minmax(96px,34%) 1fr auto;gap:8px;align-items:center;font-size:12px}
+.fn .hbt{height:18px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li.x::before{background:var(--crit)}
+.chk li b{color:var(--ink);font-weight:600}
+.tl{display:grid;gap:0}
+.tli{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tli:last-child{border-bottom:none}
+.tli .wk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-2);padding-top:1px}
+.tli .wk small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.tli b{font-size:13px;display:block;margin-bottom:2px}
+.tli span{font-size:12px;color:var(--ink-2);line-height:1.45;display:block}
+.tbar{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.tbar i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:3px;background:var(--panel-2);color:var(--ink-3);border:1px solid var(--rule)}
+.task{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:none}
+.task .ic{width:30px;height:30px;border-radius:6px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.task b{font-size:13px;display:block}
+.task span{font-size:12px;color:var(--ink-2);line-height:1.45}
+/* ballot */
+.ballot{background:var(--panel);border:1px solid var(--rule-2);border-radius:6px;overflow:hidden}
+.bhd{background:var(--hero);color:#f3f4f0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bhd b{font-size:14px}
+.bhd span{font-family:"JetBrains Mono",monospace;font-size:11px;opacity:.85}
+.bq{padding:13px 16px;border-bottom:1px solid var(--rule)}
+.bq:last-child{border-bottom:none}
+.bq p{margin:0 0 9px;font-size:13px;font-weight:600}
+.bq p small{font-weight:500;color:var(--ink-3);font-size:11px;margin-left:4px}
+.sc{display:grid;gap:4px}
+.sc9{grid-template-columns:repeat(9,minmax(0,1fr))}
+.sc5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sc label{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:10.5px;color:var(--ink-3);text-align:center;line-height:1.2}
+.sc input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--rule-2);background:var(--panel);margin:0;cursor:pointer}
+.sc input:checked{border-color:var(--s1);background:radial-gradient(circle,var(--s1) 0 45%,var(--panel) 50%)}
+.sc input:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.sc5 input{border-radius:4px}
+.sc5 input:checked{background:var(--s1)}
+.sc label.mid{color:var(--ink-2);font-weight:600}
+.ends{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-3);margin-top:5px;gap:10px}
+.oe{border:1px dashed var(--rule-2);border-radius:4px;height:42px;font-size:11px;color:var(--ink-3);padding:6px 8px;font-family:"Source Serif 4",serif;font-style:italic}
+/* stacked bars */
+.stk{display:flex;height:20px;border-radius:3px;overflow:hidden;background:var(--panel-2)}
+.stk i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:700;color:#fff;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden}
+.stk i.lt{color:var(--jar-fg)}
+.sr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center;margin:5px 0}
+.sr .sl{font-size:12px}
+.jgrp{margin-bottom:12px}
+.jgrp:last-child{margin-bottom:0}
+.jgrp h4{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 4px}
+.sig{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--ink-3);margin-left:3px;vertical-align:1px}
+.flag{background:var(--crit-bg)!important}
+.seg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.ptlab{font-family:Archivo,sans-serif;font-size:11px;font-weight:600;fill:var(--ink-2)}
+.zone{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+/* week by week */
+.vq{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.vq .vh{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;font-size:11px;color:var(--ink-3)}
+.vq .vh .dur{font-family:"JetBrains Mono",monospace;margin-left:auto}
+.vq q{display:block;font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45;color:var(--ink);quotes:"\201C" "\201D"}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.play{width:16px;height:16px;border-radius:50%;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.play::after{content:"";border-left:6px solid var(--bg);border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.vr{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px}
+.vr.r{background:var(--good-bg);color:var(--good)}
+.vr.w{background:var(--crit-bg);color:var(--crit)}
+.mult{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:700px){.mult{grid-template-columns:1fr}}
+.mult h4{font-size:12px;margin:0 0 6px;display:flex;align-items:center;gap:6px}
+/* readout */
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+.fix{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fix:last-child{border-bottom:none}
+.fix .num{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--ink-3)}
+.fix b{font-size:13.5px;display:block}
+.fix span{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+td.best{font-weight:700;color:var(--good)}
+td.worst{color:var(--crit)}
+.hero{background:var(--hero)}
+.sev{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:3px;white-space:nowrap}
+
+/* ai-moderated interviews */
+:root{--ai:#5b4bc4;--ai-bg:#eeebfa;--pp:#1a8f65;--pos:#1baf7a;--mix:#c9a227;--neg:#c0392f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ai:#a59af0;--ai-bg:#231f3d;--pp:#4caf7d;--pos:#199e70;--mix:#c99d2a;--neg:#d55a4c}}
+:root[data-theme="dark"]{--ai:#a59af0;--ai-bg:#231f3d;--pp:#4caf7d;--pos:#199e70;--mix:#c99d2a;--neg:#d55a4c}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px}
+@media(max-width:900px){.roles{grid-template-columns:1fr}}
+.role{border-top:4px solid var(--rc)}
+.role h3{font-size:15px;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+.qt{width:100%;font-size:12.5px}
+.gsec{border:1px solid var(--rule);border-radius:6px;background:var(--panel);margin-bottom:9px;overflow:hidden}
+.gsec summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:11px 14px}
+.gsec summary::-webkit-details-marker{display:none}
+.gsec summary .gn{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;width:26px;height:26px;border-radius:50%;background:var(--slate);color:var(--bg);display:flex;align-items:center;justify-content:center}
+.gsec summary b{font-size:14px}
+.gsec summary b small{display:block;font-weight:500;color:var(--ink-3);font-size:11.5px;margin-top:1px}
+.gsec summary .gt{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);white-space:nowrap}
+.gsec summary .gt::after{content:" +";font-weight:700}
+.gsec[open] summary .gt::after{content:" −"}
+.gsec[open] summary{border-bottom:1px solid var(--rule)}
+.gbody{padding:12px 16px 14px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.gbody{grid-template-columns:1fr}}
+.gq{margin:0;padding:0;list-style:none;counter-reset:q}
+.gq li{position:relative;padding:6px 0 6px 26px;border-bottom:1px solid var(--rule);font-family:"Source Serif 4",serif;font-size:13.5px;line-height:1.45}
+.gq li:last-child{border-bottom:none}
+.gq li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:7px;font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:700;color:var(--ink-3)}
+.rules{list-style:none;margin:0;padding:0}
+.rules li{font-size:12px;line-height:1.45;color:var(--ink-2);padding:5px 0 5px 12px;border-left:2px solid var(--ai);margin-bottom:5px;background:var(--ai-bg);border-radius:0 4px 4px 0;padding-right:8px}
+.rules li b{color:var(--ink)}
+.stim{border:1px dashed var(--rule-2);border-radius:6px;padding:10px 12px;font-size:12.5px;margin-top:8px;background:var(--panel-2)}
+.stim b{display:block;font-size:13px;margin-bottom:3px}
+.mini2{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
+.tr{font-size:12.5px;line-height:1.55;margin:0;padding:8px 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:88px 1fr;gap:10px}
+.tr:last-child{border-bottom:none}
+.tr .who{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);padding-top:2px}
+.tr .who b{display:block;font-size:11px}
+.tr.mod .who b{color:var(--ai)}
+.tr.par .who b{color:var(--pp)}
+.tr .tx{font-family:"Source Serif 4",Georgia,serif;color:var(--ink);font-size:13.5px}
+.tr.mod .tx{color:var(--ink-2)}
+.ptag{display:inline-block;font-family:Archivo,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--ai-bg);color:var(--ai);margin:0 0 4px}
+.ptag.no{background:var(--panel-2);color:var(--ink-3)}
+.rnote{display:block;margin-top:6px;font-family:Archivo,sans-serif;font-size:11.5px;color:var(--real-fg);background:var(--real-bg);border-radius:4px;padding:6px 9px;line-height:1.45}
+.rnote b{color:var(--real-fg)}
+.hidetags .ptag{display:none}
+.hidenotes .rnote{display:none}
+.tsec{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:10px 0 4px;border-bottom:1px solid var(--rule-2)}
+.chk2{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px;font-size:12px;color:var(--ink-2)}
+.chk2 label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.chk2 input{accent-color:var(--ai)}
+.theme{border-left:4px solid var(--tcol);padding-left:12px;margin-bottom:14px}
+.theme:last-child{margin-bottom:0}
+.theme h4{font-size:14px;margin:0 0 2px;display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.theme h4 span{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);font-weight:500}
+.theme p{font-size:12.5px;color:var(--ink-2);margin:0 0 8px;line-height:1.5}
+.out{display:grid;grid-template-columns:minmax(110px,30%) 1fr;gap:10px;align-items:center;margin:8px 0}
+.out .pl{font-size:12px;color:var(--ink-2);line-height:1.3}
+.out .pl small{display:block;color:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.out .stk{height:24px}
+.cmp td:first-child{font-weight:600;white-space:normal;min-width:120px}
+.cmp td{vertical-align:top;line-height:1.45}
+.qz{display:grid;gap:7px}
+.qzr{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.qzr:last-child{border-bottom:none}
+.yn{display:flex;gap:3px}
+.yn button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3)}
+.yn button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.yn button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.verdict{border-radius:6px;padding:14px 16px;background:var(--hero);color:#f3f4f0}
+.verdict b{font-family:"JetBrains Mono",monospace;font-size:18px;display:block;margin-bottom:4px}
+.verdict span{font-size:12.5px;color:rgba(243,244,240,.86);line-height:1.5;display:block}
+.scn{display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-size:12.5px;align-items:baseline}
+.scn:last-child{border-bottom:none}
+.mth{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 6px;border-radius:3px;white-space:nowrap}
+.mth.a{background:var(--ai-bg);color:var(--ai)}
+.mth.h{background:var(--good-bg);color:var(--good)}
+.mth.b{background:var(--warn-bg);color:var(--warn)}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every brand, product, participant, quote and number on this page is made up to show what an AI-moderated interview study looks like. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Larkspring Interviews</b><span>Sample · Reusable bottles</span></div>
+    <div class="period">Insulated water bottles · 180 interviews · text and voice · 5 days in field<br>
+      <span style="color:var(--real-fg)">●</span> measured &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#3d5a80">Design</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#5b4bc4">Discussion guide</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#2a78d6">Transcript</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#1a8f65">Themes and readout</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#d0602b">AI or human?</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- DESIGN -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Larkspring makes insulated steel water bottles. Its own tracking shows that many owners stop carrying their bottle within a year. The team wants to know <b>why bottles end up in the cupboard</b>, and whether a <b>new lid that comes apart for cleaning</b> addresses the problem. We ran <b>180 one-on-one interviews</b>, moderated by AI from a guide our senior researcher wrote, in five days of fieldwork.</p>
+
+  <div class="roles">
+    <div class="card pad role" style="--rc:var(--slate)"><p class="ttl">Senior researcher</p><h3>Designs, reviews, reports</h3>
+      <ul class="chk"><li>Writes the guide and the probe rules</li><li>Pilots with 12 people and revises</li><li>Reads transcripts every day of fieldwork</li><li>Audits probes, removes failed interviews</li><li>Checks the theme coding and writes the readout</li></ul></div>
+    <div class="card pad role" style="--rc:var(--ai)"><p class="ttl">AI moderator</p><h3>Runs each interview</h3>
+      <ul class="chk"><li>Asks the guide questions in order</li><li>Follows up when an answer is vague or opens something new, up to two probes per question</li><li>Shows the lid concept in section 4</li><li>Keeps neutral wording and never suggests an answer</li><li>Flags interviews that look rushed or off topic</li></ul></div>
+    <div class="card pad role" style="--rc:var(--pp)"><p class="ttl">Participant</p><h3>A real, screened person</h3>
+      <ul class="chk"><li>Owns an insulated bottle</li><li>Chooses text or voice</li><li>Takes part from home, at any hour</li><li>About 20 minutes</li><li>Paid an incentive, as in any study</li></ul></div>
+  </div>
+
+  <div class="row k3">
+    <div class="card pad"><p class="ttl">Who took part <span class="src real">Measured</span></p>
+      <div class="funnel" id="funnel"></div>
+      <p class="note">Six completed interviews were removed in review: two gave one-word answers throughout, three contradicted their screener, one was a duplicate.</p></div>
+    <div class="card pad"><p class="ttl">Sample, after review <span class="src real">Measured</span></p>
+      <div class="scroll"><table><thead><tr><th></th><th class="n">Daily carriers</th><th class="n">Lapsed</th><th class="n">Total</th></tr></thead><tbody>
+        <tr><td>Larkspring owners</td><td class="n">50</td><td class="n">40</td><td class="n">90</td></tr>
+        <tr><td>Other brand owners</td><td class="n">46</td><td class="n">44</td><td class="n">90</td></tr>
+        <tr class="hl"><td><b>Total</b></td><td class="n">96</td><td class="n">84</td><td class="n"><b>180</b></td></tr>
+      </tbody></table></div>
+      <p class="note"><b>Lapsed</b>: owns a bottle but carries it less than once a week. Ages 18 to 65, all regions.</p>
+      <p class="ttl" style="margin-top:14px">Mode chosen</p>
+      <div class="out" style="margin:4px 0"><span class="pl">Text 112, voice 68</span><div class="stk"><i style="width:62%;background:var(--ai)">Text 62%</i><i style="width:38%;background:var(--s1)">Voice 38%</i></div></div>
+      <p class="note">Median length: text 24 minutes, voice 17 minutes.</p></div>
+    <div class="card pad"><p class="ttl">Timeline, working days</p>
+      <div class="tl">
+        <div class="tli"><span class="wk">Days 1 to 3<small>design</small></span><div><b>Guide written and approved</b><span>Draft, review with Larkspring, final.</span></div></div>
+        <div class="tli"><span class="wk">Day 4<small>pilot</small></span><div><b>12 pilot interviews</b><span>Researcher reads every one. Three changes made.</span></div></div>
+        <div class="tli"><span class="wk">Days 5 to 9<small>field</small></span><div><b>186 interviews completed</b><span>Daily transcript review and probe audit.</span></div></div>
+        <div class="tli"><span class="wk">Days 10 to 12<small>report</small></span><div><b>Coding and readout</b><span>Themes checked by a second researcher.</span></div></div>
+      </div></div>
+  </div>
+
+  <div class="row">
+    <div class="card pad"><p class="ttl">What the pilot changed</p>
+      <div class="fix"><span class="num">1</span><div><b>Moved the cleaning question later</b><span>In the pilot, asking about cleaning early made it the answer to everything. Now cleaning is never mentioned by the moderator before section 4, so every count of it on the Themes tab is unprompted.</span></div><span class="sev q">Order</span></div>
+      <div class="fix"><span class="num">2</span><div><b>Added a probe rule for leaks</b><span>Pilot answers said "it leaks" and stopped. The moderator now asks where the bottle was and what was in it.</span></div><span class="sev q">Probe</span></div>
+      <div class="fix"><span class="num">3</span><div><b>Cut the concept from 80 words to 40</b><span>Voice participants could not hold the longer version in mind. Text and voice now see the same short card.</span></div><span class="sev q">Stimulus</span></div></div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">The guide is the researcher's main tool. It sets the questions and, just as important, <b>the rules the AI moderator follows</b> when it decides whether to probe. Click a section to open it. Target length: 19 minutes.</p>
+
+  <div class="row w21">
+    <div>
+      <details class="gsec" open><summary><span class="gn">1</span><b>Warm-up<small>Yesterday, in their own words</small></b><span class="gt">2 min</span></summary>
+        <div class="gbody"><div><p class="mini2">Questions</p><ol class="gq"><li>Tell me a little about your day yesterday. Where were you, and what did you drink?</li></ol></div>
+        <div><p class="mini2">Rules for the moderator</p><ul class="rules"><li><b>Do not mention</b> bottles, brands or water.</li><li>If the answer is under 15 words, ask for one more detail.</li></ul></div></div></details>
+      <details class="gsec"><summary><span class="gn">2</span><b>The bottles they own<small>What gets picked, and why</small></b><span class="gt">4 min</span></summary>
+        <div class="gbody"><div><p class="mini2">Questions</p><ol class="gq"><li>How many reusable bottles are in your home right now? Tell me about each one.</li><li>Which one do you reach for most, and why that one?</li></ol></div>
+        <div><p class="mini2">Rules for the moderator</p><ul class="rules"><li>If they name a feature, ask for a recent moment when it mattered.</li><li>Ask "why" once at most. Do not ladder further.</li><li>Do not name any brand they have not named.</li></ul></div></div></details>
+      <details class="gsec"><summary><span class="gn">3</span><b>When it stays home<small>The core of the study</small></b><span class="gt">6 min</span></summary>
+        <div class="gbody"><div><p class="mini2">Questions</p><ol class="gq"><li>Think about the last time you left the house without your bottle. What happened?</li><li>Has there been a bottle you stopped using altogether? Tell me the story.</li></ol></div>
+        <div><p class="mini2">Rules for the moderator</p><ul class="rules"><li><b>Never raise cleaning, smell or leaks first.</b> Let them come up on their own.</li><li>If "leak" comes up: ask where the bottle was and what was in it.</li><li>If "smell" or "gross" comes up: ask which part, and how they clean it.</li><li>If they say "I forgot": ask what was different about that day.</li></ul></div></div></details>
+      <details class="gsec"><summary><span class="gn">4</span><b>A new lid idea<small>Concept reaction</small></b><span class="gt">5 min</span></summary>
+        <div class="gbody"><div><p class="mini2">Questions</p>
+          <div class="stim"><b>Concept card shown on screen or read aloud</b>A lid that comes apart into three pieces with no hidden seal, so every part can go in the top rack of the dishwasher. Fits Larkspring 20 oz and 32 oz bottles.</div>
+          <ol class="gq" style="margin-top:8px"><li>What is your first reaction?</li><li>What, if anything, would make you doubt it?</li><li>Would it change how often you carry a bottle? Why or why not?</li></ol></div>
+        <div><p class="mini2">Rules for the moderator</p><ul class="rules"><li><b>Ask for doubts even when the reaction is positive.</b></li><li>Do not defend or explain the concept beyond the card.</li><li>If asked about cost or where to buy: "I don't have that information. What would you expect?"</li></ul></div></div></details>
+      <details class="gsec"><summary><span class="gn">5</span><b>Wrap-up<small>One change, anything missed</small></b><span class="gt">2 min</span></summary>
+        <div class="gbody"><div><p class="mini2">Questions</p><ol class="gq"><li>If you could change one thing about the bottle you use most, what would it be?</li><li>Is there anything we should have asked and did not?</li></ol></div>
+        <div><p class="mini2">Rules for the moderator</p><ul class="rules"><li>No probes on question 2. Thank them and close.</li></ul></div></div></details>
+    </div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Rules for every question</p>
+        <ul class="chk">
+          <li><b>Two follow-ups at most</b> per question, then move on.</li>
+          <li><b>Skip the probe</b> when the answer already has an example and a reason.</li>
+          <li><b>Neutral prompts only:</b> "tell me more," "what happened next," "what makes you say that."</li>
+          <li><b>Never introduce</b> a brand, feature or problem first.</li>
+          <li><b>If someone is upset</b> or wants to stop, end politely and flag for the researcher.</li>
+          <li><b>If someone asks for a person,</b> pause and notify the researcher.</li>
+        </ul></div>
+      <div class="card"><p class="ttl">Follow-up probes used <span class="src real">Measured</span></p>
+        <div id="probes"></div>
+        <p class="note">2,900 probes across 180 interviews, about 16 each.</p>
+        <p class="ttl" style="margin-top:14px">Probe audit by the researcher <span class="src real">Measured</span></p>
+        <div class="out" style="margin:4px 0"><span class="pl">300 probes reviewed</span><div class="stk"><i style="width:91%;background:var(--good)">91%</i><i style="width:7%;background:var(--s4)"></i><i style="width:2%;background:var(--crit)"></i></div></div>
+        <div class="legend"><span><i class="sw" style="background:var(--good);height:9px"></i>On target 273</span><span><i class="sw" style="background:var(--s4);height:9px"></i>Not needed 21</span><span><i class="sw" style="background:var(--crit);height:9px"></i>Leading 6</span></div>
+        <p class="note">Answers that followed the six leading probes were left out of the theme counts.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSCRIPT -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">An excerpt from one voice interview, transcribed. Purple tags show <b>why the moderator probed</b>. Blue notes are the <b>researcher's review</b>. Participant 0147: lapsed, owns another brand, chose voice, 21 minutes.</p>
+
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Interview 0147 · excerpt <span class="src ill">Illustrative</span></p>
+      <div class="chk2"><label><input type="checkbox" id="cbt" checked> Probe tags</label><label><input type="checkbox" id="cbn" checked> Researcher notes</label></div>
+      <div id="tx"></div></div>
+    <div>
+      <div class="card kpi" style="margin-bottom:13px"><p class="lab">This interview</p><p class="val">14<small> probes</small></p><p class="sub">21 minutes, voice. No probes flagged in audit.</p></div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">How it was coded</p>
+        <div class="chiprow"><span class="tag">Main reason: cleaning</span><span class="tag">Smell</span><span class="tag">Leak in bag</span><span class="tag">Lost trust in a bottle</span><span class="tag">Concept: positive</span><span class="tag">Doubt: seal</span><span class="tag">Doubt: losing a piece</span></div>
+        <p class="note">Every transcript gets the same code list. A second researcher re-coded 40 transcripts and agreed on 92% of codes.</p></div>
+      <div class="card pad"><p class="ttl">What the probes added</p>
+        <ul class="chk">
+          <li>The first answer was <b>"I grabbed a coffee instead."</b> Two probes later, the real reason was the lid seal.</li>
+          <li>The leak probe found the bottle was <b>on its side in a bag</b>, a detail that shaped the readout.</li>
+          <li><b>"I'd lose one"</b> was not on the starting code list. It was added on day 2 of fieldwork and turned up in 23 interviews.</li>
+        </ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- THEMES -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">Every transcript was coded into themes by a researcher. Counts show how many people raised each theme <b>on their own</b>, before the moderator mentioned cleaning or leaks. With 180 interviews, the counts can be compared across groups.</p>
+
+  <div class="row" style="grid-template-columns:1fr">
+    <div class="hero dec">
+      <div><p class="ttl" style="margin:0 0 3px">Recommendation</p><p class="hbig">Launch the Clean Lid,<br>and lead with the seal</p></div>
+      <p style="margin:0;font-size:13px;color:rgba(243,244,240,.86);line-height:1.55">Cleaning the lid is the most common reason lapsed owners stop carrying a bottle: it is the main reason for 36% of them, ahead of any other. 62% of lapsed owners reacted well to the Clean Lid. Their first doubt is whether a lid that comes apart still seals, because one leak is enough to retire a bottle. Show the seal before claiming easy cleaning, then size the opportunity with a survey.</p>
+    </div>
+  </div>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Why bottles get left behind, unprompted <span class="src real">Measured</span></p>
+      <div class="seg" id="tseg"><button class="on" data-p="all">All 180</button><button data-p="d">Daily carriers 96</button><button data-p="l">Lapsed 84</button></div>
+      <div id="why"></div>
+      <p class="note">Share of each group who raised it at any point. People could raise more than one.</p></div>
+    <div class="card"><p class="ttl">Main reason, lapsed owners <span class="src real">Measured</span></p>
+      <div id="mainr"></div>
+      <p class="note">One main reason coded per person, n=84. Adds to 100%.</p></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Themes and quotes <span class="src ill">Illustrative quotes</span></p>
+      <div class="theme" style="--tcol:var(--crit)"><h4>The lid is where the trouble lives <span>86 of 180 · 48%</span></h4><p>Cleaning complaints were almost always about the lid and its seal, rarely the bottle. People described tools: butter knives, toothpicks, brushes bought just for the lid.</p>
+        <p class="quote">I bought a special little brush just for the lid. That's when I knew it was a problem.<cite>0062 · lapsed · text</cite></p><p class="quote">It smells like a damp towel. You notice it when you take a sip.<cite>0147 · lapsed · voice</cite></p></div>
+      <div class="theme" style="--tcol:var(--s2)"><h4>One leak ends it <span>71 of 180 · 39%</span></h4><p>A single leak in a bag was enough to retire a bottle for good. People rarely blamed themselves, even when the lid had been on crooked.</p>
+        <p class="quote">It leaked once on my laptop. Once. That bottle is a pencil cup now.<cite>0031 · lapsed · voice</cite></p><p class="quote">I carry it upright in the side pocket now, like it's a baby.<cite>0118 · daily · text</cite></p></div>
+      <div class="theme" style="--tcol:var(--s4)"><h4>Full is heavy <span>43 of 180 · 24%</span></h4><p>The large size is what people buy and what they leave at home. Several now fill a smaller bottle twice.</p>
+        <p class="quote">32 ounces is great at my desk and awful on a walk.<cite>0089 · daily · text</cite></p></div>
+      <div class="theme" style="--tcol:var(--s1)"><h4>Routines break, bottles stay home <span>31 of 180 · 17%</span></h4><p>A change in routine, such as a new job or working from home, quietly ended the habit.</p>
+        <p class="quote">I carried it every day to the office. Once I started working from home, it just stayed on the counter.<cite>0173 · lapsed · voice</cite></p></div></div>
+    <div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Reaction to the Clean Lid <span class="src real">Measured</span></p>
+        <div id="react"></div>
+        <div class="legend"><span><i class="sw" style="background:var(--pos);height:9px"></i>Positive</span><span><i class="sw" style="background:var(--mix);height:9px"></i>Mixed</span><span><i class="sw" style="background:var(--neg);height:9px"></i>Negative</span></div>
+        <p class="note">Coded from the first-reaction answer and its probes. 98 positive, 52 mixed, 30 negative.</p></div>
+      <div class="card pad" style="margin-bottom:13px"><p class="ttl">Doubts raised about the Clean Lid <span class="src real">Measured</span></p>
+        <div id="doubt"></div>
+        <p class="note">All 180, asked of everyone including positive reactions. People could raise more than one.</p></div>
+      <div class="card pad"><p class="ttl">Next steps</p>
+        <ul class="lst"><li>Leak test the three-piece lid<span>before any claim</span></li><li>Survey, 400 bottle owners<span>size the lapsed group</span></li><li>Test two claims: seal first or cleaning first<span>same survey</span></li><li>8 in-home interviews, human-moderated<span>watch people clean a lid</span></li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- AI OR HUMAN -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">AI moderation and human moderation are good at different jobs. Many projects use both: <b>AI-moderated interviews to map themes across many people</b>, then a few <b>human-moderated sessions</b> to go deeper with the most interesting ones. Every participant in either method is a real, screened person.</p>
+
+  <div class="row w21">
+    <div class="card"><p class="ttl">Side by side</p>
+      <div class="scroll"><table class="cmp" style="min-width:560px"><thead><tr><th></th><th>AI-moderated</th><th>Human-moderated</th></tr></thead><tbody>
+        <tr><td>Number of interviews</td><td>Dozens to hundreds</td><td>Usually 8 to 30</td></tr>
+        <tr><td>Time in field</td><td>A few days</td><td>One to three weeks</td></tr>
+        <tr><td>Scheduling</td><td>Any hour, the participant's choice</td><td>Set appointments</td></tr>
+        <tr><td>Consistency</td><td>Same guide and probe rules every time</td><td>Varies with the moderator and the day</td></tr>
+        <tr><td>Follow-up</td><td>Rule-based probes, up to a set limit</td><td>Free to chase anything that matters</td></tr>
+        <tr><td>Reading the person</td><td>Words only, typed or spoken</td><td>Tone, face, hesitation, body language</td></tr>
+        <tr><td>Physical products</td><td>Images, video, or a product mailed ahead</td><td>Hands-on, in a facility or at home</td></tr>
+        <tr><td>Sensitive topics</td><td>Some people say more to a screen</td><td>Better when care and judgment are needed</td></tr>
+        <tr><td>Counting themes</td><td>Enough people to count and compare groups</td><td>Too few to count</td></tr>
+        <tr><td>Client watching live</td><td>Reads transcripts as they arrive</td><td>Watches and steers from the back room</td></tr>
+      </tbody></table></div></div>
+    <div class="card pad"><p class="ttl">Which fits your project?</p>
+      <div class="qz" id="quiz"></div>
+      <div class="verdict" id="verdict" style="margin-top:12px"></div></div>
+  </div>
+
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">Examples</p>
+      <div class="scn"><span>Why do people cancel a subscription? 150 recent cancellers, two regions.</span><span class="mth a">AI-moderated</span></div>
+      <div class="scn"><span>Watching people cook from a new recipe card in their own kitchen.</span><span class="mth h">Human-moderated</span></div>
+      <div class="scn"><span>Reactions to three ad scripts, compared across five age groups.</span><span class="mth a">AI-moderated</span></div>
+      <div class="scn"><span>Talking with caregivers about a hard health decision.</span><span class="mth h">Human-moderated</span></div>
+      <div class="scn"><span>Map the reasons people quit a habit, then go deep with ten of them.</span><span class="mth b">Both</span></div></div>
+    <div class="card pad"><p class="ttl">What stays human in every AI-moderated study</p>
+      <ul class="chk">
+        <li><b>The guide.</b> A senior researcher writes the questions, the order and the probe rules.</li>
+        <li><b>The pilot.</b> Every pilot transcript is read before full launch.</li>
+        <li><b>Quality review.</b> Interviews that fail checks are removed by a person.</li>
+        <li><b>The probe audit.</b> A sample of probes is read for leading wording.</li>
+        <li><b>The readout.</b> Themes are checked and the recommendation is written by a researcher.</li>
+      </ul></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. All brands, products, people and figures are fictional. A live version is built on your question, your customers and a guide written for your decision.</footer>
+</div>
+
+<script>
+(function(){
+const seg=(id,fn)=>document.querySelectorAll("#"+id+" button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#"+id+" button").forEach(x=>x.classList.toggle("on",x===b));fn(b.dataset.p)}));
+const r100=(c,n)=>{const raw=c.map(x=>x/n*100),fl=raw.map(Math.floor);let left=100-fl.reduce((a,b)=>a+b,0);raw.map((x,i)=>[x-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([_,i])=>{if(left>0){fl[i]++;left--}});return fl};
+
+const fun=[["Invited",1100],["Screened",412],["Qualified",236],["Started",204],["Completed",186],["Kept after review",180]];
+document.getElementById("funnel").innerHTML=fun.map((r,i)=>`<div class="fn"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${Math.max(r[1]/1100*100,3)}%;background:${i<3?"var(--ink-3)":"var(--s1)"}"></i></span><span class="hbv mono">${r[1].toLocaleString()}</span></div>`).join("");
+
+const PB=[["Ask for an example",1102],["Ask why",783],["Clarify a word",493],["Return to a missed part",319],["Reflect and confirm",203]];
+document.getElementById("probes").innerHTML=PB.map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/1102*100}%;background:var(--ai)"></i></span><span class="hbv mono">${Math.round(r[1]/29)}%</span></div>`).join("");
+
+/* transcript: [who, time, text, tag, note] */
+const T=[
+ ["s","Section 3 · When it stays home"],
+ ["m","07:42","Think about the last time you left the house without your bottle. What happened?","Guide question 3.1"],
+ ["p","07:50","Honestly, it was probably Tuesday. I just grabbed a coffee instead."],
+ ["m","08:01","What was going on that morning that you grabbed a coffee instead of the bottle?","Probe: ask for detail"],
+ ["p","08:09","The bottle was in the sink. It's always kind of in the sink. I don't love washing it."],
+ ["m","08:18","What is it about washing it that you don't love?","Probe: ask why",null,"<b>Good probe.</b> Turned \"grabbed a coffee\" into the real reason. Cleaning came up unprompted."],
+ ["p","08:24","The lid. There's this rubber ring inside, and if you don't get it out it gets, like, a smell. And getting it out takes a butter knife."],
+ ["m","08:40","When you say a smell, what does it smell like, and when do you notice it?","Probe: clarify a word (rule: smell)"],
+ ["p","08:47","Kind of musty? Like a damp towel. You notice it when you take a sip, which is the worst time."],
+ ["m","09:02","Thank you, that is clear. Has there been a bottle you stopped using altogether? Tell me the story.","No probe: answer complete. Guide question 3.2"],
+ ["p","09:10","Yeah, my blue one. It leaked in my work bag. Ruined a notebook."],
+ ["m","09:19","Where was the bottle when it leaked, and what was in it?","Probe: rule for leaks",null,"<b>Rule worked.</b> Added in the pilot. \"On its side, in a bag\" appears in 38 of the 71 leak stories."],
+ ["p","09:26","In my bag, on its side. Iced tea. I think the lid wasn't on straight, but it's hard to tell with that one."],
+ ["m","09:41","You mentioned earlier the bottle is always in the sink. Is that the blue one or a different one?","Probe: return to a missed part"],
+ ["p","09:49","Different one. The blue one is in the back of the cupboard now. I don't trust it."],
+ ["s","Section 4 · A new lid idea"],
+ ["m","14:05","Here is an idea a company is considering. [Concept card read aloud] What is your first reaction?","Guide question 4.1"],
+ ["p","14:22","Oh, that's actually my exact problem. Three pieces, though. I'd lose one."],
+ ["m","14:31","What, if anything, would make you doubt it?","Rule: ask for doubts even when positive"],
+ ["p","14:37","Whether it still seals. Usually when things come apart, they leak. So it would have to not leak."],
+ ["m","14:52","Would it change how often you carry a bottle? Why or why not?","Guide question 4.3",null,"<b>Note for the readout.</b> Cleaning interest and leak worry arrive together. Lead with the seal."],
+ ["p","14:58","If it doesn't leak, yeah. I'd probably carry it most days. The washing is really the whole thing for me."]];
+document.getElementById("tx").innerHTML=T.map(r=>{if(r[0]==="s")return `<div class="tsec">${r[1]}</div>`;
+  const m=r[0]==="m";return `<div class="tr ${m?"mod":"par"}"><span class="who"><b>${m?"Moderator":"P0147"}</b>${m?"AI · ":""}${r[1]}</span><span class="tx">${m&&r[3]?`<span class="ptag${r[3].startsWith("No probe")||r[3].startsWith("Guide")?" no":""}">${r[3]}</span><br>`:""}${r[2]}${r[5]?`<span class="rnote">Researcher: ${r[5]}</span>`:""}</span></div>`}).join("");
+const tx=document.getElementById("tx");
+document.getElementById("cbt").addEventListener("change",e=>tx.classList.toggle("hidetags",!e.target.checked));
+document.getElementById("cbn").addEventListener("change",e=>tx.classList.toggle("hidenotes",!e.target.checked));
+
+/* themes: [label, daily n, lapsed n] */
+const W=[["Hard to clean, smells",34,52],["Leaks in a bag",30,41],["Heavy or bulky when full",21,22],["Routine changed",12,19],["Does not fit the cup holder",15,14],["Lid hard to open one-handed",18,9],["Lost a lid or part",6,10]];
+function why(k){const base=k==="d"?96:k==="l"?84:180;const col=k==="d"?"var(--s1)":k==="l"?"var(--s2)":"var(--pp)";
+  document.getElementById("why").innerHTML=W.map(r=>{const v=k==="d"?r[1]:k==="l"?r[2]:r[1]+r[2];const p=Math.round(v/base*100);
+    return `<div class="hb"><span class="hbl" title="${r[0]}">${r[0]}</span><span class="hbt"><i style="width:${p/70*100}%;background:${col}"></i></span><span class="hbv mono">${p}% <small>(${v})</small></span></div>`}).join("")}
+why("all");seg("tseg",why);
+
+const MR=[["Hard to clean, smells",30],["Leaks in a bag",22],["Heavy when full",12],["Routine changed",11],["Cup holder fit",5],["Other",4]];
+const mp=r100(MR.map(r=>r[1]),84);
+document.getElementById("mainr").innerHTML=MR.map((r,i)=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${mp[i]/40*100}%;background:${i===0?"var(--crit)":"var(--ink-3)"}"></i></span><span class="hbv mono">${mp[i]}% <small>(${r[1]})</small></span></div>`).join("");
+
+const RC=[["All participants",180,[98,52,30]],["Daily carriers",96,[46,32,18]],["Lapsed",84,[52,20,12]]];
+const rc=["var(--pos)","var(--mix)","var(--neg)"];
+document.getElementById("react").innerHTML=RC.map(r=>{const v=r100(r[2],r[1]);return `<div class="out"><span class="pl">${r[0]}<small>n=${r[1]}</small></span><div class="stk">${v.map((x,i)=>`<i style="width:${x}%;background:${rc[i]}" title="${r[2][i]} of ${r[1]}">${x}%</i>`).join("")}</div></div>`}).join("");
+
+const DB=[["Will it still seal?",64],["I would lose a piece",23],["Only fits one brand",19],["Dishwasher wear",14]];
+document.getElementById("doubt").innerHTML=DB.map(r=>`<div class="hb"><span class="hbl">${r[0]}</span><span class="hbt"><i style="width:${r[1]/180*100/40*100}%;background:var(--s2)"></i></span><span class="hbv mono">${Math.round(r[1]/1.8)}% <small>(${r[1]})</small></span></div>`).join("");
+
+/* chooser: [question, ai points if yes, human points if yes] */
+const QZ=[["Do you need to hear from more than 30 people?",2,0],["Do you need to compare groups, such as owners and non-owners?",1,0],["Do you need answers within a week?",1,0],["Will people need to handle a physical product during the interview?",0,2],["Is the topic sensitive or emotional for the person?",0,1],["Does your team want to watch live and steer the conversation?",0,1]];
+const ans=[1,1,1,0,0,0];
+function verdict(){let a=0,h=0;QZ.forEach((q,i)=>{if(ans[i]){a+=q[1];h+=q[2]}});
+  let t,s;if(a>=2&&h>=2){t="Use both";s="Start with AI-moderated interviews to map themes across many people, then run a few human-moderated sessions where hands-on time or care is needed."}
+  else if(a>h){t="AI-moderated";s="You need breadth, speed and comparable groups. A researcher-written guide and probe rules give you depth from each person as well."}
+  else if(h>a){t="Human-moderated";s="The conversation needs a person in it: hands on the product, care with a hard topic, or a team steering live."}
+  else{t="Either can work";s="Start from the decision you need to make. Book a walkthrough and we will help you choose."}
+  document.getElementById("verdict").innerHTML=`<b>${t}</b><span>${s}</span>`}
+document.getElementById("quiz").innerHTML=QZ.map((q,i)=>`<div class="qzr"><span>${q[0]}</span><span class="yn" data-i="${i}"><button class="${ans[i]?"on":""}" data-v="1">Yes</button><button class="${ans[i]?"":"on"}" data-v="0">No</button></span></div>`).join("");
+document.querySelectorAll(".yn").forEach(g=>g.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ans[+g.dataset.i]=+b.dataset.v;g.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));verdict()})));
+verdict();
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>

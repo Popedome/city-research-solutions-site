@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Library Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f6f7f5; --panel:#ffffff; --panel-2:#f0f2ee;
+  --ink:#14171a; --ink-2:#4b5359; --ink-3:#767f86;
+  --rule:#e2e4e0; --rule-2:#cdd0cb; --slate:#1e2b3a;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#8a63d2;
+  --good:#1a7f4b; --warn:#b26a00; --crit:#c0392f;
+  --good-bg:#e8f4ec; --warn-bg:#fbf0dc; --crit-bg:#fbe9e7;
+  --real-bg:#e7eef8; --real-fg:#1f4f8f; --ill-bg:#eeece7; --ill-fg:#6b6255;
+  --new-bg:#eaf3ee; --new-fg:#186b45;
+  --dot-y:#c9a227; --dot-o:#e0722e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101110; --panel:#1a1b19; --panel-2:#232420;
+  --ink:#f3f4f0; --ink-2:#b8bcb5; --ink-3:#8b908a;
+  --rule:#2e302c; --rule-2:#3d403a; --slate:#c9d4e0;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#8a63d2;
+  --good:#4caf7d; --warn:#d59a3c; --crit:#e07064;
+  --good-bg:#17291f; --warn-bg:#2b2415; --crit-bg:#2d1b19;
+  --real-bg:#16243a; --real-fg:#8ab4ef; --ill-bg:#26241f; --ill-fg:#b0a692;
+  --new-bg:#152a20; --new-fg:#63c295;
+  --dot-y:#d9b845; --dot-o:#ec8a4a;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;line-height:1.5;margin:0}
+.serif{font-family:"Source Serif 4",Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px 60px}
+
+/* bar */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--rule);
+  padding:14px 0 0;margin-bottom:20px}
+.tb-in{max-width:1240px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:20px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:baseline;gap:11px}
+.brandmark b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.brandmark span{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.period{font-size:11.5px;color:var(--ink-3);text-align:right;line-height:1.45}
+.tabs{display:flex;gap:4px;margin-top:15px;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;padding-top:4px}
+.tabs button{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;
+  padding:9px 18px 10px;color:var(--ink-3);background:var(--panel-2);
+  border:1px solid var(--rule);border-bottom:none;border-top:3px solid var(--tc);
+  border-radius:7px 7px 0 0;margin-bottom:-1px;position:relative;transition:background .12s,color .12s}
+.tabs button:hover{background:var(--panel);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:#fff;
+  padding-top:11px;margin-top:-2px;box-shadow:0 -1px 3px rgba(0,0,0,.08)}
+.tabs button[aria-selected="true"]:hover{background:var(--tc);color:#fff}
+.tabs button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[role=tabpanel][hidden]{display:none}
+
+/* layout primitives */
+.row{display:grid;gap:13px;margin-bottom:13px}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.w21{grid-template-columns:2fr 1fr}
+.w12{grid-template-columns:1fr 2fr}
+@media(max-width:1000px){.k4{grid-template-columns:repeat(2,1fr)}
+  .k3,.k2,.w21,.w12{grid-template-columns:1fr}}
+@media(max-width:560px){.k4{grid-template-columns:repeat(2,1fr)}}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;min-width:0}
+.card.pad{padding:16px 18px}
+.ttl{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ttl .src{font-weight:600;letter-spacing:.04em;font-size:9px;padding:2px 6px;border-radius:3px}
+.src.real{background:var(--real-bg);color:var(--real-fg)}
+.src.ill{background:var(--ill-bg);color:var(--ill-fg)}
+
+/* kpi */
+.kpi .lab{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.kpi .val{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0}
+.kpi .val small{font-size:14px;color:var(--ink-3);font-weight:500}
+.kpi .sub{font-size:11.5px;color:var(--ink-2);margin:5px 0 0;line-height:1.4}
+
+/* severity tags */
+.sev{font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;
+  border-radius:3px;white-space:nowrap}
+.sev.c{background:var(--crit-bg);color:var(--crit)}
+.sev.w{background:var(--warn-bg);color:var(--warn)}
+.sev.g{background:var(--good-bg);color:var(--good)}
+.sev.q{background:var(--real-bg);color:var(--real-fg)}
+
+/* tables */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--rule)}
+th{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1.5px solid var(--rule-2);white-space:nowrap;vertical-align:bottom}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+td.c,th.c{text-align:center}
+tbody tr:last-child td{border-bottom:none}
+tr.hl td{background:var(--panel-2)}
+.mdl{font-weight:600;white-space:nowrap}
+.up{color:var(--good)} .dn{color:var(--crit)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+/* charts */
+.chartwrap{position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.gl{stroke:var(--rule);stroke-width:1}
+.ax{fill:var(--ink-3);font-family:"JetBrains Mono",monospace;font-size:10px}
+.dl{font-family:Archivo,sans-serif;font-size:10px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:11px;font-size:11px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:14px;height:3px;border-radius:2px;flex:none}
+
+.note{font-size:11.5px;color:var(--ink-2);margin:10px 0 0;line-height:1.5}
+.note b{color:var(--ink)}
+.hero{background:var(--slate);color:#f3f4f0;border-radius:6px;padding:17px 20px}
+.hero .ttl{color:rgba(243,244,240,.62)}
+.hero .big{font-family:"JetBrains Mono",monospace;font-size:30px;font-weight:700;letter-spacing:-.03em;margin:0}
+.hero p{font-size:13px;color:rgba(243,244,240,.86);margin:8px 0 0;line-height:1.5}
+.hero a{color:#8ab4ef}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:5px 0;
+  border-bottom:1px solid var(--rule);font-size:12.5px}
+.lst li:last-child{border-bottom:none}
+.lst li span{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.quote{border-left:2px solid var(--rule-2);padding:1px 0 1px 12px;margin:0 0 10px;font-size:12.5px;
+  color:var(--ink-2);font-family:"Source Serif 4",serif}
+.quote cite{display:block;font-style:normal;font-family:Archivo,sans-serif;font-size:10px;color:var(--ink-3);margin-top:3px}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--ink-3);line-height:1.65}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.banner{background:var(--warn-bg);color:var(--warn);font-size:12.5px;font-weight:600;text-align:center;padding:8px 16px;border-bottom:1px solid var(--rule)}
+.intro{font-family:"Source Serif 4",Georgia,serif;font-size:14.5px;line-height:1.55;color:var(--ink-2);max-width:880px;margin:0 0 16px}
+.intro b{color:var(--ink)}
+.hbig{font-family:"JetBrains Mono",monospace;font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:#f3f4f0}
+.mini{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 5px}
+.small{font-size:12.5px;color:var(--ink-2);margin:0}
+.hb{display:grid;grid-template-columns:minmax(86px,38%) 1fr auto;gap:8px;align-items:center;padding:4px 0;font-size:12px}
+.hbl{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbt{position:relative;height:14px;background:var(--panel-2);border-radius:3px;overflow:hidden}
+.hbt i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.hbv{font-size:11px;color:var(--ink-2);white-space:nowrap}.hbv small{color:var(--ink-3)}
+.legend i.sw{display:inline-block}
+@media(max-width:560px){.wrap,.tb-in{padding-left:16px;padding-right:16px}.hb{grid-template-columns:minmax(80px,40%) 1fr auto}}
+
+/* research library additions */
+:root{--hero:#1e2b3a;--c2:#2a78d6;--c1:#a9c8ee;--c0:#f0f2ee;--ok:#1a7f4b;--watch:#b26a00;--field:#c0392f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hero:#24344a;--c2:#3987e5;--c1:#2c4a73;--c0:#232420;--ok:#4caf7d;--watch:#d59a3c;--field:#e07064}}
+:root[data-theme="dark"]{--hero:#24344a;--c2:#3987e5;--c1:#2c4a73;--c0:#232420;--ok:#4caf7d;--watch:#d59a3c;--field:#e07064}
+.hero{background:var(--hero)}
+.seg{display:flex;gap:3px;flex-wrap:wrap}
+.seg button{font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;padding:5px 11px;cursor:pointer;background:var(--panel);border:1px solid var(--rule);border-radius:4px;color:var(--ink-3);white-space:nowrap}
+.seg button:hover{color:var(--ink);border-color:var(--rule-2)}
+.seg button.on{background:var(--slate);border-color:var(--slate);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:6px 0 6px 20px;border-bottom:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"";position:absolute;left:2px;top:12px;width:8px;height:8px;border-radius:2px;background:var(--s1)}
+.chk li b{color:var(--ink);font-weight:600}
+/* search */
+.sbox{display:flex;gap:8px;background:var(--panel);border:1.5px solid var(--rule-2);border-radius:8px;padding:6px 6px 6px 14px;align-items:center}
+.sbox:focus-within{border-color:var(--c2)}
+.sbox input{flex:1;min-width:0;border:0;background:transparent;font-family:Archivo,sans-serif;font-size:15px;color:var(--ink);outline:none;padding:6px 0}
+.sbox button{font-family:Archivo,sans-serif;font-size:13px;font-weight:700;padding:9px 16px;border-radius:6px;border:0;background:var(--c2);color:#fff;cursor:pointer;white-space:nowrap}
+.sbox button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.ex{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.ex button{font-family:Archivo,sans-serif;font-size:12px;font-weight:600;padding:6px 11px;border-radius:16px;border:1px solid var(--rule-2);background:var(--panel);color:var(--ink-2);cursor:pointer;text-align:left}
+.ex button:hover{border-color:var(--c2);color:var(--ink)}
+.ex button.on{background:var(--real-bg);border-color:var(--c2);color:var(--real-fg)}
+.ex button:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+.ans{font-family:"Source Serif 4",Georgia,serif;font-size:15px;line-height:1.6;color:var(--ink)}
+.ans p{margin:0 0 10px}
+.ans p:last-child{margin-bottom:0}
+.cite{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--real-fg);background:var(--real-bg);padding:1px 5px;border-radius:3px;vertical-align:2px;cursor:pointer;border:0}
+.cite:hover{background:var(--c2);color:#fff}
+.meter{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.meter span{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:4px}
+.st-ok{background:var(--good-bg);color:var(--ok)}
+.st-watch{background:var(--warn-bg);color:var(--watch)}
+.st-field{background:var(--crit-bg);color:var(--field)}
+.st-n{background:var(--panel-2);color:var(--ink-2)}
+.srcc{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;margin-bottom:8px;background:var(--panel);transition:border-color .2s,box-shadow .2s}
+.srcc.hl{border-color:var(--c2);box-shadow:0 0 0 2px var(--real-bg)}
+.srcc .sh{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.srcc .sh b{font-size:13px}
+.srcc .meta{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3)}
+.srcc q{display:block;font-family:"Source Serif 4",serif;font-size:13px;color:var(--ink-2);margin-top:5px;line-height:1.45;quotes:"\201C" "\201D"}
+.srcc .loc{font-size:10.5px;color:var(--ink-3);margin-top:4px}
+.flagbox{border-radius:6px;padding:12px 14px;margin-top:12px;font-size:13px;line-height:1.5}
+.flagbox b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.flagbox.field{background:var(--crit-bg);color:var(--ink)}
+.flagbox.field b{color:var(--field)}
+.flagbox.watch{background:var(--warn-bg);color:var(--ink)}
+.flagbox.watch b{color:var(--watch)}
+.flagbox.ok{background:var(--good-bg);color:var(--ink)}
+.flagbox.ok b{color:var(--ok)}
+/* coverage */
+.cov{border-collapse:separate;border-spacing:3px;width:auto;min-width:100%}
+.cov th,.cov td{border:0;padding:0}
+.cov th{font-size:9.5px;text-align:center;padding:0 0 4px;color:var(--ink-3);vertical-align:bottom}
+.cov th.tp{text-align:left}
+.cov td.tn{font-size:12px;padding:0 8px 0 0;white-space:nowrap;cursor:pointer}
+.cov tr:hover td.tn,.cov tr.sel td.tn{color:var(--c2);font-weight:600}
+.cov td.cl{width:30px;height:24px;border-radius:3px;cursor:pointer}
+.cov td.l0{background:var(--c0)}
+.cov td.l1{background:var(--c1)}
+.cov td.l2{background:var(--c2)}
+.cov td.stt{padding-left:8px;white-space:nowrap}
+.cov tr.sel td.cl{outline:1px solid var(--ink-3)}
+.dot2{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0}
+/* studies */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.sc2{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;border-top:3px solid var(--tc)}
+.sc2 .yr{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--ink-3)}
+.sc2 h4{margin:3px 0 4px;font-size:14px;letter-spacing:-.01em}
+.sc2 p{margin:0;font-size:12px;color:var(--ink-2);line-height:1.45}
+.sc2 .tg{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.sc2 .tg span{font-size:10.5px;padding:2px 7px;border-radius:10px;background:var(--panel-2);color:var(--ink-2);border:1px solid var(--rule)}
+.sc2 .fs{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3);margin-top:8px}
+.tlx{position:relative;height:56px;margin:4px 0 6px}
+.fx{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:start}
+.fx:last-child{border-bottom:none}
+.fx b{font-size:13.5px;display:block}
+.fx span.d{font-size:12.5px;color:var(--ink-2);line-height:1.5;display:block;margin-top:2px}
+.fx .nx{font-size:12px;margin-top:5px;color:var(--ink)}
+.fx .nx em{font-style:normal;font-weight:700;color:var(--c2)}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+@media(max-width:800px){.flow{grid-template-columns:1fr}.flow .ar{transform:rotate(90deg);justify-self:center}}
+.flow .st{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px}
+.flow .st h4{margin:0 0 5px;font-size:14px}
+.flow .st p{margin:0;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.flow .ar{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:20px}
+.flow .st.me{border-color:var(--c2);box-shadow:0 0 0 2px var(--real-bg)}
+.dec{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+@media(max-width:700px){.dec{grid-template-columns:1fr;gap:10px}}
+</style>
+</head><body><div class="banner">Illustrative example, fictional brand. Every company, study, quote and number on this page is made up to show how a Pervasive Insights research library works. Nothing here describes a real company.</div>
+
+<div class="topbar">
+  <div class="tb-in">
+    <div class="brandmark"><b>Tallgrass Beverage Research Library</b><span>Sample · Pervasive Insights</span></div>
+    <div class="period" id="hdr">12 studies · 2016 to 2025<br>
+      <span style="color:var(--real-fg)">●</span> from the studies &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative</div>
+  </div>
+  <div class="tb-in">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0b" style="--tc:#2a78d6">Ask the library</button>
+      <button role="tab" aria-selected="false" aria-controls="p1" id="t1b" style="--tc:#3d5a80">Studies</button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2b" style="--tc:#1baf7a">Coverage</button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3b" style="--tc:#eb6834">When to field new research</button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4b" style="--tc:#8a63d2">How it fits</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ASK -->
+<div role="tabpanel" id="p0" aria-labelledby="t0b">
+  <p class="intro">Tallgrass Beverage, a fictional maker of bottled iced tea and sparkling juice, has run <b>12 studies since 2016</b>: surveys, focus groups and a diary study. Every questionnaire, data file, report and transcript sits in one private library. Ask a question in plain words. The answer <b>cites the study, year and sample</b> behind every claim, and says plainly when the evidence is thin or old.</p>
+
+  <div class="row">
+    <div class="card pad">
+      <form class="sbox" id="sform" role="search"><input id="q" type="text" placeholder="Ask anything about your past research" aria-label="Ask the library"><button type="submit">Ask</button></form>
+      <div class="ex" id="ex"></div>
+      <div id="out"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDIES -->
+<div role="tabpanel" id="p1" aria-labelledby="t1b" hidden>
+  <p class="intro">Everything the library knows comes from these studies and nothing else. Each one is indexed down to the question, the table and the transcript line, so an answer can point to where it came from.</p>
+  <div class="row k4">
+    <div class="card kpi"><p class="lab">Studies</p><p class="val">12</p><p class="sub">2016 to 2025</p></div>
+    <div class="card kpi"><p class="lab">People heard from</p><p class="val" id="kn">0</p><p class="sub">across all studies</p></div>
+    <div class="card kpi"><p class="lab">Transcript hours</p><p class="val">17</p><p class="sub">14 groups across three studies</p></div>
+    <div class="card kpi"><p class="lab">Files indexed</p><p class="val">143</p><p class="sub">questionnaires, data, reports, transcripts</p></div>
+  </div>
+  <div class="card" style="margin-bottom:13px"><p class="ttl">Studies by year</p><div class="chartwrap" id="tline"></div></div>
+  <div class="seg" id="sf" style="margin-bottom:10px"><button class="on" data-t="all">All</button><button data-t="Survey">Surveys</button><button data-t="Focus groups">Focus groups</button><button data-t="Diary">Diary</button></div>
+  <div class="sgrid" id="slist"></div>
+</div>
+
+<!-- COVERAGE -->
+<div role="tabpanel" id="p2" aria-labelledby="t2b" hidden>
+  <p class="intro">Which topics each study covered. Dark cells are a main topic of the study, light cells are partial. <b>Click a topic</b> to see how much evidence sits behind it and how recent it is.</p>
+  <div class="row w21">
+    <div class="card"><p class="ttl">Topics by study <span class="src real">From the studies</span></p>
+      <div class="scroll"><table class="cov" id="cov"></table></div>
+      <div class="legend"><span><i class="sw" style="background:var(--c2);height:10px"></i>Main topic</span><span><i class="sw" style="background:var(--c1);height:10px"></i>Partial</span><span><i class="sw" style="background:var(--c0);height:10px;border:1px solid var(--rule)"></i>Not covered</span></div></div>
+    <div class="card pad"><p class="ttl">Topic detail</p><div id="tdet"></div></div>
+  </div>
+</div>
+
+<!-- FIELD NEW -->
+<div role="tabpanel" id="p3" aria-labelledby="t3b" hidden>
+  <p class="intro">The library is honest about its limits. Each topic is scored on <b>how much evidence</b> there is and <b>how recent</b> it is. When either falls short, the library says so and suggests the smallest study that would close the gap.</p>
+  <div class="row k3" id="fk"></div>
+  <div class="row w21">
+    <div class="card pad"><p class="ttl">Topics flagged</p><div id="flist"></div></div>
+    <div class="card pad"><p class="ttl">How the flags are set</p>
+      <ul class="chk">
+        <li><b>Evidence.</b> Strong: 1,000 or more survey or diary respondents in studies where the topic was a main focus. Moderate: 500 to 999. Thin: fewer than 500, or focus groups only.</li>
+        <li><b>Freshness.</b> Current: main-topic study in 2023 or later. Aging: 2020 to 2022. Old: 2019 or earlier.</li>
+        <li><b>Field new research</b> when evidence is thin or old. <b>Watch</b> when it is aging. Otherwise current.</li>
+        <li><b>Your team sets the rules.</b> A fast-moving category may call a two-year-old study old.</li>
+      </ul></div>
+  </div>
+</div>
+
+<!-- HOW IT FITS -->
+<div role="tabpanel" id="p4" aria-labelledby="t4b" hidden>
+  <p class="intro">The library is one part of <b>Pervasive Insights</b>, a City Research Solutions product. It sits alongside synthetic panels calibrated to your own customers, and both rest on human research.</p>
+  <div class="flow" style="margin-bottom:13px">
+    <div class="st me"><h4>1. Research library</h4><p>Ask what you already know. Answers cite the study, year and sample, and flag thin or old evidence.</p></div>
+    <div class="ar" aria-hidden="true">→</div>
+    <div class="st"><h4>2. Calibrated synthetic panel</h4><p>For a new question, explore it first with synthetic respondents calibrated to how your customers answered in your own studies. Every answer is labeled as model-generated.</p></div>
+    <div class="ar" aria-hidden="true">→</div>
+    <div class="st"><h4>3. New human study</h4><p>When the decision is big or the evidence is thin, field it with real buyers. The new study goes straight into the library.</p></div>
+  </div>
+  <div class="row k2">
+    <div class="card pad"><p class="ttl">What the library does</p>
+      <ul class="chk">
+        <li><b>Answers from your studies only.</b> No outside sources and no guessing. If nothing in the library covers a question, it says so.</li>
+        <li><b>Cites every claim</b> to the study, year, sample size, and the page, table or transcript time.</li>
+        <li><b>Flags method changes</b>, such as a new question wording between tracker waves.</li>
+        <li><b>Private to your company.</b> Your studies are never shared with or used for anyone else.</li>
+      </ul></div>
+    <div class="card pad"><p class="ttl">What it does not do</p>
+      <ul class="chk">
+        <li><b>It does not make new data.</b> A topic nobody has studied stays a gap until someone studies it.</li>
+        <li><b>It does not hide disagreement.</b> When two studies point different ways, both are shown.</li>
+        <li><b>Judgment stays with your team.</b> The library shortens the hunt through old decks, so more time goes to the decision.</li>
+      </ul></div>
+  </div>
+</div>
+
+<footer>A City Research Solutions sample. Pervasive Insights is a City Research Solutions product. All companies, studies, quotes and figures are fictional. A live library is built from your own studies and stays private to you.</footer>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+/* studies: name, year, type, n, nlabel, method, files */
+const S=[
+ ["Brand Usage and Attitude Study",2016,"Survey",1500,"n=1,500","Online survey of iced tea and juice buyers, 20 minutes.","questionnaire · data · report"],
+ ["Iced Tea Sweetness Focus Groups",2017,"Focus groups",48,"6 groups, n=48","In-person groups in three cities, 90 minutes each.","guide · 6 transcripts · topline"],
+ ["Label Redesign Concept Test",2018,"Survey",600,"n=600","Monadic test of three label designs, 200 per design.","questionnaire · data · report"],
+ ["Buyer Segmentation",2019,"Survey",2000,"n=2,000","Needs and attitudes survey, five segments and a typing tool.","questionnaire · data · report · typing tool"],
+ ["Convenience Store Shopper Intercepts",2019,"Survey",320,"n=320","Short interviews at the cooler door in 16 stores.","questionnaire · data · topline"],
+ ["Sparkling Juice Concept Screen",2020,"Survey",900,"n=900","Six sparkling juice concepts, monadic, 150 per concept.","questionnaire · data · report"],
+ ["At-Home Drinking Diary",2021,"Diary",240,"240 households","Two-week phone diary of every cold drink at home.","app export · data · report"],
+ ["Zero Sugar Line Focus Groups",2022,"Focus groups",32,"4 groups, n=32","Online groups on a zero sugar iced tea idea.","guide · 4 transcripts · report"],
+ ["Pricing and Pack Size Study",2023,"Survey",1200,"n=1,200","Price ladder and pack size choice, iced tea and sparkling.","questionnaire · data · report"],
+ ["Brand Health Tracker, Wave 1",2024,"Survey",1000,"n=1,000","Awareness, image and purchase, national sample.","questionnaire · data · dashboard"],
+ ["Gen Z Flavor Exploration",2025,"Focus groups",36,"4 online groups, n=36","Online groups with 18 to 24 year-olds on flavors and formats.","guide · 4 transcripts · topline"],
+ ["Brand Health Tracker, Wave 2",2025,"Survey",1000,"n=1,000","Same as wave 1, one year later.","questionnaire · data · dashboard"]];
+const TC={"Survey":"#2a78d6","Focus groups":"#eb6834","Diary":"#1baf7a"};
+const T=["Brand image","Sweetness and sugar","Flavor","Packaging and pack size","Price","Drinking occasions","Where they shop","Who buys (segments)","Zero sugar","Younger buyers (18 to 24)"];
+/* coverage: topic index -> {study index: 1 partial, 2 main} */
+const C=[{0:2,2:1,3:1,9:2,11:2},{0:2,1:2,6:1,7:2},{1:1,5:2,7:1,10:2},{2:2,4:1,8:2},{3:1,5:1,8:2},{0:2,3:1,6:2},{0:1,4:2,8:1},{3:2,9:1,11:1},{7:2,8:1},{5:1,10:2}];
+const NEXT={
+ "Sweetness and sugar":"Add three sweetness questions to the next tracker wave. No new study needed.",
+ "Drinking occasions":"Repeat the 2021 diary with 120 households when the sparkling line is reformulated.",
+ "Where they shop":"Shop-alongs and shelf intercepts in grocery and convenience stores, plus a short online module.",
+ "Who buys (segments)":"Re-run the typing tool on the 2025 tracker sample to see if the segments still hold before a full refresh.",
+ "Zero sugar":"A quantitative concept test of the zero sugar idea, about 600 buyers.",
+ "Younger buyers (18 to 24)":"A survey of about 400 buyers age 18 to 24. Narrow the ideas first with a synthetic panel."};
+function score(ti){const m=C[ti],main=Object.keys(m).filter(s=>m[s]===2).map(Number);
+  const qn=main.filter(s=>S[s][2]!=="Focus groups").reduce((a,s)=>a+S[s][3],0);
+  const yr=Math.max(...main.map(s=>S[s][1]));
+  const ev=qn>=1000?"Strong":qn>=500?"Moderate":"Thin";
+  const fr=yr>=2023?"Current":yr>=2020?"Aging":"Old";
+  const st=(ev==="Thin"||fr==="Old")?"field":fr==="Aging"?"watch":"ok";
+  return {main,qn,yr,ev,fr,st,all:Object.keys(m).map(Number).sort((a,b)=>a-b)}}
+const SC=T.map((t,i)=>score(i));
+const STL={ok:"Current",watch:"Watch",field:"Field new research"};
+const COL={ok:"var(--ok)",watch:"var(--watch)",field:"var(--field)"};
+const tot=S.reduce((a,s)=>a+s[3],0);
+document.getElementById("kn").textContent=tot.toLocaleString();
+document.getElementById("hdr").innerHTML=`12 studies · 2016 to 2025 · ${tot.toLocaleString()} people<br><span style="color:var(--real-fg)">●</span> from the studies &nbsp; <span style="color:var(--ill-fg)">●</span> illustrative`;
+
+/* Q and A */
+const QA=[
+ {q:"Why do people say our iced tea is too sweet?",t:1,
+  a:[`It is mostly about the finish and the second half of the bottle, more than the first sip. In the 2016 survey, 31% of buyers rated Tallgrass iced tea "too sweet," the highest of the five brands rated <button class="cite" data-s="0">1</button>. Focus groups a year later described a "syrupy finish" and said they water it down or leave the bottle half full <button class="cite" data-s="1">2</button>.`,
+     `The diary confirms the behavior: 22% of Tallgrass bottles opened at home were not finished, and sweetness was the most common reason given <button class="cite" data-s="6">3</button>. In 2022, people asked for "less sweet, not zero sweet," which suggests a reduced-sugar recipe may beat a zero sugar one for this complaint <button class="cite" data-s="7">4</button>.`],
+  src:[[0,"Report p. 22, table 14","31% too sweet, vs 12% to 24% for the other four brands rated."],[1,"Transcript, group 4, 00:41:10","It's fine for a few sips, then it gets syrupy. I end up pouring half of it out."],[6,"Report p. 9","22% of 1,186 Tallgrass bottles logged were not finished; 41% of those cited sweetness."],[7,"Transcript, group 2, 00:18:35","I don't want zero sugar. I want it to taste like tea, just less sweet."]],
+  fl:"watch",fh:"Watch: the main survey number is from 2016",fx:"The pattern is consistent across four studies, but the 31% figure is ten years old. Three sweetness questions in the next tracker wave would update it at almost no cost."},
+ {q:"What do younger buyers want from a sparkling drink?",t:9,
+  a:[`The library has an early picture only. In the 2025 online groups, 18 to 24 year-olds asked for less sugar, bolder flavors such as hibiscus and yuzu, and cans over bottles <button class="cite" data-s="10">1</button>. In the 2020 concept screen, the 112 respondents in this age group liked the sparkling juice idea more than the total sample, 41% top-two-box purchase interest against 33% <button class="cite" data-s="5">2</button>.`,
+     `Both points lean the same way, but one is a set of conversations with 36 people and the other is a small subgroup from five years ago. Neither can size the opportunity or rank flavors.`],
+  src:[[10,"Transcript, group 1, 00:27:50","Give me something I can't get anywhere else. Hibiscus, yuzu, something weird. And put it in a can."],[5,"Report p. 31, table 8","Purchase interest, top two box: 41% among 18 to 24 (n=112), 33% total (n=900)."]],
+  fl:"field",fh:"Field new research: evidence is thin",fx:"Before any launch decision, survey about 400 buyers age 18 to 24. A synthetic panel calibrated to the 2025 tracker can narrow the flavor list first, so the survey tests the right six."},
+ {q:"How do convenience store shoppers pick a drink?",t:6,
+  a:[`In the 2019 intercepts, most shoppers decided at the cooler door: 58% chose in under five seconds, and 64% bought a brand they had bought before <button class="cite" data-s="4">1</button>. Cold, single-serve and "at eye level" came up again and again. In the 2016 survey, convenience stores were 18% of Tallgrass purchases <button class="cite" data-s="0">2</button>.`,
+     `Both studies are seven years old or more, and convenience shopping has changed since. The only fresh signal is indirect: the 2023 pricing study saw more interest in multipacks than single bottles, a hint that fewer drinks are bought one at a time <button class="cite" data-s="8">3</button>.`],
+  src:[[4,"Topline p. 4","58% decided in under 5 seconds; 64% bought a brand bought before (n=320, 16 stores)."],[0,"Report p. 12","Share of Tallgrass purchases by channel: convenience 18%."],[8,"Report p. 17","Multipack preferred over single bottle by 54% of iced tea buyers."]],
+  fl:"field",fh:"Field new research: evidence is old and thin",fx:"Run shop-alongs and shelf intercepts in grocery and convenience stores before the next cooler reset. The 2019 study is a useful baseline to compare against."},
+ {q:"Has our brand image changed since 2016?",t:0,
+  a:[`Yes, in two directions. "Refreshing" has slipped, from 46% in 2016 to 39% in 2024 and 37% in 2025 <button class="cite" data-s="0">1</button> <button class="cite" data-s="9">2</button> <button class="cite" data-s="11">3</button>. "Good value" has risen, from 28% to 34% and then 35%, in step with the pack size changes after the 2023 pricing study.`,
+     `Among buyers age 18 to 34, "a brand for people like me" fell from 30% to 22% over the same years. One caution: the tracker uses a pick-any list while the 2016 survey used an agree scale, so compare the size of the change with care. The two tracker waves match each other exactly.`],
+  src:[[0,"Report p. 16, table 9","Refreshing 46%, good value 28%, for people like me (18 to 34) 30%. 5-point agree scale, top two box."],[9,"Dashboard, image tab","Refreshing 39%, good value 34%, for people like me (18 to 34) 24%. Pick-any list."],[11,"Dashboard, image tab","Refreshing 37%, good value 35%, for people like me (18 to 34) 22%. Pick-any list."]],
+  fl:"ok",fh:"Current: strong and recent evidence",fx:"Three large studies, the latest in 2025. The library flags the change in question format between 2016 and 2024, so the trend direction is solid and the exact size is approximate."}];
+const ex=document.getElementById("ex");
+ex.innerHTML=QA.map((x,i)=>`<button data-i="${i}">${x.q}</button>`).join("");
+function show(i){const x=QA[i],sc=SC[x.t];
+  ex.querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.i===i));
+  document.getElementById("q").value=x.q;
+  const evc=sc.ev==="Strong"?"st-ok":sc.ev==="Moderate"?"st-watch":"st-field",frc=sc.fr==="Current"?"st-ok":sc.fr==="Aging"?"st-watch":"st-field";
+  document.getElementById("out").innerHTML=`<div class="row w21" style="margin:0"><div><div class="meter"><span class="st-n">Topic: ${T[x.t]}</span><span class="${evc}">Evidence: ${sc.ev}</span><span class="${frc}">Freshness: ${sc.fr}</span></div>
+    <div class="ans">${x.a.map(p=>`<p>${p}</p>`).join("")}</div>
+    <div class="flagbox ${x.fl}"><b>${x.fh}</b>${x.fx}</div></div>
+    <div><p class="ttl">Sources cited <span class="src real">${x.src.length} studies</span></p>${x.src.map((s,k)=>{const st=S[s[0]];return `<div class="srcc" data-k="${s[0]}"><div class="sh"><span class="cite" style="cursor:default">${k+1}</span><b>${st[0]}</b></div><div class="meta">${st[1]} · ${st[2]} · ${st[4]}</div><q>${s[2]}</q><div class="loc">${s[1]}</div></div>`}).join("")}</div></div>`;
+  document.querySelectorAll("#out button.cite").forEach(c=>c.addEventListener("click",()=>{const card=document.querySelector(`#out .srcc[data-k="${c.dataset.s}"]`);if(!card)return;document.querySelectorAll("#out .srcc").forEach(x=>x.classList.remove("hl"));card.classList.add("hl");card.scrollIntoView({behavior:"smooth",block:"nearest"})}));}
+ex.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>show(+b.dataset.i)));
+const KW=[[/sweet|sugar|syrup/i,0],[/young|gen ?z|teen|18|24|student|college/i,1],[/convenien|c-store|gas|cooler|shop|store|retail/i,2],[/brand|image|percep|changed|tracker|refresh/i,3]];
+document.getElementById("sform").addEventListener("submit",e=>{e.preventDefault();const v=document.getElementById("q").value.trim();if(!v)return;
+  const hit=KW.find(k=>k[0].test(v));if(hit){show(hit[1]);return}
+  ex.querySelectorAll("button").forEach(b=>b.classList.remove("on"));
+  document.getElementById("out").innerHTML=`<div class="flagbox watch"><b>This sample answers four questions</b>A live library would search all 12 studies for "${v.replace(/[<>&"]/g,"")}" and answer with citations, or say that no study covers it. Try one of the example questions above.</div>`;});
+show(0);
+
+/* studies */
+function slist(f){document.getElementById("slist").innerHTML=S.map((s,i)=>[s,i]).filter(x=>f==="all"||x[0][2]===f).map(([s,i])=>`<div class="sc2" style="--tc:${TC[s[2]]}"><span class="yr">${s[1]} · ${s[2]} · ${s[4]}</span><h4>${s[0]}</h4><p>${s[5]}</p><div class="tg">${T.map((t,ti)=>C[ti][i]?`<span${C[ti][i]===2?' style="border-color:var(--c2);color:var(--real-fg)"':""}>${t}</span>`:"").join("")}</div><p class="fs">${s[6]}</p></div>`).join("")}
+slist("all");
+document.querySelectorAll("#sf button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("#sf button").forEach(x=>x.classList.toggle("on",x===b));slist(b.dataset.t)}));
+(function(){const d=document.getElementById("tline");const w=640,h=74,L=16,R=16;const s=el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-label":"Studies by year"},d);
+  const X=y=>L+(y-2016)/9*(w-L-R);el("line",{x1:L,x2:w-R,y1:52,y2:52,stroke:"var(--rule-2)"},s);
+  for(let y=2016;y<=2025;y++){el("text",{x:X(y),y:70,"text-anchor":"middle",class:"ax"},s).textContent=y}
+  const cnt={};S.forEach(st=>{const k=cnt[st[1]]||0;cnt[st[1]]=k+1;const c=el("circle",{cx:X(st[1]),cy:40-k*16,r:6.5,fill:TC[st[2]],stroke:"var(--panel)","stroke-width":1.5},s);el("title",{},c).textContent=`${st[1]} ${st[0]}, ${st[4]}`});})();
+document.getElementById("tline").insertAdjacentHTML("beforeend",`<div class="legend">${Object.keys(TC).map(k=>`<span><i class="sw" style="background:${TC[k]};height:9px"></i>${k}</span>`).join("")}</div>`);
+
+/* coverage */
+const cov=document.getElementById("cov");
+cov.innerHTML=`<thead><tr><th class="tp">Topic</th>${S.map((s,i)=>`<th title="${s[0]}">${String(s[1]).slice(2)}<br>${i+1}</th>`).join("")}<th class="tp" style="padding-left:8px">Status</th></tr></thead><tbody>${T.map((t,ti)=>`<tr data-t="${ti}"><td class="tn">${t}</td>${S.map((s,i)=>`<td class="cl l${C[ti][i]||0}" title="${s[0]} (${s[1]}): ${["not covered","partial","main topic"][C[ti][i]||0]}"></td>`).join("")}<td class="stt" style="font-size:11px;font-weight:700;color:${COL[SC[ti].st]}">${STL[SC[ti].st]}</td></tr>`).join("")}</tbody>`;
+function tdet(ti){const sc=SC[ti];cov.querySelectorAll("tbody tr").forEach(r=>r.classList.toggle("sel",+r.dataset.t===ti));
+  document.getElementById("tdet").innerHTML=`<h3 style="margin:0 0 8px;font-size:16px">${T[ti]}</h3><div class="meter"><span class="${sc.ev==="Strong"?"st-ok":sc.ev==="Moderate"?"st-watch":"st-field"}">Evidence: ${sc.ev}</span><span class="${sc.fr==="Current"?"st-ok":sc.fr==="Aging"?"st-watch":"st-field"}">Freshness: ${sc.fr}</span></div>
+  <ul class="lst">${sc.all.map(i=>`<li>${S[i][0]}<span>${S[i][1]} · ${S[i][4]}${C[ti][i]===2?"":" · partial"}</span></li>`).join("")}</ul>
+  <p class="note">Survey and diary respondents in main-topic studies: <b>${sc.qn.toLocaleString()}</b>. Latest main-topic study: <b>${sc.yr}</b>.</p>
+  <div class="flagbox ${sc.st}"><b>${STL[sc.st]}</b>${NEXT[T[ti]]||"Evidence is strong and recent. Ask away."}</div>`}
+cov.querySelectorAll("tbody tr").forEach(r=>r.addEventListener("click",()=>tdet(+r.dataset.t)));
+tdet(6);
+
+/* field new */
+const cnts={ok:0,watch:0,field:0};SC.forEach(s=>cnts[s.st]++);
+document.getElementById("fk").innerHTML=["field","watch","ok"].map(k=>`<div class="card kpi"><p class="lab">${STL[k]}</p><p class="val" style="color:${COL[k]}">${cnts[k]}<small> of ${T.length} topics</small></p><p class="sub">${{field:"evidence is thin or old",watch:"evidence is aging",ok:"strong enough to act on"}[k]}</p></div>`).join("");
+const order={field:0,watch:1,ok:2};
+document.getElementById("flist").innerHTML=T.map((t,i)=>[t,SC[i]]).filter(x=>x[1].st!=="ok").sort((a,b)=>order[a[1].st]-order[b[1].st]).map(([t,sc])=>`<div class="fx"><span class="sev ${sc.st==="field"?"c":"w"}">${sc.st==="field"?"Field":"Watch"}</span><div><b>${t}</b><span class="d">Evidence ${sc.ev.toLowerCase()} (${sc.qn.toLocaleString()} survey or diary respondents), latest main study ${sc.yr}.</span><p class="nx"><em>Next:</em> ${NEXT[t]}</p></div></div>`).join("");
+
+const tabs=[...document.querySelectorAll('[role=tab]')];
+tabs.forEach((t,i)=>t.addEventListener("click",()=>{tabs.forEach((x,j)=>{x.setAttribute("aria-selected",i===j);document.getElementById("p"+j).hidden=i!==j});window.scrollTo({top:0})}));
+})();
+</script>
+</body></html>
